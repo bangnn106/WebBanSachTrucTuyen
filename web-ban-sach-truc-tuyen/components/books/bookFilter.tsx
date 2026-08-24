@@ -27,7 +27,7 @@ export default function BookFilter({
   return (
     <aside className="book-filter">
       {/* Thể loại */}
-      <div className="book-filter-section">
+      <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-bookmarks me-2" />
           Thể loại
@@ -54,7 +54,7 @@ export default function BookFilter({
       </div>
 
       {/* Khoảng giá */}
-      <div className="book-filter-section">
+      <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-currency-exchange me-2" />
           Khoảng giá
@@ -81,7 +81,7 @@ export default function BookFilter({
       </div>
 
       {/* Sắp xếp */}
-      <div className="book-filter-section">
+      <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-sort-down me-2" />
           Sắp xếp

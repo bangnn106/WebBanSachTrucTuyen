@@ -344,7 +344,7 @@ footer p {
   padding: 28px;
 }
 
-.book-detail-image-section {
+.book-detail-image-wrapper {
   text-align: center;
 }
 
@@ -557,13 +557,13 @@ footer p {
   top: 20px;
 }
 
-.book-filter-section {
+.book-filter-group {
   margin-bottom: 24px;
   padding-bottom: 20px;
   border-bottom: 1px solid #eee;
 }
 
-.book-filter-section:last-child {
+.book-filter-group:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
@@ -738,7 +738,7 @@ footer p {
 
 
 /* Checkout Page */
-.checkout-section {
+.checkout-block {
   background: white;
   border-radius: 12px;
   padding: 24px;

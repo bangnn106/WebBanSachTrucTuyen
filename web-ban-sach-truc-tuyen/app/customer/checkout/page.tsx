@@ -97,7 +97,7 @@ export default function CheckoutPage() {
         <Row className="g-4">
           {/* ── CỘT TRÁI: FORM THÔNG TIN ── */}
           <Col lg={7}>
-            <div className="checkout-section">
+            <div className="checkout">
               <h5 className="fw-bold mb-3">
                 <i className="bi bi-person-lines-fill me-2" />
                 Thông tin giao hàng

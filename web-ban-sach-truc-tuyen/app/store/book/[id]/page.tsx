@@ -82,7 +82,7 @@ export default function BookDetailPage() {
         <Row className="g-4">
           {/* ── CỘT TRÁI: HÌNH ẢNH ── */}
           <Col lg={5}>
-            <div className="book-detail-image-section">
+            <div className="book-detail-image-wrapper">
               <div className="book-detail-image-main">
                 <Image
                   src={book.anh_bia || "/images/book/imgbook1.jpg"}
