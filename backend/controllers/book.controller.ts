@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import * as bookService from '../services/book';
+import * as bookService from '../services/book.service';
 
 // GET /api/books - Tìm kiếm sách (public)
 export async function searchBooks(
