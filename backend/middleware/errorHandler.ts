@@ -1,69 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
 
-// ========== MAPPING MÃ LỖI SQL → HTTP STATUS ==========
-// Khi Stored Procedure dùng THROW 50xxx, ta map sang HTTP status phù hợp
-function mapSqlErrorToHttp(errorNumber: number): number {
+//MAPPING MA LOI SQL HTTP STATUS//Khi Stored Procedure dung THROW 50xxx, ta map sang HTTP status phu hopfunction mapSqlErrorToHttp(errorNumber: number): number {
   const mapping: Record<number, number> = {
-    // --- Lỗi User/Auth ---
-    50001: 409,  // Email đã tồn tại
-    50002: 500,  // Chưa có vai trò KHACH_HANG
-    50003: 404,  // Người dùng không tồn tại
-    50004: 409,  // Email đã tồn tại (cập nhật)
-
-    // --- Lỗi Sách ---
-    50010: 409,  // ISBN đã tồn tại
-    50011: 400,  // Giá sách không hợp lệ
-    50012: 400,  // Số lượng tồn không được âm
-    50013: 404,  // Thể loại không tồn tại
-    50014: 404,  // NXB không tồn tại
-    50015: 404,  // Sách không tồn tại
-    50016: 409,  // ISBN trùng (cập nhật)
-    50017: 400,  // Giá không hợp lệ (cập nhật)
-    50018: 404,  // Thể loại không tồn tại (cập nhật)
-    50019: 404,  // NXB không tồn tại (cập nhật)
-    50020: 400,  // Trạng thái không hợp lệ
-    50021: 404,  // Sách không tồn tại
-    50022: 400,  // Không thể đặt Còn hàng khi tồn = 0
-
-    // --- Lỗi Giỏ hàng ---
-    50030: 400,  // Số lượng phải > 0
-    50031: 404,  // Sách không tồn tại hoặc không còn bán
-    50032: 400,  // Số lượng vượt quá tồn kho
-    50033: 400,  // Số lượng phải > 0
-    50034: 404,  // Sách không tồn tại
-    50035: 400,  // Số lượng vượt quá tồn kho
-    50036: 404,  // Sách không có trong giỏ
-    50037: 404,  // Sách không có trong giỏ (xóa)
-
-    // --- Lỗi Đơn hàng ---
-    50040: 404,  // Không tìm thấy giỏ hàng
-    50041: 400,  // Giỏ hàng đang trống
-    50042: 400,  // Sách hết hàng/ngừng bán/không đủ số lượng
-    50043: 404,  // Không tìm thấy đơn hàng
-    50044: 404,  // Đơn hàng không tồn tại
-    50045: 400,  // Không thể chuyển sang trạng thái này
-    50046: 404,  // Đơn hàng không tồn tại (hủy)
-    50047: 404,  // Người thực hiện không tồn tại
-    50048: 403,  // Không có quyền hủy đơn hàng này
-    50049: 400,  // Chỉ hủy được khi Chờ xác nhận/Đang chuẩn bị
-
-    // --- Lỗi Kho ---
-    50060: 400,  // Số lượng nhập phải > 0
-    50061: 403,  // Không có quyền nhập kho
-    50062: 404,  // Sách không tồn tại
-    50063: 400,  // Số lượng điều chỉnh phải khác 0
-    50064: 400,  // Phải nhập lý do
-    50065: 403,  // Không có quyền điều chỉnh kho
-    50066: 404,  // Sách không tồn tại (điều chỉnh)
-    50067: 400,  // Tồn sau điều chỉnh < 0
-  };
+    //Loi User/Auth    50001: 409,  //Email a ton tai    50002: 500,  //Chua co vai tro KHACH HANG    50003: 404,  //Nguoi dung khong ton tai    50004: 409,  //Email a ton tai (cap nhat)
+    //Loi Sach    50010: 409,  //ISBN a ton tai    50011: 400,  //Gia sach khong hop le    50012: 400,  //So luong ton khong uoc am    50013: 404,  //The loai khong ton tai    50014: 404,  //NXB khong ton tai    50015: 404,  //Sach khong ton tai    50016: 409,  //ISBN trung (cap nhat)    50017: 400,  //Gia khong hop le (cap nhat)    50018: 404,  //The loai khong ton tai (cap nhat)    50019: 404,  //NXB khong ton tai (cap nhat)    50020: 400,  //Trang thai khong hop le    50021: 404,  //Sach khong ton tai    50022: 400,  //Khong the at Con hang khi ton 0
+    //Loi Gio hang    50030: 400,  //So luong phai > 0    50031: 404,  //Sach khong ton tai hoac khong con ban    50032: 400,  //So luong vuot qua ton kho    50033: 400,  //So luong phai > 0    50034: 404,  //Sach khong ton tai    50035: 400,  //So luong vuot qua ton kho    50036: 404,  //Sach khong co trong gio    50037: 404,  //Sach khong co trong gio (xoa)
+    //Loi on hang    50040: 404,  //Khong tim thay gio hang    50041: 400,  //Gio hang ang trong    50042: 400,  //Sach het hang/ngung ban/khong u so luong    50043: 404,  //Khong tim thay on hang    50044: 404,  //on hang khong ton tai    50045: 400,  //Khong the chuyen sang trang thai nay    50046: 404,  //on hang khong ton tai (huy)    50047: 404,  //Nguoi thuc hien khong ton tai    50048: 403,  //Khong co quyen huy on hang nay    50049: 400,  //Chi huy uoc khi Cho xac nhan/ang chuan bi
+    //Loi Kho    50060: 400,  //So luong nhap phai > 0    50061: 403,  //Khong co quyen nhap kho    50062: 404,  //Sach khong ton tai    50063: 400,  //So luong ieu chinh phai khac 0    50064: 400,  //Phai nhap ly do    50065: 403,  //Khong co quyen ieu chinh kho    50066: 404,  //Sach khong ton tai (ieu chinh)    50067: 400,  //Ton sau ieu chinh < 0  };
 
   return mapping[errorNumber] || 400;
 }
 
-// ========== GLOBAL ERROR HANDLER ==========
-// Đặt SAU tất cả routes trong middleware chain
-export function errorHandler(
+//GLOBAL ERROR HANDLER//at SAU tat ca routes trong middleware chainexport function errorHandler(
   err: any,
   _req: Request,
   res: Response,
@@ -71,18 +19,15 @@ export function errorHandler(
 ): void {
   console.error('❌ Error:', err);
 
-  // 1) Lỗi từ SQL Server (Stored Procedure THROW 50xxx)
-  if (err.number && err.number >= 50000) {
+  //1) Loi tu SQL Server (Stored Procedure THROW 50xxx)  if (err.number && err.number >= 50000) {
     const httpStatus = mapSqlErrorToHttp(err.number);
     res.status(httpStatus).json({
       success: false,
-      message: err.message,  // Thông điệp tiếng Việt từ SP
-    });
+      message: err.message,  //Thong iep tieng Viet tu SP    });
     return;
   }
 
-  // 2) Lỗi SQL Server khác (constraint violation, syntax...)
-  if (err.number) {
+  //2) Loi SQL Server khac (constraint violation, syntax...)  if (err.number) {
     res.status(400).json({
       success: false,
       message: 'Lỗi cơ sở dữ liệu. Vui lòng kiểm tra lại dữ liệu.',
@@ -91,8 +36,7 @@ export function errorHandler(
     return;
   }
 
-  // 3) Lỗi Multer (file quá lớn)
-  if (err.code === 'LIMIT_FILE_SIZE') {
+  //3) Loi Multer (file qua lon)  if (err.code === 'LIMIT_FILE_SIZE') {
     res.status(400).json({
       success: false,
       message: 'File ảnh quá lớn. Kích thước tối đa là 5MB.',
@@ -100,8 +44,7 @@ export function errorHandler(
     return;
   }
 
-  // 4) Lỗi có statusCode custom (từ service throw)
-  if (err.statusCode) {
+  //4) Loi co statusCode custom (tu service throw)  if (err.statusCode) {
     res.status(err.statusCode).json({
       success: false,
       message: err.message,
@@ -109,8 +52,7 @@ export function errorHandler(
     return;
   }
 
-  // 5) Lỗi không xác định
-  res.status(500).json({
+  //5) Loi khong xac inh  res.status(500).json({
     success: false,
     message: 'Đã xảy ra lỗi máy chủ.',
     error: process.env.NODE_ENV === 'development' ? err.stack : undefined,

@@ -6,48 +6,35 @@ import { getPool } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import apiRoutes from './routes/index';
 
-// Load biến môi trường từ file .env
-dotenv.config();
+//Load bien moi truong tu file .envdotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ========== MIDDLEWARES ==========
+//MIDDLEWARES
+//Cho phep frontend goi API (CORS)app.use(cors());
 
-// Cho phép frontend gọi API (CORS)
-app.use(cors());
+//Parse JSON bodyapp.use(express.json());
 
-// Parse JSON body
-app.use(express.json());
+//Parse URL-encoded body (form submit)app.use(express.urlencoded({ extended: true }));
 
-// Parse URL-encoded body (form submit)
-app.use(express.urlencoded({ extended: true }));
+//Phuc vu file tinh (anh bia sach a upload)app.use(express.static(path.join(__dirname, 'public')));
 
-// Phục vụ file tĩnh (ảnh bìa sách đã upload)
-app.use(express.static(path.join(__dirname, 'public')));
+//ROUTES
+//Mount tat ca API routes duoi prefix /apiapp.use('/api', apiRoutes);
 
-// ========== ROUTES ==========
-
-// Mount tất cả API routes dưới prefix /api
-app.use('/api', apiRoutes);
-
-// Route kiểm tra server hoạt động
-app.get('/', (_req, res) => {
+//Route kiem tra server hoat ongapp.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'API Website Bán Sách Trực Tuyến đang hoạt động! 📚',
   });
 });
 
-// ========== ERROR HANDLER ==========
-// QUAN TRỌNG: Phải đặt SAU tất cả routes
-app.use(errorHandler);
+//ERROR HANDLER//QUAN TRONG: Phai at SAU tat ca routesapp.use(errorHandler);
 
-// ========== KHỞI ĐỘNG SERVER ==========
-async function startServer() {
+//KHOI ONG SERVERasync function startServer() {
   try {
-    // Kết nối database trước khi lắng nghe port
-    await getPool();
+    //Ket noi database truoc khi lang nghe port    await getPool();
 
     app.listen(PORT, () => {
       console.log(`\n🚀 Server đang chạy tại: http://localhost:${PORT}`);

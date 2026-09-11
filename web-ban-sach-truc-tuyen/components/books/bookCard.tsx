@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge, Button, Card } from "react-bootstrap";
 import { book } from "@/types/book";
+import { layUrlAnh } from "@/lib/api";
 
 interface Props {
   book: book;
@@ -29,10 +30,7 @@ export default function BookCard({
 
         <Link href={`/store/book/${book.id}`}>
           <Image
-            src={
-              book.anh_bia ||
-              "/images/book/imgbook1.jpg"
-            }
+            src={layUrlAnh(book.anh_bia)}
             alt={book.ten_sach}
             width={180}
             height={230}

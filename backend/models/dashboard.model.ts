@@ -1,5 +1,4 @@
-// ========== TỔNG QUAN DASHBOARD ==========
-export interface TongQuanDashboard {
+//TONG QUAN DASHBOARDexport interface TongQuanDashboard {
   tong_doanh_thu: number;
   tong_don_hang: number;
   don_da_giao: number;
@@ -10,8 +9,7 @@ export interface TongQuanDashboard {
   tong_sach_da_ban: number;
 }
 
-// ========== DOANH THU THEO NGÀY/THÁNG ==========
-export interface DoanhThuThongKe {
+//DOANH THU THEO NGAY/THANGexport interface DoanhThuThongKe {
   ngay?: string;
   nam?: number;
   thang?: number;
@@ -19,8 +17,7 @@ export interface DoanhThuThongKe {
   doanh_thu: number;
 }
 
-// ========== SÁCH BÁN CHẠY ==========
-export interface SachBanChay {
+//SACH BAN CHAYexport interface SachBanChay {
   id: number;
   ten_sach: string;
   tac_gia: string;
@@ -33,8 +30,7 @@ export interface SachBanChay {
   tong_doanh_thu: number;
 }
 
-// ========== ĐƠN HÀNG THEO TRẠNG THÁI ==========
-export interface DonHangTheoTrangThai {
+//ON HANG THEO TRANG THAIexport interface DonHangTheoTrangThai {
   trang_thai_don_hang: string;
   so_luong_don: number;
   tong_gia_tri: number;

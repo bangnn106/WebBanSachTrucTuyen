@@ -24,7 +24,7 @@ export default function CartPage() {
       </h2>
 
       <Row className="g-4">
-        {/* Danh sách sản phẩm */}
+        {/* Danh sach san pham */}
         <Col lg={8}>
           <CartList
             items={items}
@@ -33,7 +33,7 @@ export default function CartPage() {
           />
         </Col>
 
-        {/* Tóm tắt đơn hàng */}
+        {/* Tom tat on hang */}
         <Col lg={4}>
           {items.length > 0 && (
             <CartSummary

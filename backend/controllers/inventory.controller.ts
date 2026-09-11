@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as inventoryService from '../services/inventory.service';
 
-// POST /api/inventory/import - Nhập kho
-export async function importStock(
+//POST /api/inventory/import - Nhap khoexport async function importStock(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -30,8 +29,7 @@ export async function importStock(
   }
 }
 
-// POST /api/inventory/adjust - Điều chỉnh kho
-export async function adjustStock(
+//POST /api/inventory/adjust - ieu chinh khoexport async function adjustStock(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -64,8 +62,7 @@ export async function adjustStock(
   }
 }
 
-// GET /api/inventory/history - Lịch sử kho
-export async function getHistory(
+//GET /api/inventory/history - Lich su khoexport async function getHistory(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

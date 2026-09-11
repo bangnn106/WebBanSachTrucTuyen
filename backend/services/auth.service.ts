@@ -7,8 +7,7 @@ import { DangKyDTO, DangNhapDTO, JwtPayload, NguoiDung } from '../models/user.mo
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 
-// ========== TẠO JWT TOKEN ==========
-function taoToken(payload: JwtPayload): string {
+//TAO JWT TOKENfunction taoToken(payload: JwtPayload): string {
   return jwt.sign(
     {
       id: payload.id,
@@ -21,13 +20,10 @@ function taoToken(payload: JwtPayload): string {
   );
 }
 
-// ========== ĐĂNG KÝ TÀI KHOẢN MỚI ==========
-export async function dangKy(data: DangKyDTO) {
-  // 1. Hash mật khẩu trước khi lưu vào DB
-  const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
+//ANG KY TAI KHOAN MOIexport async function dangKy(data: DangKyDTO) {
+  //1. Hash mat khau truoc khi luu vao DB  const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
 
-  // 2. Gọi SP đăng ký (SP tự tạo giỏ hàng)
-  const result = await executeProcedure('sp_dang_ky_nguoi_dung', [
+  //2. Goi SP ang ky (SP tu tao gio hang)  const result = await executeProcedure('sp_dang_ky_nguoi_dung', [
     { name: 'ho_ten',           type: sql.NVarChar(100), value: data.ho_ten },
     { name: 'email',            type: sql.VarChar(255),  value: data.email },
     { name: 'mat_khau',         type: sql.VarChar(255),  value: hashedPassword },
@@ -38,13 +34,10 @@ export async function dangKy(data: DangKyDTO) {
     { name: 'dia_chi_chi_tiet', type: sql.NVarChar(255), value: data.dia_chi_chi_tiet || null },
   ]);
 
-  return result.recordset[0]; // { id_nguoi_dung, thong_bao }
-}
+  return result.recordset[0]; //{ id nguoi dung, thong bao }}
 
-// ========== ĐĂNG NHẬP ==========
-export async function dangNhap(data: DangNhapDTO) {
-  // 1. Tìm user theo email
-  const result = await executeProcedure('sp_lay_nguoi_dung_theo_email', [
+//ANG NHAPexport async function dangNhap(data: DangNhapDTO) {
+  //1. Tim user theo email  const result = await executeProcedure('sp_lay_nguoi_dung_theo_email', [
     { name: 'email', type: sql.VarChar(255), value: data.email },
   ]);
 
@@ -54,22 +47,19 @@ export async function dangNhap(data: DangNhapDTO) {
 
   const user: NguoiDung = result.recordset[0];
 
-  // 2. So sánh mật khẩu với hash trong DB
-  const isMatch = await bcrypt.compare(data.mat_khau, user.mat_khau);
+  //2. So sanh mat khau voi hash trong DB  const isMatch = await bcrypt.compare(data.mat_khau, user.mat_khau);
   if (!isMatch) {
     throw { statusCode: 401, message: 'Email hoặc mật khẩu không đúng.' };
   }
 
-  // 3. Tạo JWT token
-  const token = taoToken({
+  //3. Tao JWT token  const token = taoToken({
     id: user.id,
     email: user.email,
     id_vai_tro: user.id_vai_tro,
     ten_vai_tro: user.ten_vai_tro,
   });
 
-  // 4. Trả token + info user (KHÔNG trả mật khẩu)
-  return {
+  //4. Tra token + info user (KHONG tra mat khau)  return {
     token,
     user: {
       id: user.id,
@@ -85,8 +75,7 @@ export async function dangNhap(data: DangNhapDTO) {
   };
 }
 
-// ========== LẤY THÔNG TIN USER HIỆN TẠI (từ token) ==========
-export async function layThongTinHienTai(email: string) {
+//LAY THONG TIN USER HIEN TAI (tu token)export async function layThongTinHienTai(email: string) {
   const result = await executeProcedure('sp_lay_nguoi_dung_theo_email', [
     { name: 'email', type: sql.VarChar(255), value: email },
   ]);
@@ -96,7 +85,6 @@ export async function layThongTinHienTai(email: string) {
   }
 
   const user = result.recordset[0];
-  // Loại bỏ mật khẩu trước khi trả về
-  const { mat_khau, ...userInfo } = user;
+  //Loai bo mat khau truoc khi tra ve  const { mat_khau, ...userInfo } = user;
   return userInfo;
 }

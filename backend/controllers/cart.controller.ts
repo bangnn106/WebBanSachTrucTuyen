@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as cartService from '../services/cart.service';
 
-// GET /api/cart - Lấy giỏ hàng
-export async function getCart(
+//GET /api/cart - Lay gio hangexport async function getCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -17,8 +16,7 @@ export async function getCart(
   }
 }
 
-// POST /api/cart - Thêm sách vào giỏ
-export async function addToCart(
+//POST /api/cart - Them sach vao gioexport async function addToCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -47,8 +45,7 @@ export async function addToCart(
   }
 }
 
-// PUT /api/cart/:idSach - Cập nhật số lượng
-export async function updateCartItem(
+//PUT /api/cart/:idSach - Cap nhat so luongexport async function updateCartItem(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -78,8 +75,7 @@ export async function updateCartItem(
   }
 }
 
-// DELETE /api/cart/:idSach - Xóa 1 sách khỏi giỏ
-export async function removeFromCart(
+//DELETE /api/cart/:idSach - Xoa 1 sach khoi gioexport async function removeFromCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -95,8 +91,7 @@ export async function removeFromCart(
   }
 }
 
-// DELETE /api/cart - Xóa toàn bộ giỏ
-export async function clearCart(
+//DELETE /api/cart - Xoa toan bo gioexport async function clearCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

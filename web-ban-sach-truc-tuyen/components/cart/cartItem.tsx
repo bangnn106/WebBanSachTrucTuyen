@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "react-bootstrap";
 import { CartItem } from "@/types/book";
+import { layUrlAnh } from "@/lib/api";
 import QuantityInput from "./QuantityInput";
 
 interface Props {
@@ -21,11 +22,11 @@ export default function CartItemRow({
 
   return (
     <div className="cart-item">
-      {/* Ảnh */}
+      {/* Anh */}
       <div className="cart-item-image">
         <Link href={`/store/book/${item.id_sach}`}>
           <Image
-            src={item.anh_bia || "/images/book/imgbook1.jpg"}
+            src={layUrlAnh(item.anh_bia)}
             alt={item.ten_sach}
             width={80}
             height={100}
@@ -34,7 +35,7 @@ export default function CartItemRow({
         </Link>
       </div>
 
-      {/* Thông tin */}
+      {/* Thong tin */}
       <div className="cart-item-info">
         <Link
           href={`/store/book/${item.id_sach}`}
@@ -48,7 +49,7 @@ export default function CartItemRow({
         </div>
       </div>
 
-      {/* Số lượng */}
+      {/* So luong */}
       <div className="cart-item-quantity">
         <QuantityInput
           value={item.so_luong}
@@ -57,12 +58,12 @@ export default function CartItemRow({
         />
       </div>
 
-      {/* Thành tiền */}
+      {/* Thanh tien */}
       <div className="cart-item-subtotal">
         {subtotal.toLocaleString("vi-VN")} đ
       </div>
 
-      {/* Xoá */}
+      {/* Xoa */}
       <div className="cart-item-remove">
         <Button
           variant="link"

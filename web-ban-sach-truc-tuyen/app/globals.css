@@ -849,3 +849,492 @@ footer p {
     gap: 4px;
   }
 }
+
+
+/* ============================================
+   AUTH FORMS
+   ============================================ */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f0fe 0%, #f0f4ff 100%);
+  padding: 20px;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  width: 100%;
+  max-width: 460px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+.auth-card h2 {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-card .form-control {
+  border-radius: 10px;
+  padding: 12px 16px;
+  border: 1.5px solid #e0e0e0;
+}
+
+.auth-card .form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(41,118,255,0.1);
+}
+
+.auth-card .btn-primary {
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #aaa;
+  font-size: 14px;
+  margin: 20px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e5e5e5;
+}
+
+
+/* ============================================
+   ADMIN / STAFF DASHBOARD LAYOUT
+   ============================================ */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar {
+  width: 260px;
+  background: #1a1f36;
+  color: white;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 200;
+  overflow-y: auto;
+  transition: 0.3s;
+}
+
+.dashboard-sidebar-brand {
+  padding: 24px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-sidebar-nav {
+  padding: 12px 0;
+}
+
+.dashboard-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 24px;
+  color: rgba(255,255,255,0.65);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s;
+  border-left: 3px solid transparent;
+}
+
+.dashboard-sidebar-item:hover {
+  color: white;
+  background: rgba(255,255,255,0.06);
+}
+
+.dashboard-sidebar-item.active {
+  color: white;
+  background: rgba(41,118,255,0.15);
+  border-left-color: var(--primary);
+}
+
+.dashboard-sidebar-item i {
+  font-size: 18px;
+  width: 22px;
+  text-align: center;
+}
+
+.dashboard-sidebar-section {
+  padding: 20px 24px 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.35);
+  font-weight: 600;
+}
+
+.dashboard-content {
+  flex: 1;
+  margin-left: 260px;
+  background: #f5f7fa;
+  min-height: 100vh;
+}
+
+.dashboard-navbar {
+  background: white;
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.dashboard-navbar-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+}
+
+.dashboard-navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.dashboard-main {
+  padding: 24px 28px;
+}
+
+
+/* ============================================
+   STAT CARDS
+   ============================================ */
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: 0.2s;
+  border: 1px solid #f0f0f0;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+
+.stat-card-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.stat-card-info h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: #222;
+}
+
+.stat-card-info p {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+
+/* ============================================
+   DASHBOARD CHARTS (CSS-only)
+   ============================================ */
+.chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #f0f0f0;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 200px;
+  padding-top: 10px;
+}
+
+.bar-chart-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bar-chart-bar {
+  width: 100%;
+  max-width: 40px;
+  background: linear-gradient(180deg, var(--primary), #5da3ff);
+  border-radius: 6px 6px 0 0;
+  transition: 0.3s;
+  min-height: 4px;
+}
+
+.bar-chart-bar:hover {
+  opacity: 0.85;
+}
+
+.bar-chart-label {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+}
+
+.bar-chart-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: #333;
+}
+
+
+/* ============================================
+   ORDER STATUS BADGE
+   ============================================ */
+.order-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.order-status.cho-xac-nhan {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.order-status.da-xac-nhan {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.order-status.dang-giao {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.order-status.da-giao {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
+
+.order-status.da-huy {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+
+/* ============================================
+   ADMIN TABLE
+   ============================================ */
+.admin-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.admin-table table {
+  margin: 0;
+}
+
+.admin-table thead th {
+  background: #f8f9fa;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  border-bottom: 1px solid #eee;
+  padding: 14px 16px;
+  white-space: nowrap;
+}
+
+.admin-table tbody td {
+  padding: 14px 16px;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.admin-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+.admin-toolbar {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 1px solid #f0f0f0;
+}
+
+
+/* ============================================
+   CUSTOMER ACCOUNT SIDEBAR
+   ============================================ */
+.account-layout {
+  display: flex;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.account-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.account-sidebar-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+}
+
+.account-sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.account-sidebar-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e8f0fe, #b3d4fc);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--primary);
+}
+
+.account-sidebar-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.account-sidebar-nav {
+  padding: 8px 0;
+}
+
+.account-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  font-size: 14px;
+  color: #555;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.account-sidebar-link:hover {
+  background: #f5f7fa;
+  color: var(--primary);
+}
+
+.account-sidebar-link.active {
+  color: var(--primary);
+  background: #f0f7ff;
+  font-weight: 600;
+}
+
+.account-sidebar-link i {
+  font-size: 18px;
+  width: 22px;
+  text-align: center;
+}
+
+.account-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #f0f0f0;
+}
+
+
+/* ============================================
+   INVENTORY PAGE
+   ============================================ */
+.inventory-form {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid #f0f0f0;
+}
+
+
+/* ============================================
+   RESPONSIVE - DASHBOARD
+   ============================================ */
+@media (max-width: 991px) {
+  .dashboard-sidebar {
+    transform: translateX(-100%);
+  }
+
+  .dashboard-content {
+    margin-left: 0;
+  }
+
+  .account-layout {
+    flex-direction: column;
+  }
+
+  .account-sidebar {
+    width: 100%;
+  }
+}

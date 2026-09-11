@@ -7,8 +7,7 @@ import {
 } from '../views/mailTemplates';
 import { VaiTro } from '../models/user.model';
 
-// POST /api/orders - Tạo đơn hàng từ giỏ (khách hàng)
-export async function createOrder(
+//POST /api/orders - Tao on hang tu gio (khach hang)export async function createOrder(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -26,8 +25,7 @@ export async function createOrder(
       ten_nguoi_nhan, so_dien_thoai_nhan, dia_chi_giao_hang, ghi_chu,
     });
 
-    // Gửi email xác nhận đơn hàng (không chờ kết quả, không crash nếu lỗi)
-    try {
+    //Gui email xac nhan on hang (khong cho ket qua, khong crash neu loi)    try {
       const detail = await orderService.layChiTietDonHang(result.id_don_hang, null);
       await sendMail(
         req.user!.email,
@@ -43,8 +41,7 @@ export async function createOrder(
         })
       );
     } catch {
-      // Email lỗi không ảnh hưởng response
-    }
+      //Email loi khong anh huong response    }
 
     res.status(201).json({
       success: true,
@@ -56,15 +53,13 @@ export async function createOrder(
   }
 }
 
-// GET /api/orders - Danh sách đơn hàng
-export async function getOrders(
+//GET /api/orders - Danh sach on hangexport async function getOrders(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const { tu_khoa, trang_thai, tu_ngay, den_ngay, trang, kich_thuoc_trang } = req.query;
 
-    // KHACH_HANG chỉ xem đơn của mình, NHAN_VIEN/ADMIN xem tất cả
-    const idNguoiDung =
+    //KHACH HANG chi xem on cua minh, NHAN VIEN/ADMIN xem tat ca    const idNguoiDung =
       req.user!.ten_vai_tro === VaiTro.KHACH_HANG ? req.user!.id : null;
 
     const result = await orderService.layDanhSachDonHang(idNguoiDung, {
@@ -86,15 +81,13 @@ export async function getOrders(
   }
 }
 
-// GET /api/orders/:id - Chi tiết đơn hàng
-export async function getOrderById(
+//GET /api/orders/:id - Chi tiet on hangexport async function getOrderById(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const idDonHang = parseInt(req.params.id);
 
-    // KHACH_HANG chỉ xem đơn của mình
-    const idNguoiDung =
+    //KHACH HANG chi xem on cua minh    const idNguoiDung =
       req.user!.ten_vai_tro === VaiTro.KHACH_HANG ? req.user!.id : null;
 
     const result = await orderService.layChiTietDonHang(idDonHang, idNguoiDung);
@@ -109,8 +102,7 @@ export async function getOrderById(
   }
 }
 
-// PATCH /api/orders/:id/status - Cập nhật trạng thái (nhân viên/admin)
-export async function updateOrderStatus(
+//PATCH /api/orders/:id/status - Cap nhat trang thai (nhan vien/admin)export async function updateOrderStatus(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -138,8 +130,7 @@ export async function updateOrderStatus(
   }
 }
 
-// PATCH /api/orders/:id/cancel - Hủy đơn hàng
-export async function cancelOrder(
+//PATCH /api/orders/:id/cancel - Huy on hangexport async function cancelOrder(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -150,8 +141,7 @@ export async function cancelOrder(
       idDonHang, req.user!.id, ly_do
     );
 
-    // Gửi email thông báo hủy đơn
-    try {
+    //Gui email thong bao huy on    try {
       const detail = await orderService.layChiTietDonHang(idDonHang, null);
       if (detail.don_hang?.email) {
         await sendMail(
@@ -166,8 +156,7 @@ export async function cancelOrder(
         );
       }
     } catch {
-      // Email lỗi không ảnh hưởng response
-    }
+      //Email loi khong anh huong response    }
 
     res.json({
       success: true,

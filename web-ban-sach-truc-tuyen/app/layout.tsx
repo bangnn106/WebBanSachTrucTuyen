@@ -4,11 +4,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "./globals.css";
 
+import { AuthProvider } from "@/contexts/AuthProvider";
 import { CartProvider } from "@/contexts/CartProvider";
 
 export const metadata: Metadata = {
-  title: "Book Store",
-  description: "Book Store",
+  title: "Nhà Sách Trực Tuyến",
+  description: "Mua sách online giá tốt, giao hàng tận nơi",
 };
 
 export default function RootLayout({
@@ -17,11 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-   <html lang="vi">
+    <html lang="vi">
       <body>
-        <CartProvider>
-          {children}
-        </CartProvider>
+        {/* AuthProvider boc ngoai e CartProvider co the dung useAuth */}
+        <AuthProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );

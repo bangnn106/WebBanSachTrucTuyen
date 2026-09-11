@@ -19,7 +19,7 @@ export interface book{
     ten_nxb?: string;
 }
 
-/* Cart item - matches sp_lay_chi_tiet_gio_hang output */
+/* Cart item - matches sp lay chi tiet gio hang output */
 export interface CartItem {
     id_sach: number;
     ten_sach: string;

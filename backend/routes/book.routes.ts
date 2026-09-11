@@ -6,12 +6,10 @@ import * as bookController from '../controllers/book.controller';
 
 const router = Router();
 
-// ===== PUBLIC ROUTES (không cần đăng nhập) =====
-router.get('/', bookController.searchBooks);
+//PUBLIC ROUTES (khong can ang nhap)router.get('/', bookController.searchBooks);
 router.get('/:id', bookController.getBookById);
 
-// ===== ADMIN ROUTES =====
-router.post(
+//ADMIN ROUTESrouter.post(
   '/',
   authMiddleware,
   roleMiddleware('QUAN_TRI_VIEN'),

@@ -1,134 +1,180 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useMemo, useState, Suspense } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Container, Row, Col, Form, Button, Spinner, Alert } from "react-bootstrap";
+import BookCard from "@/components/books/bookCard";
+import { sachAPI } from "@/lib/api";
+import { book } from "@/types/book";
 
-import { mockBooks } from "@/constants/testData";
-import { priceRanges } from "@/constants/bookData";
-import BookFilter from "@/components/books/bookFilter";
-import BookGrid from "@/components/books/bookGrid";
-import BookPagination from "@/components/books/bookPagination";
+interface TheLoai { id: number; ten_the_loai: string; }
+interface NhaXuatBan { id: number; ten_nxb: string; }
 
-const PAGE_SIZE = 12;
-
-function SearchContent() {
+export default function SearchPage() {
   const searchParams = useSearchParams();
-  const keyword = searchParams.get("q") || "";
+  const router = useRouter();
 
-  const [category, setCategory] = useState<number | null>(null);
-  const [priceIdx, setPriceIdx] = useState<number | null>(null);
-  const [sort, setSort] = useState("MOI_NHAT");
-  const [page, setPage] = useState(1);
+  //State cho bo loc  const [tuKhoa, setTuKhoa] = useState(searchParams.get("q") || "");
+  const [idTheLoai, setIdTheLoai] = useState(searchParams.get("id_the_loai") || "");
+  const [sapXep, setSapXep] = useState("MOI_NHAT");
+  const [trang, setTrang] = useState(1);
 
-  /* Lọc + sắp xếp */
-  const filtered = useMemo(() => {
-    let result = mockBooks.filter((b) => b.trang_thai !== "Ngừng bán");
+  //State cho du lieu  const [danhSachSach, setDanhSachSach] = useState<book[]>([]);
+  const [tongTrang, setTongTrang] = useState(0);
+  const [danhSachTheLoai, setDanhSachTheLoai] = useState<TheLoai[]>([]);
+  const [dangTai, setDangTai] = useState(true);
 
-    /* Tìm kiếm theo từ khoá */
-    if (keyword) {
-      const kw = keyword.toLowerCase();
-      result = result.filter(
-        (b) =>
-          b.ten_sach.toLowerCase().includes(kw) ||
-          b.tac_gia.toLowerCase().includes(kw) ||
-          b.isbn.includes(kw)
-      );
-    }
+  //Load danh sach the loai khi mount  useEffect(() => {
+    sachAPI.layDanhSachTheLoai()
+      .then((res) => setDanhSachTheLoai(res.data || []))
+      .catch(() => {});
+  }, []);
 
-    /* Lọc thể loại */
-    if (category !== null) {
-      result = result.filter((b) => b.id_the_loai === category);
-    }
+  //Load sach khi params thay oi  useEffect(() => {
+    setDangTai(true);
+    sachAPI
+      .timKiem({
+        tu_khoa: tuKhoa || undefined,
+        id_the_loai: idTheLoai ? parseInt(idTheLoai) : undefined,
+        sap_xep: sapXep,
+        trang,
+        kich_thuoc_trang: 12,
+      })
+      .then((res) => {
+        setDanhSachSach(res.data.items || []);
+        setTongTrang(res.data.tong_trang || 0);
+      })
+      .catch(() => setDanhSachSach([]))
+      .finally(() => setDangTai(false));
+  }, [tuKhoa, idTheLoai, sapXep, trang]);
 
-    /* Lọc khoảng giá */
-    if (priceIdx !== null) {
-      const range = priceRanges[priceIdx];
-      result = result.filter(
-        (b) => b.gia_ban >= range.min && b.gia_ban <= range.max
-      );
-    }
+  //Cap nhat tuKhoa khi URL thay oi  useEffect(() => {
+    setTuKhoa(searchParams.get("q") || "");
+    setIdTheLoai(searchParams.get("id_the_loai") || "");
+    setTrang(1);
+  }, [searchParams]);
 
-    /* Sắp xếp */
-    switch (sort) {
-      case "GIA_TANG":
-        result.sort((a, b) => a.gia_ban - b.gia_ban);
-        break;
-      case "GIA_GIAM":
-        result.sort((a, b) => b.gia_ban - a.gia_ban);
-        break;
-      case "BAN_CHAY":
-        result.sort((a, b) => b.so_luong_da_ban - a.so_luong_da_ban);
-        break;
-      default:
-        result.sort((a, b) => b.id - a.id);
-    }
-
-    return result;
-  }, [keyword, category, priceIdx, sort]);
-
-  /* Phân trang */
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const pagedBooks = filtered.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setTrang(1);
+    router.push(`/store/search?q=${encodeURIComponent(tuKhoa)}`);
+  }
 
   return (
     <Container fluid="xl" className="py-4">
-      {/* Breadcrumb */}
       <nav className="book-detail-breadcrumb mb-3">
         <a href="/">Trang chủ</a>
         <i className="bi bi-chevron-right mx-2" />
-        <span>{keyword ? `Kết quả tìm kiếm: "${keyword}"` : "Tất cả sách"}</span>
+        <span>Tìm kiếm sách</span>
       </nav>
 
       <Row className="g-4">
-        {/* Sidebar lọc */}
+        {/* BO LOC BEN TRAI */}
         <Col lg={3}>
-          <BookFilter
-            selectedCategory={category}
-            selectedPrice={priceIdx}
-            selectedSort={sort}
-            onCategoryChange={(v) => { setCategory(v); setPage(1); }}
-            onPriceChange={(v) => { setPriceIdx(v); setPage(1); }}
-            onSortChange={(v) => { setSort(v); setPage(1); }}
-          />
+          <div className="p-3 border rounded bg-white">
+            <h5 className="fw-bold mb-3">
+              <i className="bi bi-funnel me-2" />Bộ lọc
+            </h5>
+
+            <Form onSubmit={handleSearch}>
+              <Form.Group className="mb-3">
+                <Form.Label className="small fw-bold">Từ khóa</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Tìm sách..."
+                  value={tuKhoa}
+                  onChange={(e) => setTuKhoa(e.target.value)}
+                />
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="small fw-bold">Thể loại</Form.Label>
+                <Form.Select
+                  value={idTheLoai}
+                  onChange={(e) => { setIdTheLoai(e.target.value); setTrang(1); }}
+                >
+                  <option value="">Tất cả thể loại</option>
+                  {danhSachTheLoai.map((tl) => (
+                    <option key={tl.id} value={tl.id}>{tl.ten_the_loai}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+
+              <Form.Group className="mb-3">
+                <Form.Label className="small fw-bold">Sắp xếp</Form.Label>
+                <Form.Select
+                  value={sapXep}
+                  onChange={(e) => { setSapXep(e.target.value); setTrang(1); }}
+                >
+                  <option value="MOI_NHAT">Mới nhất</option>
+                  <option value="BAN_CHAY">Bán chạy</option>
+                  <option value="GIA_TANG">Giá tăng dần</option>
+                  <option value="GIA_GIAM">Giá giảm dần</option>
+                </Form.Select>
+              </Form.Group>
+
+              <Button type="submit" variant="primary" className="w-100">
+                <i className="bi bi-search me-2" />Tìm kiếm
+              </Button>
+            </Form>
+          </div>
         </Col>
 
-        {/* Danh sách sách */}
+        {/* DANH SACH SACH */}
         <Col lg={9}>
-          <div className="search-results-header mb-3">
-            <h5 className="fw-bold mb-0">
-              {keyword ? (
-                <>Kết quả tìm kiếm cho &ldquo;{keyword}&rdquo;</>
-              ) : (
-                <>Tất cả sách</>
+          <h4 className="fw-bold mb-3">
+            {tuKhoa
+              ? `Kết quả tìm kiếm "${tuKhoa}"`
+              : "Tất cả sách"}
+          </h4>
+
+          {dangTai ? (
+            <div className="text-center py-5">
+              <Spinner animation="border" variant="primary" />
+            </div>
+          ) : danhSachSach.length === 0 ? (
+            <Alert variant="info">
+              <i className="bi bi-info-circle me-2" />
+              Không tìm thấy sách nào phù hợp.
+            </Alert>
+          ) : (
+            <>
+              <Row className="g-3">
+                {danhSachSach.map((s) => (
+                  <Col key={s.id} xs={6} md={4} lg={3}>
+                    <BookCard book={s} />
+                  </Col>
+                ))}
+              </Row>
+
+              {/* PHAN TRANG */}
+              {tongTrang > 1 && (
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    disabled={trang <= 1}
+                    onClick={() => setTrang(trang - 1)}
+                  >
+                    <i className="bi bi-chevron-left" /> Trước
+                  </Button>
+                  <span className="d-flex align-items-center px-3">
+                    Trang {trang} / {tongTrang}
+                  </span>
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    disabled={trang >= tongTrang}
+                    onClick={() => setTrang(trang + 1)}
+                  >
+                    Sau <i className="bi bi-chevron-right" />
+                  </Button>
+                </div>
               )}
-            </h5>
-            <span className="text-secondary">
-              ({filtered.length} sản phẩm)
-            </span>
-          </div>
-
-          <BookGrid books={pagedBooks} />
-
-          <BookPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setPage}
-          />
+            </>
+          )}
         </Col>
       </Row>
     </Container>
-  );
-}
-
-export default function SearchPage() {
-  return (
-    <Suspense fallback={<div className="text-center py-5">Đang tải...</div>}>
-      <SearchContent />
-    </Suspense>
   );
 }

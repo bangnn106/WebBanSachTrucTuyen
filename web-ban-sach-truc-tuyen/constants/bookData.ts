@@ -1,4 +1,4 @@
-/* Mapping ID -> tên hiển thị (khớp với data trong SQL) */
+/* Mapping ID -> ten hien thi (khop voi data trong SQL) */
 
 export const theLoaiMap: Record<number, string> = {
   1: "Văn học",
@@ -15,7 +15,7 @@ export const nhaXuatBanMap: Record<number, string> = {
   3: "NXB Tổng hợp TP.HCM",
 };
 
-/* Danh sách khoảng giá cho filter */
+/* Danh sach khoang gia cho filter */
 export const priceRanges = [
   { label: "Dưới 50.000đ",    min: 0,      max: 50000 },
   { label: "50.000đ - 100.000đ", min: 50000,  max: 100000 },
@@ -23,7 +23,7 @@ export const priceRanges = [
   { label: "Trên 200.000đ",   min: 200000, max: Infinity },
 ];
 
-/* Danh sách option sắp xếp */
+/* Danh sach option sap xep */
 export const sortOptions = [
   { value: "MOI_NHAT",  label: "Mới nhất" },
   { value: "GIA_TANG",  label: "Giá tăng dần" },

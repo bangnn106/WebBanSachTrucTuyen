@@ -1,5 +1,4 @@
-// ========== ENTITY ĐƠN HÀNG ==========
-export interface DonHang {
+//ENTITY ON HANGexport interface DonHang {
   id: number;
   ma_don_hang: string;
   tong_tien: number;
@@ -16,8 +15,7 @@ export interface DonHang {
   tong_ban_ghi?: number;
 }
 
-// ========== CHI TIẾT ĐƠN HÀNG ==========
-export interface ChiTietDonHang {
+//CHI TIET ON HANGexport interface ChiTietDonHang {
   id: number;
   id_sach: number;
   ten_sach: string;
@@ -27,8 +25,7 @@ export interface ChiTietDonHang {
   thanh_tien: number;
 }
 
-// ========== DTOs ==========
-
+//DTOs
 export interface TaoDonHangDTO {
   ten_nguoi_nhan: string;
   so_dien_thoai_nhan: string;

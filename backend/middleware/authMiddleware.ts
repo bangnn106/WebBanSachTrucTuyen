@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JwtPayload } from '../models/user.model';
 
-// Mở rộng kiểu Request của Express để thêm field user
-declare global {
+//Mo rong kieu Request cua Express e them field userdeclare global {
   namespace Express {
     interface Request {
       user?: JwtPayload;
@@ -11,15 +10,13 @@ declare global {
   }
 }
 
-// Middleware xác thực JWT token
-export function authMiddleware(
+//Middleware xac thuc JWT tokenexport function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
   try {
-    // Lấy token từ header: Authorization: Bearer <token>
-    const authHeader = req.headers.authorization;
+    //Lay token tu header: Authorization: Bearer <token>    const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
@@ -32,11 +29,9 @@ export function authMiddleware(
     const token = authHeader.split(' ')[1];
     const secret = process.env.JWT_SECRET || 'default_secret';
 
-    // Verify và decode token
-    const decoded = jwt.verify(token, secret) as JwtPayload;
+    //Verify va decode token    const decoded = jwt.verify(token, secret) as JwtPayload;
 
-    // Gắn payload vào req.user để các handler sau dùng
-    req.user = decoded;
+    //Gan payload vao req.user e cac handler sau dung    req.user = decoded;
     next();
   } catch (error) {
     res.status(401).json({

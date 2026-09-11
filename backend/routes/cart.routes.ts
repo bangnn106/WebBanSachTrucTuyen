@@ -5,8 +5,7 @@ import * as cartController from '../controllers/cart.controller';
 
 const router = Router();
 
-// Tất cả route giỏ hàng: đăng nhập + vai trò KHACH_HANG
-router.use(authMiddleware, roleMiddleware('KHACH_HANG'));
+//Tat ca route gio hang: ang nhap + vai tro KHACH HANGrouter.use(authMiddleware, roleMiddleware('KHACH_HANG'));
 
 router.get('/', cartController.getCart);
 router.post('/', cartController.addToCart);

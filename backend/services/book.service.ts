@@ -2,8 +2,7 @@ import sql from 'mssql';
 import { executeProcedure, executeQuery } from '../config/database';
 import { ThemSachDTO, CapNhatSachDTO, TimKiemSachDTO } from '../models/book.model';
 
-// ========== TÌM KIẾM SÁCH (public, phân trang & lọc) ==========
-export async function timKiemSach(filter: TimKiemSachDTO) {
+//TIM KIEM SACH (public, phan trang & loc)export async function timKiemSach(filter: TimKiemSachDTO) {
   const result = await executeProcedure('sp_tim_kiem_sach', [
     { name: 'tu_khoa',          type: sql.NVarChar(255),     value: filter.tu_khoa || null },
     { name: 'id_the_loai',      type: sql.Int,               value: filter.id_the_loai || null },
@@ -30,8 +29,7 @@ export async function timKiemSach(filter: TimKiemSachDTO) {
   };
 }
 
-// ========== LẤY CHI TIẾT 1 CUỐN SÁCH THEO ID ==========
-export async function laySachTheoId(id: number) {
+//LAY CHI TIET 1 CUON SACH THEO IDexport async function laySachTheoId(id: number) {
   const result = await executeQuery(
     `SELECT s.*, tls.ten_the_loai, nxb.ten_nxb
      FROM sach s
@@ -48,8 +46,7 @@ export async function laySachTheoId(id: number) {
   return result.recordset[0];
 }
 
-// ========== THÊM SÁCH MỚI (Admin) ==========
-export async function themSach(data: ThemSachDTO, idNguoiThucHien: number) {
+//THEM SACH MOI (Admin)export async function themSach(data: ThemSachDTO, idNguoiThucHien: number) {
   const result = await executeProcedure('sp_them_sach', [
     { name: 'ten_sach',           type: sql.NVarChar(255),   value: data.ten_sach },
     { name: 'isbn',               type: sql.VarChar(20),     value: data.isbn },
@@ -66,11 +63,9 @@ export async function themSach(data: ThemSachDTO, idNguoiThucHien: number) {
     { name: 'id_nguoi_thuc_hien', type: sql.Int,             value: idNguoiThucHien },
   ]);
 
-  return result.recordset[0]; // { id_sach, thong_bao }
-}
+  return result.recordset[0]; //{ id sach, thong bao }}
 
-// ========== CẬP NHẬT THÔNG TIN SÁCH (Admin) ==========
-export async function capNhatSach(id: number, data: CapNhatSachDTO) {
+//CAP NHAT THONG TIN SACH (Admin)export async function capNhatSach(id: number, data: CapNhatSachDTO) {
   const result = await executeProcedure('sp_cap_nhat_sach', [
     { name: 'id_sach',         type: sql.Int,              value: id },
     { name: 'ten_sach',        type: sql.NVarChar(255),    value: data.ten_sach },
@@ -86,28 +81,23 @@ export async function capNhatSach(id: number, data: CapNhatSachDTO) {
     { name: 'id_nha_xuat_ban', type: sql.Int,              value: data.id_nha_xuat_ban },
   ]);
 
-  return result.recordset[0]; // { thong_bao }
-}
+  return result.recordset[0]; //{ thong bao }}
 
-// ========== CẬP NHẬT TRẠNG THÁI SÁCH (Admin) ==========
-export async function capNhatTrangThai(id: number, trangThai: string) {
+//CAP NHAT TRANG THAI SACH (Admin)export async function capNhatTrangThai(id: number, trangThai: string) {
   const result = await executeProcedure('sp_cap_nhat_trang_thai_sach', [
     { name: 'id_sach',    type: sql.Int,          value: id },
     { name: 'trang_thai', type: sql.NVarChar(20), value: trangThai },
   ]);
-  return result.recordset[0]; // { thong_bao }
-}
+  return result.recordset[0]; //{ thong bao }}
 
-// ========== LẤY DANH SÁCH THỂ LOẠI ==========
-export async function layDanhSachTheLoai() {
+//LAY DANH SACH THE LOAIexport async function layDanhSachTheLoai() {
   const result = await executeQuery(
     'SELECT id, ten_the_loai FROM the_loai_sach ORDER BY ten_the_loai'
   );
   return result.recordset;
 }
 
-// ========== LẤY DANH SÁCH NHÀ XUẤT BẢN ==========
-export async function layDanhSachNhaXuatBan() {
+//LAY DANH SACH NHA XUAT BANexport async function layDanhSachNhaXuatBan() {
   const result = await executeQuery(
     'SELECT id, ten_nxb FROM nha_xuat_ban ORDER BY ten_nxb'
   );

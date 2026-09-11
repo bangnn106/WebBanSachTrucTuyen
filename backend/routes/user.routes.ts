@@ -5,15 +5,27 @@ import * as userController from '../controllers/user.controller';
 
 const router = Router();
 
-// Cập nhật profile bản thân (tất cả user đã đăng nhập)
-router.put('/me', authMiddleware, userController.updateProfile);
+//Cap nhat profile ban than (tat ca user a ang nhap)router.put('/me', authMiddleware, userController.updateProfile);
 
-// Lấy danh sách user (Admin only)
-router.get(
+//Lay danh sach user (Admin only)router.get(
   '/',
   authMiddleware,
   roleMiddleware('QUAN_TRI_VIEN'),
   userController.getUsers
+);
+
+//Tao tai khoan moi (Admin only)router.post(
+  '/',
+  authMiddleware,
+  roleMiddleware('QUAN_TRI_VIEN'),
+  userController.createUser
+);
+
+//Khoa/mo khoa tai khoan (Admin only)router.patch(
+  '/:id/status',
+  authMiddleware,
+  roleMiddleware('QUAN_TRI_VIEN'),
+  userController.toggleUserStatus
 );
 
 export default router;

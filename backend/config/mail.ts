@@ -3,19 +3,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Tạo transporter SMTP dùng chung cho cả app
-const transporter = nodemailer.createTransport({
+//Tao transporter SMTP dung chung cho ca appconst transporter = nodemailer.createTransport({
   host: process.env.MAIL_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.MAIL_PORT || '587'),
-  secure: false,   // true nếu dùng port 465
-  auth: {
+  secure: false,   //true neu dung port 465  auth: {
     user: process.env.MAIL_USER,
     pass: process.env.MAIL_PASS,
   },
 });
 
-// Hàm gửi email tái sử dụng cho toàn app
-export async function sendMail(
+//Ham gui email tai su dung cho toan appexport async function sendMail(
   to: string,
   subject: string,
   html: string
@@ -30,6 +27,5 @@ export async function sendMail(
     console.log(`📧 Đã gửi email tới: ${to}`);
   } catch (error) {
     console.error('❌ Lỗi gửi email:', error);
-    // KHÔNG throw lỗi - email lỗi không nên crash cả request
-  }
+    //KHONG throw loi - email loi khong nen crash ca request  }
 }

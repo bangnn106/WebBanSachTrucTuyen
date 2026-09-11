@@ -1,35 +1,60 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Spinner } from "react-bootstrap";
 import Banner from "@/components/home/banner";
 import CategoryHighlight from "@/components/home/categoryHighlight";
 import BookSection from "@/components/books/bookSection";
 import TopBanner from "@/components/layout/topBanner";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-
-import { mockBooks } from "@/constants/testData";
+import { sachAPI } from "@/lib/api";
+import { book } from "@/types/book";
 
 export default function HomePage() {
+  const [sachMoi, setSachMoi] = useState<book[]>([]);
+  const [sachBanChay, setSachBanChay] = useState<book[]>([]);
+  const [sachGiamGia, setSachGiamGia] = useState<book[]>([]);
+  const [dangTai, setDangTai] = useState(true);
 
-  const bestSellers = [...mockBooks]
-    .filter((book) => book.trang_thai !== "Ngừng bán")
-    .sort(
-      (a, b) =>
-        b.so_luong_da_ban -
-        a.so_luong_da_ban
-    )
-    .slice(0, 6);
+  useEffect(() => {
+    async function taiDuLieu() {
+      try {
+        //Goi 3 API song song e tai nhanh hon        const [resMoi, resChay, resTatCa] = await Promise.all([
+          sachAPI.timKiem({ sap_xep: "MOI_NHAT", kich_thuoc_trang: 6 }),
+          sachAPI.timKiem({ sap_xep: "BAN_CHAY", kich_thuoc_trang: 6 }),
+          sachAPI.timKiem({ kich_thuoc_trang: 50 }),
+        ]);
 
-  const saleBooks = mockBooks
-    .filter(
-      (book) =>
-        book.gia_ban < book.gia_goc &&
-        book.trang_thai !== "Ngừng bán"
-    )
-    .slice(0, 6);
+        setSachMoi(resMoi.data.items || []);
+        setSachBanChay(resChay.data.items || []);
 
-  const newBooks = [...mockBooks]
-    .filter((book) => book.trang_thai !== "Ngừng bán")
-    .reverse()
-    .slice(0, 6);
+        //Loc sach ang giam gia (gia ban < gia goc)        const tatCa = resTatCa.data.items || [];
+        const giamGia = tatCa
+          .filter((s: book) => s.gia_ban < s.gia_goc)
+          .slice(0, 6);
+        setSachGiamGia(giamGia);
+      } catch {
+        //Neu API loi hien thi rong      } finally {
+        setDangTai(false);
+      }
+    }
+    taiDuLieu();
+  }, []);
+
+  if (dangTai) {
+    return (
+      <>
+        <TopBanner />
+        <Header />
+        <div className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-secondary">Đang tải dữ liệu...</p>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
@@ -38,20 +63,18 @@ export default function HomePage() {
       <Banner />
       <CategoryHighlight />
 
-      <BookSection
-        title="📚 Sách mới"
-        books={newBooks}
-      />
+      {sachMoi.length > 0 && (
+        <BookSection title="📚 Sách mới" books={sachMoi} />
+      )}
 
-      <BookSection
-        title="🔥 Sách bán chạy"
-        books={bestSellers}
-      />
+      {sachBanChay.length > 0 && (
+        <BookSection title="🔥 Sách bán chạy" books={sachBanChay} />
+      )}
 
-      <BookSection
-        title="🏷️ Sách đang giảm giá"
-        books={saleBooks}
-      />
+      {sachGiamGia.length > 0 && (
+        <BookSection title="🏷️ Sách đang giảm giá" books={sachGiamGia} />
+      )}
+
       <Footer />
     </>
   );

@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.service';
 
-// POST /api/auth/register
-export async function register(
+//POST /api/auth/registerexport async function register(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -11,8 +10,7 @@ export async function register(
       tinh_thanh, quan_huyen, phuong_xa, dia_chi_chi_tiet,
     } = req.body;
 
-    // Validate đầu vào cơ bản
-    if (!ho_ten || !email || !mat_khau || !so_dien_thoai ||
+    //Validate au vao co ban    if (!ho_ten || !email || !mat_khau || !so_dien_thoai ||
         !tinh_thanh || !quan_huyen || !phuong_xa) {
       res.status(400).json({
         success: false,
@@ -32,12 +30,10 @@ export async function register(
       data: result,
     });
   } catch (error) {
-    next(error);   // Chuyển lỗi cho errorHandler xử lý
-  }
+    next(error);   //Chuyen loi cho errorHandler xu ly  }
 }
 
-// POST /api/auth/login
-export async function login(
+//POST /api/auth/loginexport async function login(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -56,15 +52,13 @@ export async function login(
     res.json({
       success: true,
       message: 'Đăng nhập thành công.',
-      data: result,   // { token, user }
-    });
+      data: result,   //{ token, user }    });
   } catch (error) {
     next(error);
   }
 }
 
-// GET /api/auth/me (cần đăng nhập)
-export async function getMe(
+//GET /api/auth/me (can ang nhap)export async function getMe(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

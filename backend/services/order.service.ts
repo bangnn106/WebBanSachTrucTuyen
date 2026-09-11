@@ -2,8 +2,7 @@ import sql from 'mssql';
 import { executeProcedure } from '../config/database';
 import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
 
-// ========== TẠO ĐƠN HÀNG TỪ GIỎ HÀNG ==========
-export async function taoDonHangTuGio(
+//TAO ON HANG TU GIO HANGexport async function taoDonHangTuGio(
   idNguoiDung: number,
   data: TaoDonHangDTO
 ) {
@@ -15,13 +14,10 @@ export async function taoDonHangTuGio(
     { name: 'ghi_chu',            type: sql.NVarChar(500), value: data.ghi_chu || null },
   ]);
 
-  return result.recordset[0]; // { id_don_hang, ma_don_hang, tong_tien, thong_bao }
-}
+  return result.recordset[0]; //{ id don hang, ma don hang, tong tien, thong bao }}
 
-// ========== LẤY DANH SÁCH ĐƠN HÀNG ==========
-export async function layDanhSachDonHang(
-  idNguoiDung: number | null,    // null = lấy tất cả (nhân viên/admin)
-  filter: DanhSachDonHangDTO
+//LAY DANH SACH ON HANGexport async function layDanhSachDonHang(
+  idNguoiDung: number | null,    //null lay tat ca (nhan vien/admin)  filter: DanhSachDonHangDTO
 ) {
   const result = await executeProcedure('sp_lay_danh_sach_don_hang', [
     { name: 'id_nguoi_dung',    type: sql.Int,           value: idNguoiDung },
@@ -47,25 +43,19 @@ export async function layDanhSachDonHang(
   };
 }
 
-// ========== LẤY CHI TIẾT ĐƠN HÀNG ==========
-// SP trả về 2 recordsets: [0] thông tin đơn, [1] danh sách sản phẩm
-export async function layChiTietDonHang(
+//LAY CHI TIET ON HANG//SP tra ve 2 recordsets: [0] thong tin on, [1] danh sach san phamexport async function layChiTietDonHang(
   idDonHang: number,
-  idNguoiDung: number | null    // null = không giới hạn (nhân viên/admin)
-) {
+  idNguoiDung: number | null    //null khong gioi han (nhan vien/admin)) {
   const result = await executeProcedure('sp_lay_chi_tiet_don_hang', [
     { name: 'id_don_hang',   type: sql.Int, value: idDonHang },
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
 
   return {
-    don_hang: (result.recordsets as any[])[0][0],    // 1 object thông tin đơn
-    chi_tiet: (result.recordsets as any[])[1],        // mảng chi tiết sản phẩm
-  };
+    don_hang: (result.recordsets as any[])[0][0],    //1 object thong tin on    chi_tiet: (result.recordsets as any[])[1],        //mang chi tiet san pham  };
 }
 
-// ========== CẬP NHẬT TRẠNG THÁI ĐƠN HÀNG (nhân viên/admin) ==========
-export async function capNhatTrangThaiDonHang(
+//CAP NHAT TRANG THAI ON HANG (nhan vien/admin)export async function capNhatTrangThaiDonHang(
   idDonHang: number,
   trangThaiMoi: string
 ) {
@@ -73,11 +63,9 @@ export async function capNhatTrangThaiDonHang(
     { name: 'id_don_hang',     type: sql.Int,          value: idDonHang },
     { name: 'trang_thai_moi',  type: sql.NVarChar(30), value: trangThaiMoi },
   ]);
-  return result.recordset[0]; // { thong_bao }
-}
+  return result.recordset[0]; //{ thong bao }}
 
-// ========== HỦY ĐƠN HÀNG ==========
-export async function huyDonHang(
+//HUY ON HANGexport async function huyDonHang(
   idDonHang: number,
   idNguoiThucHien: number,
   lyDo?: string
@@ -87,5 +75,4 @@ export async function huyDonHang(
     { name: 'id_nguoi_thuc_hien', type: sql.Int,           value: idNguoiThucHien },
     { name: 'ly_do',              type: sql.NVarChar(500), value: lyDo || null },
   ]);
-  return result.recordset[0]; // { thong_bao }
-}
+  return result.recordset[0]; //{ thong bao }}

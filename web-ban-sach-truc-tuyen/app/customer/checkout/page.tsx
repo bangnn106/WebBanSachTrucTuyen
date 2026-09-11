@@ -4,6 +4,7 @@ import { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
+  Alert,
   Button,
   Col,
   Container,
@@ -12,22 +13,40 @@ import {
   Table,
 } from "react-bootstrap";
 import { useCart } from "@/contexts/CartProvider";
+import { useAuth } from "@/contexts/AuthProvider";
+import { donHangAPI, layUrlAnh } from "@/lib/api";
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clearCart } = useCart();
+  const { user, daDangNhap } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const [form, setForm] = useState({
-    ten_nguoi_nhan: "",
-    so_dien_thoai: "",
-    tinh_thanh: "",
-    quan_huyen: "",
-    phuong_xa: "",
-    dia_chi_chi_tiet: "",
+    ten_nguoi_nhan: user?.ho_ten || "",
+    so_dien_thoai: user?.so_dien_thoai || "",
+    tinh_thanh: user?.tinh_thanh || "",
+    quan_huyen: user?.quan_huyen || "",
+    phuong_xa: user?.phuong_xa || "",
+    dia_chi_chi_tiet: user?.dia_chi_chi_tiet || "",
     ghi_chu: "",
   });
 
-  /* Nếu giỏ hàng trống → quay lại */
+  /* Neu chua ang nhap redirect */
+  if (!daDangNhap) {
+    return (
+      <Container fluid="xl" className="py-5 text-center">
+        <i className="bi bi-person-lock" style={{ fontSize: 64, color: "#ccc" }} />
+        <h4 className="mt-3">Vui lòng đăng nhập để thanh toán</h4>
+        <Button variant="primary" className="mt-3" onClick={() => router.push("/auth/login")}>
+          Đăng nhập
+        </Button>
+      </Container>
+    );
+  }
+
+  /* Neu gio hang trong quay lai */
   if (items.length === 0) {
     return (
       <Container fluid="xl" className="py-5 text-center">
@@ -44,9 +63,7 @@ export default function CheckoutPage() {
   }
 
   function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
     setForm((prev) => ({
       ...prev,
@@ -54,27 +71,32 @@ export default function CheckoutPage() {
     }));
   }
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    /*
-      TODO: Khi có Backend API, gọi:
-        POST /api/orders  →  sp_tao_don_hang_tu_gio
-        Body: { ...form, items }
-    */
+    try {
+      //Goi API tao on hang that      const diaChiDay = [form.dia_chi_chi_tiet, form.phuong_xa, form.quan_huyen, form.tinh_thanh]
+        .filter(Boolean)
+        .join(", ");
 
-    const maDon =
-      "DH" +
-      new Date()
-        .toISOString()
-        .slice(0, 10)
-        .replace(/-/g, "") +
-      Math.random().toString(36).substring(2, 10).toUpperCase();
+      const res = await donHangAPI.taoDonHang({
+        ten_nguoi_nhan: form.ten_nguoi_nhan,
+        so_dien_thoai_nhan: form.so_dien_thoai,
+        dia_chi_giao_hang: diaChiDay,
+        ghi_chu: form.ghi_chu || undefined,
+      });
 
-    clearCart();
+      //Xoa gio hang local      clearCart();
 
-    /* Chuyển sang trang xác nhận */
-    router.push(`/customer/checkout/${maDon}`);
+      //Chuyen sang trang xac nhan voi ID on hang that      const idDonHang = res.data.id_don_hang;
+      router.push(`/customer/checkout/${idDonHang}`);
+    } catch (err: any) {
+      setError(err.message || "Đặt hàng thất bại. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -93,9 +115,11 @@ export default function CheckoutPage() {
         Thanh toán
       </h2>
 
+      {error && <Alert variant="danger">{error}</Alert>}
+
       <Form onSubmit={handleSubmit}>
         <Row className="g-4">
-          {/* ── CỘT TRÁI: FORM THÔNG TIN ── */}
+          {/* COT TRAI: FORM THONG TIN */}
           <Col lg={7}>
             <div className="checkout">
               <h5 className="fw-bold mb-3">
@@ -208,13 +232,12 @@ export default function CheckoutPage() {
                 </Col>
               </Row>
 
-              {/* Phương thức thanh toán */}
+              {/* Phuong thuc thanh toan */}
               <div className="mt-4">
                 <h5 className="fw-bold mb-3">
                   <i className="bi bi-wallet2 me-2" />
                   Phương thức thanh toán
                 </h5>
-
                 <div className="checkout-payment-method active">
                   <Form.Check
                     type="radio"
@@ -235,7 +258,7 @@ export default function CheckoutPage() {
             </div>
           </Col>
 
-          {/* ── CỘT PHẢI: TÓM TẮT ĐƠN HÀNG ── */}
+          {/* COT PHAI: TOM TAT ON HANG */}
           <Col lg={5}>
             <div className="checkout-section">
               <h5 className="fw-bold mb-3">
@@ -256,29 +279,20 @@ export default function CheckoutPage() {
                       <td>
                         <div className="d-flex align-items-center gap-2">
                           <Image
-                            src={
-                              item.anh_bia || "/images/book/imgbook1.jpg"
-                            }
+                            src={layUrlAnh(item.anh_bia)}
                             alt={item.ten_sach}
                             width={40}
                             height={50}
                             className="rounded"
                           />
                           <div>
-                            <div className="checkout-item-name">
-                              {item.ten_sach}
-                            </div>
-                            <small className="text-secondary">
-                              x{item.so_luong}
-                            </small>
+                            <div className="checkout-item-name">{item.ten_sach}</div>
+                            <small className="text-secondary">x{item.so_luong}</small>
                           </div>
                         </div>
                       </td>
                       <td className="text-end fw-bold">
-                        {(
-                          item.gia_ban * item.so_luong
-                        ).toLocaleString("vi-VN")}{" "}
-                        đ
+                        {(item.gia_ban * item.so_luong).toLocaleString("vi-VN")} đ
                       </td>
                     </tr>
                   ))}
@@ -311,9 +325,19 @@ export default function CheckoutPage() {
                 variant="primary"
                 size="lg"
                 className="w-100 mt-3"
+                disabled={loading}
               >
-                <i className="bi bi-check-circle me-2" />
-                Đặt hàng
+                {loading ? (
+                  <>
+                    <span className="spinner-border spinner-border-sm me-2" />
+                    Đang xử lý...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-check-circle me-2" />
+                    Đặt hàng
+                  </>
+                )}
               </Button>
 
               <p className="text-center text-secondary mt-2 mb-0">

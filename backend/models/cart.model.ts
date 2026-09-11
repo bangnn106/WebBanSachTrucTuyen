@@ -1,5 +1,4 @@
-// ========== CHI TIẾT GIỎ HÀNG (output từ sp_lay_chi_tiet_gio_hang) ==========
-export interface ChiTietGioHang {
+//CHI TIET GIO HANG (output tu sp lay chi tiet gio hang)export interface ChiTietGioHang {
   id: number;
   id_sach: number;
   ten_sach: string;
@@ -12,8 +11,7 @@ export interface ChiTietGioHang {
   tong_tien_gio_hang: number;
 }
 
-// ========== DTOs ==========
-
+//DTOs
 export interface ThemVaoGioDTO {
   id_sach: number;
   so_luong: number;

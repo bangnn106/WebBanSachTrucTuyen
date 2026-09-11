@@ -1,8 +1,7 @@
 import sql from 'mssql';
 import { executeProcedure } from '../config/database';
 
-// ========== THÊM SÁCH VÀO GIỎ HÀNG ==========
-export async function themSachVaoGio(
+//THEM SACH VAO GIO HANGexport async function themSachVaoGio(
   idNguoiDung: number,
   idSach: number,
   soLuong: number
@@ -15,8 +14,7 @@ export async function themSachVaoGio(
   return result.recordset[0];
 }
 
-// ========== CẬP NHẬT SỐ LƯỢNG SÁCH TRONG GIỎ ==========
-export async function capNhatSoLuongGio(
+//CAP NHAT SO LUONG SACH TRONG GIOexport async function capNhatSoLuongGio(
   idNguoiDung: number,
   idSach: number,
   soLuong: number
@@ -29,8 +27,7 @@ export async function capNhatSoLuongGio(
   return result.recordset[0];
 }
 
-// ========== XÓA 1 SÁCH KHỎI GIỎ HÀNG ==========
-export async function xoaSachKhoiGio(idNguoiDung: number, idSach: number) {
+//XOA 1 SACH KHOI GIO HANGexport async function xoaSachKhoiGio(idNguoiDung: number, idSach: number) {
   const result = await executeProcedure('sp_xoa_sach_khoi_gio', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
     { name: 'id_sach',       type: sql.Int, value: idSach },
@@ -38,18 +35,15 @@ export async function xoaSachKhoiGio(idNguoiDung: number, idSach: number) {
   return result.recordset[0];
 }
 
-// ========== XÓA TOÀN BỘ GIỎ HÀNG ==========
-export async function xoaToanBoGioHang(idNguoiDung: number) {
+//XOA TOAN BO GIO HANGexport async function xoaToanBoGioHang(idNguoiDung: number) {
   const result = await executeProcedure('sp_xoa_toan_bo_gio_hang', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
   return result.recordset[0];
 }
 
-// ========== LẤY CHI TIẾT GIỎ HÀNG ==========
-export async function layChiTietGioHang(idNguoiDung: number) {
+//LAY CHI TIET GIO HANGexport async function layChiTietGioHang(idNguoiDung: number) {
   const result = await executeProcedure('sp_lay_chi_tiet_gio_hang', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
-  return result.recordset; // Mảng các sản phẩm trong giỏ
-}
+  return result.recordset; //Mang cac san pham trong gio}

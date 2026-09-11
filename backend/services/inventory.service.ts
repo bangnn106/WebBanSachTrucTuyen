@@ -2,30 +2,25 @@ import sql from 'mssql';
 import { executeProcedure } from '../config/database';
 import { NhapKhoDTO, DieuChinhKhoDTO, LichSuKhoDTO } from '../models/inventory.model';
 
-// ========== NHẬP KHO ==========
-export async function nhapKho(data: NhapKhoDTO, idNguoiThucHien: number) {
+//NHAP KHOexport async function nhapKho(data: NhapKhoDTO, idNguoiThucHien: number) {
   const result = await executeProcedure('sp_nhap_kho', [
     { name: 'id_sach',            type: sql.Int,           value: data.id_sach },
     { name: 'so_luong',           type: sql.Int,           value: data.so_luong },
     { name: 'id_nguoi_thuc_hien', type: sql.Int,           value: idNguoiThucHien },
     { name: 'ly_do',              type: sql.NVarChar(500), value: data.ly_do || null },
   ]);
-  return result.recordset[0]; // { thong_bao }
-}
+  return result.recordset[0]; //{ thong bao }}
 
-// ========== ĐIỀU CHỈNH KHO ==========
-export async function dieuChinhKho(data: DieuChinhKhoDTO, idNguoiThucHien: number) {
+//IEU CHINH KHOexport async function dieuChinhKho(data: DieuChinhKhoDTO, idNguoiThucHien: number) {
   const result = await executeProcedure('sp_dieu_chinh_kho', [
     { name: 'id_sach',            type: sql.Int,           value: data.id_sach },
     { name: 'so_luong_thay_doi',  type: sql.Int,           value: data.so_luong_thay_doi },
     { name: 'id_nguoi_thuc_hien', type: sql.Int,           value: idNguoiThucHien },
     { name: 'ly_do',              type: sql.NVarChar(500), value: data.ly_do },
   ]);
-  return result.recordset[0]; // { ton_truoc, ton_sau, thong_bao }
-}
+  return result.recordset[0]; //{ ton truoc, ton sau, thong bao }}
 
-// ========== LẤY LỊCH SỬ KHO ==========
-export async function layLichSuKho(filter: LichSuKhoDTO) {
+//LAY LICH SU KHOexport async function layLichSuKho(filter: LichSuKhoDTO) {
   const result = await executeProcedure('sp_lay_lich_su_kho', [
     { name: 'id_sach',          type: sql.Int,          value: filter.id_sach || null },
     { name: 'loai_giao_dich',   type: sql.NVarChar(30), value: filter.loai_giao_dich || null },

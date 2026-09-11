@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as dashboardService from '../services/dashboard.service';
 
-// GET /api/dashboard/overview
-export async function getOverview(
+//GET /api/dashboard/overviewexport async function getOverview(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -22,8 +21,7 @@ export async function getOverview(
   }
 }
 
-// GET /api/dashboard/revenue
-export async function getRevenue(
+//GET /api/dashboard/revenueexport async function getRevenue(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -44,8 +42,7 @@ export async function getRevenue(
   }
 }
 
-// GET /api/dashboard/top-books
-export async function getTopBooks(
+//GET /api/dashboard/top-booksexport async function getTopBooks(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -64,8 +61,7 @@ export async function getTopBooks(
   }
 }
 
-// GET /api/dashboard/order-stats
-export async function getOrderStats(
+//GET /api/dashboard/order-statsexport async function getOrderStats(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

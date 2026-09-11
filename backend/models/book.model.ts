@@ -1,5 +1,4 @@
-// ========== ENTITY SÁCH ==========
-export interface Sach {
+//ENTITY SACHexport interface Sach {
   id: number;
   ten_sach: string;
   isbn: string;
@@ -15,14 +14,12 @@ export interface Sach {
   trang_thai: string;
   id_the_loai: number;
   id_nha_xuat_ban: number;
-  // Các field JOIN thêm
-  ten_the_loai?: string;
+  //Cac field JOIN them  ten_the_loai?: string;
   ten_nxb?: string;
   tong_ban_ghi?: number;
 }
 
-// ========== DTOs ==========
-
+//DTOs
 export interface ThemSachDTO {
   ten_sach: string;
   isbn: string;
@@ -59,13 +56,11 @@ export interface TimKiemSachDTO {
   gia_tu?: number;
   gia_den?: number;
   trang_thai?: string;
-  sap_xep?: string;       // 'MOI_NHAT' | 'GIA_TANG' | 'GIA_GIAM' | 'BAN_CHAY'
-  trang?: number;
+  sap_xep?: string;       //'MOI NHAT' | 'GIA TANG' | 'GIA GIAM' | 'BAN CHAY'  trang?: number;
   kich_thuoc_trang?: number;
 }
 
-// ========== ENTITIES PHỤ ==========
-
+//ENTITIES PHU
 export interface TheLoai {
   id: number;
   ten_the_loai: string;

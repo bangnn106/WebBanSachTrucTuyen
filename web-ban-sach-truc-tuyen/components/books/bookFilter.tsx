@@ -26,7 +26,7 @@ export default function BookFilter({
 }: Props) {
   return (
     <aside className="book-filter">
-      {/* Thể loại */}
+      {/* The loai */}
       <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-bookmarks me-2" />
@@ -53,7 +53,7 @@ export default function BookFilter({
         ))}
       </div>
 
-      {/* Khoảng giá */}
+      {/* Khoang gia */}
       <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-currency-exchange me-2" />
@@ -80,7 +80,7 @@ export default function BookFilter({
         ))}
       </div>
 
-      {/* Sắp xếp */}
+      {/* Sap xep */}
       <div className="book-filter-group">
         <h6 className="book-filter-title">
           <i className="bi bi-sort-down me-2" />

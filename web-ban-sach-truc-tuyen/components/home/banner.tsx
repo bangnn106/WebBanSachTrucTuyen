@@ -8,7 +8,7 @@ export default function Banner() {
 
       <Row className="g-3">
 
-        {/* BANNER CHÍNH */}
+        {/* BANNER CHINH */}
         <Col lg={8}>
           <Carousel>
             <Carousel.Item>
@@ -24,7 +24,7 @@ export default function Banner() {
           </Carousel>
         </Col>
 
-        {/* 2 BANNER PHỤ */}
+        {/* 2 BANNER PHU */}
         <Col lg={4}>
           <div className="d-flex flex-column gap-3">
 

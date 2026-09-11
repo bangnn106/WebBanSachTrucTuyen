@@ -1,5 +1,4 @@
-// ========== ENTITY QUẢN LÝ KHO ==========
-export interface QuanLiKho {
+//ENTITY QUAN LY KHOexport interface QuanLiKho {
   id: number;
   loai_giao_dich: string;
   so_luong: number;
@@ -14,8 +13,7 @@ export interface QuanLiKho {
   tong_ban_ghi?: number;
 }
 
-// ========== DTOs ==========
-
+//DTOs
 export interface NhapKhoDTO {
   id_sach: number;
   so_luong: number;
@@ -24,9 +22,7 @@ export interface NhapKhoDTO {
 
 export interface DieuChinhKhoDTO {
   id_sach: number;
-  so_luong_thay_doi: number;   // dương = tăng, âm = giảm
-  ly_do: string;                // bắt buộc
-}
+  so_luong_thay_doi: number;   //duong tang, am giam  ly_do: string;                //bat buoc}
 
 export interface LichSuKhoDTO {
   id_sach?: number;

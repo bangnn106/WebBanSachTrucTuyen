@@ -1,5 +1,4 @@
-// ========== TEMPLATE EMAIL XÁC NHẬN ĐƠN HÀNG ==========
-export function orderConfirmationTemplate(data: {
+//TEMPLATE EMAIL XAC NHAN ON HANGexport function orderConfirmationTemplate(data: {
   ma_don_hang: string;
   ten_nguoi_nhan: string;
   dia_chi_giao_hang: string;
@@ -13,8 +12,7 @@ export function orderConfirmationTemplate(data: {
     thanh_tien: number;
   }>;
 }): string {
-  // Tạo các dòng trong bảng chi tiết sản phẩm
-  const rows = data.chi_tiet
+  //Tao cac dong trong bang chi tiet san pham  const rows = data.chi_tiet
     .map(
       (item, i) => `
       <tr>
@@ -70,8 +68,7 @@ export function orderConfirmationTemplate(data: {
   `;
 }
 
-// ========== TEMPLATE EMAIL THÔNG BÁO HỦY ĐƠN ==========
-export function orderCancelledTemplate(data: {
+//TEMPLATE EMAIL THONG BAO HUY ONexport function orderCancelledTemplate(data: {
   ma_don_hang: string;
   ten_nguoi_nhan: string;
   tong_tien: number;
