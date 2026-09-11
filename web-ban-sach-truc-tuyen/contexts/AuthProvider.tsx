@@ -1,4 +1,6 @@
-/* AUTH PROVIDER Quan ly ang nhap / ang ky / phan quyen Wrap toan bo app, cung cap thong tin user + token cho moi trang. Khi mount tu ong check token a luu va lay lai thong tin user. */
+/* AUTH PROVIDER: Quan ly dang nhap / dang ky / phan quyen
+   Wrap toan bo app, cung cap thong tin user + token cho moi trang.
+   Khi mount tu dong check token da luu va lay lai thong tin user. */
 "use client";
 
 import {
@@ -22,14 +24,19 @@ export interface ThongTinUser {
   quan_huyen: string;
   phuong_xa: string;
   dia_chi_chi_tiet: string | null;
-  ten_vai_tro: string; //"KHACH HANG" | "NHAN VIEN" | "QUAN TRI VIEN"}
+  ten_vai_tro: string; // "KHACH_HANG" | "NHAN_VIEN" | "QUAN_TRI_VIEN"
+}
 
 /* Kieu du lieu Context */
 interface AuthContextType {
-  user: ThongTinUser | null;       //null chua ang nhap  dangTai: boolean;                 //true khi ang load thong tin  daDangNhap: boolean;              //shortcut: user ! null  dangNhap: (email: string, matKhau: string) => Promise<ThongTinUser>;
+  user: ThongTinUser | null;       // null: chua dang nhap
+  dangTai: boolean;                 // true khi dang load thong tin
+  daDangNhap: boolean;              // shortcut: user ! null
+  dangNhap: (email: string, matKhau: string) => Promise<ThongTinUser>;
   dangKy: (data: any) => Promise<void>;
   dangXuat: () => void;
-  capNhatUser: () => Promise<void>; //refresh thong tin user tu server}
+  capNhatUser: () => Promise<void>; // refresh thong tin user tu server
+}
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -39,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [dangTai, setDangTai] = useState(true);
   const router = useRouter();
 
-  /* Khi mount kiem tra token a luu, neu co thi lay lai thong tin user */
+  /* Khi mount: kiem tra token da luu, neu co thi lay lai thong tin user */
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -47,7 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .layThongTinCuaToi()
         .then((res) => setUser(res.data))
         .catch(() => {
-          //Token het han hoac khong hop le xoa          localStorage.removeItem("token");
+          // Token het han hoac khong hop le -> xoa
+          localStorage.removeItem("token");
         })
         .finally(() => setDangTai(false));
     } else {
@@ -55,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  /* ang nhap luu token + set user */
+  /* Dang nhap: luu token + set user */
   const dangNhap = useCallback(
     async (email: string, matKhau: string): Promise<ThongTinUser> => {
       const res = await xacThucAPI.dangNhap(email, matKhau);
@@ -67,12 +75,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     []
   );
 
-  /* ang ky (chi tao tai khoan, chua tu ang nhap) */
+  /* Dang ky (chi tao tai khoan, chua tu dang nhap) */
   const dangKy = useCallback(async (data: any) => {
     await xacThucAPI.dangKy(data);
   }, []);
 
-  /* ang xuat xoa token + user + redirect ve login */
+  /* Dang xuat: xoa token + user + redirect ve login */
   const dangXuat = useCallback(() => {
     localStorage.removeItem("token");
     localStorage.removeItem("bookstore_cart");
@@ -86,7 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await xacThucAPI.layThongTinCuaToi();
       setUser(res.data);
     } catch {
-      //Bo qua loi    }
+      // Bo qua loi
+    }
   }, []);
 
   return (
@@ -106,7 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/* Hook e dung trong component */
+/* Hook de dung trong component */
 export function useAuth() {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth phải được dùng bên trong <AuthProvider>");

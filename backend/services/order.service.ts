@@ -2,7 +2,8 @@ import sql from 'mssql';
 import { executeProcedure } from '../config/database';
 import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
 
-//TAO ON HANG TU GIO HANGexport async function taoDonHangTuGio(
+// TAO DON HANG TU GIO HANG
+export async function taoDonHangTuGio(
   idNguoiDung: number,
   data: TaoDonHangDTO
 ) {
@@ -14,10 +15,13 @@ import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
     { name: 'ghi_chu',            type: sql.NVarChar(500), value: data.ghi_chu || null },
   ]);
 
-  return result.recordset[0]; //{ id don hang, ma don hang, tong tien, thong bao }}
+  return result.recordset[0]; // { id_don_hang, ma_don_hang, tong_tien, thong_bao }
+}
 
-//LAY DANH SACH ON HANGexport async function layDanhSachDonHang(
-  idNguoiDung: number | null,    //null lay tat ca (nhan vien/admin)  filter: DanhSachDonHangDTO
+// LAY DANH SACH DON HANG
+export async function layDanhSachDonHang(
+  idNguoiDung: number | null,    // null lay tat ca (nhan vien/admin)
+  filter: DanhSachDonHangDTO
 ) {
   const result = await executeProcedure('sp_lay_danh_sach_don_hang', [
     { name: 'id_nguoi_dung',    type: sql.Int,           value: idNguoiDung },
@@ -43,19 +47,25 @@ import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
   };
 }
 
-//LAY CHI TIET ON HANG//SP tra ve 2 recordsets: [0] thong tin on, [1] danh sach san phamexport async function layChiTietDonHang(
+// LAY CHI TIET DON HANG
+// SP tra ve 2 recordsets: [0] thong tin don, [1] danh sach san pham
+export async function layChiTietDonHang(
   idDonHang: number,
-  idNguoiDung: number | null    //null khong gioi han (nhan vien/admin)) {
+  idNguoiDung: number | null    // null khong gioi han (nhan vien/admin)
+) {
   const result = await executeProcedure('sp_lay_chi_tiet_don_hang', [
     { name: 'id_don_hang',   type: sql.Int, value: idDonHang },
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
 
   return {
-    don_hang: (result.recordsets as any[])[0][0],    //1 object thong tin on    chi_tiet: (result.recordsets as any[])[1],        //mang chi tiet san pham  };
+    don_hang: (result.recordsets as any[])[0][0],    // 1 object thong tin don
+    chi_tiet: (result.recordsets as any[])[1],        // mang chi tiet san pham
+  };
 }
 
-//CAP NHAT TRANG THAI ON HANG (nhan vien/admin)export async function capNhatTrangThaiDonHang(
+// CAP NHAT TRANG THAI DON HANG (nhan vien/admin)
+export async function capNhatTrangThaiDonHang(
   idDonHang: number,
   trangThaiMoi: string
 ) {
@@ -63,9 +73,11 @@ import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
     { name: 'id_don_hang',     type: sql.Int,          value: idDonHang },
     { name: 'trang_thai_moi',  type: sql.NVarChar(30), value: trangThaiMoi },
   ]);
-  return result.recordset[0]; //{ thong bao }}
+  return result.recordset[0]; // { thong_bao }
+}
 
-//HUY ON HANGexport async function huyDonHang(
+// HUY DON HANG
+export async function huyDonHang(
   idDonHang: number,
   idNguoiThucHien: number,
   lyDo?: string
@@ -75,4 +87,5 @@ import { TaoDonHangDTO, DanhSachDonHangDTO } from '../models/order.model';
     { name: 'id_nguoi_thuc_hien', type: sql.Int,           value: idNguoiThucHien },
     { name: 'ly_do',              type: sql.NVarChar(500), value: lyDo || null },
   ]);
-  return result.recordset[0]; //{ thong bao }}
+  return result.recordset[0]; // { thong_bao }
+}

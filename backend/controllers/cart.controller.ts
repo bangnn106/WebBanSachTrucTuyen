@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as cartService from '../services/cart.service';
 
-//GET /api/cart - Lay gio hangexport async function getCart(
+// GET /api/cart - Lay gio hang
+export async function getCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -16,7 +17,8 @@ import * as cartService from '../services/cart.service';
   }
 }
 
-//POST /api/cart - Them sach vao gioexport async function addToCart(
+// POST /api/cart - Them sach vao gio
+export async function addToCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -45,7 +47,8 @@ import * as cartService from '../services/cart.service';
   }
 }
 
-//PUT /api/cart/:idSach - Cap nhat so luongexport async function updateCartItem(
+// PUT /api/cart/:idSach - Cap nhat so luong
+export async function updateCartItem(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -75,7 +78,8 @@ import * as cartService from '../services/cart.service';
   }
 }
 
-//DELETE /api/cart/:idSach - Xoa 1 sach khoi gioexport async function removeFromCart(
+// DELETE /api/cart/:idSach - Xoa 1 sach khoi gio
+export async function removeFromCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -91,7 +95,8 @@ import * as cartService from '../services/cart.service';
   }
 }
 
-//DELETE /api/cart - Xoa toan bo gioexport async function clearCart(
+// DELETE /api/cart - Xoa toan bo gio
+export async function clearCart(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

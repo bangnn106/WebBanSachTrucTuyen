@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '../services/auth.service';
 
-//POST /api/auth/registerexport async function register(
+// POST /api/auth/register
+export async function register(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -10,7 +11,8 @@ import * as authService from '../services/auth.service';
       tinh_thanh, quan_huyen, phuong_xa, dia_chi_chi_tiet,
     } = req.body;
 
-    //Validate au vao co ban    if (!ho_ten || !email || !mat_khau || !so_dien_thoai ||
+    // Validate dau vao co ban
+    if (!ho_ten || !email || !mat_khau || !so_dien_thoai ||
         !tinh_thanh || !quan_huyen || !phuong_xa) {
       res.status(400).json({
         success: false,
@@ -30,10 +32,12 @@ import * as authService from '../services/auth.service';
       data: result,
     });
   } catch (error) {
-    next(error);   //Chuyen loi cho errorHandler xu ly  }
+    next(error);   // Chuyen loi cho errorHandler xu ly
+  }
 }
 
-//POST /api/auth/loginexport async function login(
+// POST /api/auth/login
+export async function login(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -52,13 +56,15 @@ import * as authService from '../services/auth.service';
     res.json({
       success: true,
       message: 'Đăng nhập thành công.',
-      data: result,   //{ token, user }    });
+      data: result,   // { token, user }
+    });
   } catch (error) {
     next(error);
   }
 }
 
-//GET /api/auth/me (can ang nhap)export async function getMe(
+// GET /api/auth/me (can dang nhap)
+export async function getMe(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

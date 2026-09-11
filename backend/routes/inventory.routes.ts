@@ -5,7 +5,8 @@ import * as inventoryController from '../controllers/inventory.controller';
 
 const router = Router();
 
-//Tat ca route kho: ang nhap + nhan vien hoac adminrouter.use(authMiddleware, roleMiddleware('NHAN_VIEN', 'QUAN_TRI_VIEN'));
+// Tat ca route kho: dang nhap + nhan vien hoac admin
+router.use(authMiddleware, roleMiddleware('NHAN_VIEN', 'QUAN_TRI_VIEN'));
 
 router.post('/import', inventoryController.importStock);
 router.post('/adjust', inventoryController.adjustStock);

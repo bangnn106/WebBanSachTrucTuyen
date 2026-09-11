@@ -1,9 +1,10 @@
 import sql from 'mssql';
 import bcrypt from 'bcryptjs';
-import { executeProcedure, executeQuery, getPool } from '../config/database';
+import { executeProcedure, getPool } from '../config/database';
 import { CapNhatNguoiDungDTO } from '../models/user.model';
 
-//CAP NHAT THONG TIN NGUOI DUNGexport async function capNhatNguoiDung(
+// CAP NHAT THONG TIN NGUOI DUNG
+export async function capNhatNguoiDung(
   idNguoiDung: number,
   data: CapNhatNguoiDungDTO
 ) {
@@ -18,9 +19,11 @@ import { CapNhatNguoiDungDTO } from '../models/user.model';
     { name: 'dia_chi_chi_tiet', type: sql.NVarChar(255), value: data.dia_chi_chi_tiet || null },
   ]);
 
-  return result.recordset[0]; //{ thong bao }}
+  return result.recordset[0]; // { thong_bao }
+}
 
-//LAY DANH SACH NGUOI DUNG (Admin)export async function layDanhSachNguoiDung(
+// LAY DANH SACH NGUOI DUNG (Admin)
+export async function layDanhSachNguoiDung(
   tuKhoa?: string,
   idVaiTro?: number,
   trang: number = 1,
@@ -45,7 +48,8 @@ import { CapNhatNguoiDungDTO } from '../models/user.model';
   };
 }
 
-//TAO TAI KHOAN MOI (Admin tao nhan vien/admin)export async function taoTaiKhoan(data: {
+// TAO TAI KHOAN MOI (Admin tao nhan vien/admin)
+export async function taoTaiKhoan(data: {
   ho_ten: string;
   email: string;
   mat_khau: string;
@@ -54,7 +58,8 @@ import { CapNhatNguoiDungDTO } from '../models/user.model';
 }) {
   const pool = await getPool();
 
-  //Kiem tra email a ton tai chua  const existing = await pool.request()
+  // Kiem tra email da ton tai chua
+  const existing = await pool.request()
     .input('email', sql.VarChar(255), data.email)
     .query('SELECT id FROM nguoi_dung WHERE email = @email');
 
@@ -62,9 +67,11 @@ import { CapNhatNguoiDungDTO } from '../models/user.model';
     throw { statusCode: 400, message: 'Email này đã được sử dụng.' };
   }
 
-  //Hash mat khau  const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
+  // Hash mat khau
+  const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
 
-  //Tao tai khoan  const result = await pool.request()
+  // Tao tai khoan
+  const result = await pool.request()
     .input('ho_ten', sql.NVarChar(100), data.ho_ten)
     .input('email', sql.VarChar(255), data.email)
     .input('mat_khau', sql.VarChar(255), hashedPassword)
@@ -78,17 +85,20 @@ import { CapNhatNguoiDungDTO } from '../models/user.model';
 
   const newUserId = result.recordset[0].id;
 
-  //Tao gio hang cho user moi  await pool.request()
+  // Tao gio hang cho user moi
+  await pool.request()
     .input('id_nguoi_dung', sql.Int, newUserId)
     .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
 
   return { id: newUserId };
 }
 
-//KHOA / MO KHOA TAI KHOAN (Admin)export async function khoaMoKhoaTaiKhoan(idNguoiDung: number, khoa: boolean) {
+// KHOA / MO KHOA TAI KHOAN (Admin)
+export async function khoaMoKhoaTaiKhoan(idNguoiDung: number, khoa: boolean) {
   const pool = await getPool();
 
-  //Khong cho khoa chinh minh  const result = await pool.request()
+  // Khong cho khoa chinh minh
+  const result = await pool.request()
     .input('id', sql.Int, idNguoiDung)
     .input('trang_thai', sql.Bit, khoa ? 0 : 1)
     .query('UPDATE nguoi_dung SET trang_thai = @trang_thai WHERE id = @id');

@@ -41,7 +41,8 @@ export default function OrderDetailPage() {
     try {
       await donHangAPI.huyDon(idDonHang, "Khách hàng yêu cầu hủy");
       setThongBao("Đã hủy đơn hàng thành công.");
-      //Reload data      const res = await donHangAPI.layChiTiet(idDonHang);
+      // Reload data
+      const res = await donHangAPI.layChiTiet(idDonHang);
       setDonHang(res.data.don_hang);
     } catch (err: any) {
       setThongBao(err.message || "Không thể hủy đơn hàng.");

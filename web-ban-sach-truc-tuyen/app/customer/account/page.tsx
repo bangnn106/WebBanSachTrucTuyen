@@ -21,7 +21,8 @@ export default function AccountPage() {
     dia_chi_chi_tiet: "",
   });
 
-  //Load du lieu tu user khi mount  useEffect(() => {
+  // Load du lieu tu user khi mount
+  useEffect(() => {
     if (user) {
       setForm({
         ho_ten: user.ho_ten,
@@ -44,7 +45,8 @@ export default function AccountPage() {
     setLoading(true);
     try {
       await nguoiDungAPI.capNhatProfile(form);
-      await capNhatUser(); //Refresh thong tin user trong AuthContext      setEditing(false);
+      await capNhatUser(); // Refresh thong tin user trong AuthContext
+      setEditing(false);
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } catch (err: any) {

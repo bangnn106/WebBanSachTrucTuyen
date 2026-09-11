@@ -19,7 +19,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
 
-  //Kiem tra quyen: chi QUAN TRI VIEN moi vao uoc  useEffect(() => {
+  // Kiem tra quyen: chi QUAN TRI VIEN moi vao duoc
+  useEffect(() => {
     if (!dangTai && (!daDangNhap || user?.ten_vai_tro !== "QUAN_TRI_VIEN")) {
       router.push("/auth/login");
     }

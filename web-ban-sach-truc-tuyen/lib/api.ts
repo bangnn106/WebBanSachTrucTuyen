@@ -1,16 +1,21 @@
-/* API CLIENT - Lop goi API tap trung cho toan bo frontend Tat ca request en backend eu i qua file nay. Token JWT uoc tu ong gan vao header. */
+/* API CLIENT - Lop goi API tap trung cho toan bo frontend
+   Tat ca request den backend deu di qua file nay. Token JWT duoc tu dong gan vao header. */
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
-//Base URL backend (khong co /api) dung e load anh tinhconst BACKEND_URL = API_URL.replace(/\/api$/, "");
+// Base URL backend (khong co /api) dung de load anh tinh
+const BACKEND_URL = API_URL.replace(/\/api$/, "");
 
-/* Tao URL ay u cho anh bia sach */
+/* Tao URL day du cho anh bia sach */
 export function layUrlAnh(anhBia: string | null | undefined): string {
-  if (!anhBia) return "/images/book/imgbook1.jpg"; //anh mac inh  //Neu a la URL ay u (http/https) thi giu nguyen  if (anhBia.startsWith("http")) return anhBia;
-  //Neu la path tuong oi (/uploads/...) them base URL backend  return `${BACKEND_URL}${anhBia}`;
+  if (!anhBia) return "/images/book/imgbook1.jpg"; // anh mac dinh
+  // Neu da la URL day du (http/https) thi giu nguyen
+  if (anhBia.startsWith("http")) return anhBia;
+  // Neu la path tuong doi (/uploads/...) them base URL backend
+  return `${BACKEND_URL}${anhBia}`;
 }
 
-/* Lay token a luu */
+/* Lay token da luu */
 function layToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("token");
@@ -24,7 +29,8 @@ async function goiAPI(
   const token = layToken();
   const laFormData = tuyChon.body instanceof FormData;
 
-  //Tao headers khong set Content-Type cho FormData (browser tu set)  const headers: Record<string, string> = {};
+  // Tao headers khong set Content-Type cho FormData (browser tu set)
+  const headers: Record<string, string> = {};
   if (!laFormData) {
     headers["Content-Type"] = "application/json";
   }
@@ -40,7 +46,8 @@ async function goiAPI(
   const data = await res.json();
 
   if (!res.ok) {
-    //Tao loi co status va message e component xu ly    const loi: any = new Error(data.message || "Đã xảy ra lỗi");
+    // Tao loi co status va message de component xu ly
+    const loi: any = new Error(data.message || "Đã xảy ra lỗi");
     loi.status = res.status;
     throw loi;
   }
@@ -60,9 +67,10 @@ function taoQuery(params: Record<string, any>): string {
   return str ? `?${str}` : "";
 }
 
-/* CAC MODULE API at ten tieng Viet cho de hieu */
+/* CAC MODULE API */
 
-//XAC THUC (ang nhap, ang ky, oi mat khau)export const xacThucAPI = {
+// XAC THUC (dang nhap, dang ky, doi mat khau)
+export const xacThucAPI = {
   dangNhap: (email: string, mat_khau: string) =>
     goiAPI("/auth/login", {
       method: "POST",
@@ -93,7 +101,8 @@ function taoQuery(params: Record<string, any>): string {
     }),
 };
 
-//SACH (tim kiem, chi tiet, them, sua, the loai, NXB)export const sachAPI = {
+// SACH (tim kiem, chi tiet, them, sua, the loai, NXB)
+export const sachAPI = {
   timKiem: (params: {
     tu_khoa?: string;
     id_the_loai?: number;
@@ -125,7 +134,8 @@ function taoQuery(params: Record<string, any>): string {
   layDanhSachNhaXuatBan: () => goiAPI("/publishers"),
 };
 
-//GIO HANG (them, sua, xoa, lay gio)export const gioHangAPI = {
+// GIO HANG (them, sua, xoa, lay gio)
+export const gioHangAPI = {
   layGioHang: () => goiAPI("/cart"),
 
   themVaoGio: (id_sach: number, so_luong: number) =>
@@ -146,7 +156,8 @@ function taoQuery(params: Record<string, any>): string {
   xoaToanBo: () => goiAPI("/cart", { method: "DELETE" }),
 };
 
-//ON HANG (tao on, xem, cap nhat trang thai, huy)export const donHangAPI = {
+// DON HANG (tao don, xem, cap nhat trang thai, huy)
+export const donHangAPI = {
   taoDonHang: (data: {
     ten_nguoi_nhan: string;
     so_dien_thoai_nhan: string;
@@ -179,7 +190,8 @@ function taoQuery(params: Record<string, any>): string {
     }),
 };
 
-//THONG KE / DASHBOARD (doanh thu, top sach, on hang)export const thongKeAPI = {
+// THONG KE / DASHBOARD (doanh thu, top sach, don hang)
+export const thongKeAPI = {
   tongQuan: (tu_ngay?: string, den_ngay?: string) =>
     goiAPI(`/dashboard/overview${taoQuery({ tu_ngay, den_ngay })}`),
 
@@ -195,7 +207,8 @@ function taoQuery(params: Record<string, any>): string {
     goiAPI(`/dashboard/order-stats${taoQuery({ tu_ngay, den_ngay })}`),
 };
 
-//KHO HANG (nhap kho, ieu chinh, lich su)export const khoHangAPI = {
+// KHO HANG (nhap kho, dieu chinh, lich su)
+export const khoHangAPI = {
   nhapKho: (id_sach: number, so_luong: number, ly_do?: string) =>
     goiAPI("/inventory/import", {
       method: "POST",
@@ -222,7 +235,8 @@ function taoQuery(params: Record<string, any>): string {
   } = {}) => goiAPI(`/inventory/history${taoQuery(params)}`),
 };
 
-//NGUOI DUNG (cap nhat profile, danh sach user)export const nguoiDungAPI = {
+// NGUOI DUNG (cap nhat profile, danh sach user)
+export const nguoiDungAPI = {
   capNhatProfile: (data: {
     ho_ten: string;
     email: string;

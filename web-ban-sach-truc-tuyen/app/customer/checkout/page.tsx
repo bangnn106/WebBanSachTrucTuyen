@@ -77,7 +77,8 @@ export default function CheckoutPage() {
     setLoading(true);
 
     try {
-      //Goi API tao on hang that      const diaChiDay = [form.dia_chi_chi_tiet, form.phuong_xa, form.quan_huyen, form.tinh_thanh]
+      // Goi API tao don hang that
+      const diaChiDay = [form.dia_chi_chi_tiet, form.phuong_xa, form.quan_huyen, form.tinh_thanh]
         .filter(Boolean)
         .join(", ");
 
@@ -88,9 +89,11 @@ export default function CheckoutPage() {
         ghi_chu: form.ghi_chu || undefined,
       });
 
-      //Xoa gio hang local      clearCart();
+      // Xoa gio hang local
+      clearCart();
 
-      //Chuyen sang trang xac nhan voi ID on hang that      const idDonHang = res.data.id_don_hang;
+      // Chuyen sang trang xac nhan voi ID don hang that
+      const idDonHang = res.data.id_don_hang;
       router.push(`/customer/checkout/${idDonHang}`);
     } catch (err: any) {
       setError(err.message || "Đặt hàng thất bại. Vui lòng thử lại.");

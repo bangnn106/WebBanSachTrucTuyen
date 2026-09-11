@@ -1,4 +1,5 @@
-//TEMPLATE EMAIL XAC NHAN ON HANGexport function orderConfirmationTemplate(data: {
+// TEMPLATE EMAIL XAC NHAN DON HANG
+export function orderConfirmationTemplate(data: {
   ma_don_hang: string;
   ten_nguoi_nhan: string;
   dia_chi_giao_hang: string;
@@ -12,7 +13,8 @@
     thanh_tien: number;
   }>;
 }): string {
-  //Tao cac dong trong bang chi tiet san pham  const rows = data.chi_tiet
+  // Tao cac dong trong bang chi tiet san pham
+  const rows = data.chi_tiet
     .map(
       (item, i) => `
       <tr>
@@ -68,7 +70,8 @@
   `;
 }
 
-//TEMPLATE EMAIL THONG BAO HUY ONexport function orderCancelledTemplate(data: {
+// TEMPLATE EMAIL THONG BAO HUY DON
+export function orderCancelledTemplate(data: {
   ma_don_hang: string;
   ten_nguoi_nhan: string;
   tong_tien: number;

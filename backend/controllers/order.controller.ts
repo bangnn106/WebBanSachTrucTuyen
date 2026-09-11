@@ -7,7 +7,8 @@ import {
 } from '../views/mailTemplates';
 import { VaiTro } from '../models/user.model';
 
-//POST /api/orders - Tao on hang tu gio (khach hang)export async function createOrder(
+// POST /api/orders - Tao don hang tu gio (khach hang)
+export async function createOrder(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -25,7 +26,8 @@ import { VaiTro } from '../models/user.model';
       ten_nguoi_nhan, so_dien_thoai_nhan, dia_chi_giao_hang, ghi_chu,
     });
 
-    //Gui email xac nhan on hang (khong cho ket qua, khong crash neu loi)    try {
+    // Gui email xac nhan don hang (khong cho ket qua, khong crash neu loi)
+    try {
       const detail = await orderService.layChiTietDonHang(result.id_don_hang, null);
       await sendMail(
         req.user!.email,
@@ -41,7 +43,8 @@ import { VaiTro } from '../models/user.model';
         })
       );
     } catch {
-      //Email loi khong anh huong response    }
+      // Email loi khong anh huong response
+    }
 
     res.status(201).json({
       success: true,
@@ -53,13 +56,15 @@ import { VaiTro } from '../models/user.model';
   }
 }
 
-//GET /api/orders - Danh sach on hangexport async function getOrders(
+// GET /api/orders - Danh sach don hang
+export async function getOrders(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const { tu_khoa, trang_thai, tu_ngay, den_ngay, trang, kich_thuoc_trang } = req.query;
 
-    //KHACH HANG chi xem on cua minh, NHAN VIEN/ADMIN xem tat ca    const idNguoiDung =
+    // KHACH_HANG chi xem don cua minh, NHAN_VIEN/ADMIN xem tat ca
+    const idNguoiDung =
       req.user!.ten_vai_tro === VaiTro.KHACH_HANG ? req.user!.id : null;
 
     const result = await orderService.layDanhSachDonHang(idNguoiDung, {
@@ -81,13 +86,15 @@ import { VaiTro } from '../models/user.model';
   }
 }
 
-//GET /api/orders/:id - Chi tiet on hangexport async function getOrderById(
+// GET /api/orders/:id - Chi tiet don hang
+export async function getOrderById(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const idDonHang = parseInt(req.params.id);
 
-    //KHACH HANG chi xem on cua minh    const idNguoiDung =
+    // KHACH_HANG chi xem don cua minh
+    const idNguoiDung =
       req.user!.ten_vai_tro === VaiTro.KHACH_HANG ? req.user!.id : null;
 
     const result = await orderService.layChiTietDonHang(idDonHang, idNguoiDung);
@@ -102,7 +109,8 @@ import { VaiTro } from '../models/user.model';
   }
 }
 
-//PATCH /api/orders/:id/status - Cap nhat trang thai (nhan vien/admin)export async function updateOrderStatus(
+// PATCH /api/orders/:id/status - Cap nhat trang thai (nhan vien/admin)
+export async function updateOrderStatus(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -130,7 +138,8 @@ import { VaiTro } from '../models/user.model';
   }
 }
 
-//PATCH /api/orders/:id/cancel - Huy on hangexport async function cancelOrder(
+// PATCH /api/orders/:id/cancel - Huy don hang
+export async function cancelOrder(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -141,7 +150,8 @@ import { VaiTro } from '../models/user.model';
       idDonHang, req.user!.id, ly_do
     );
 
-    //Gui email thong bao huy on    try {
+    // Gui email thong bao huy don
+    try {
       const detail = await orderService.layChiTietDonHang(idDonHang, null);
       if (detail.don_hang?.email) {
         await sendMail(
@@ -156,7 +166,8 @@ import { VaiTro } from '../models/user.model';
         );
       }
     } catch {
-      //Email loi khong anh huong response    }
+      // Email loi khong anh huong response
+    }
 
     res.json({
       success: true,

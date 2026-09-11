@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as inventoryService from '../services/inventory.service';
 
-//POST /api/inventory/import - Nhap khoexport async function importStock(
+// POST /api/inventory/import - Nhap kho
+export async function importStock(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -29,7 +30,8 @@ import * as inventoryService from '../services/inventory.service';
   }
 }
 
-//POST /api/inventory/adjust - ieu chinh khoexport async function adjustStock(
+// POST /api/inventory/adjust - Dieu chinh kho
+export async function adjustStock(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -62,7 +64,8 @@ import * as inventoryService from '../services/inventory.service';
   }
 }
 
-//GET /api/inventory/history - Lich su khoexport async function getHistory(
+// GET /api/inventory/history - Lich su kho
+export async function getHistory(
   req: Request, res: Response, next: NextFunction
 ) {
   try {

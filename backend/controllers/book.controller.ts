@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as bookService from '../services/book.service';
 
-//GET /api/books - Tim kiem sach (public)export async function searchBooks(
+// GET /api/books - Tim kiem sach (public)
+export async function searchBooks(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -33,7 +34,8 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//GET /api/books/:id - Chi tiet sach (public)export async function getBookById(
+// GET /api/books/:id - Chi tiet sach (public)
+export async function getBookById(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -50,17 +52,20 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//POST /api/books - Them sach moi (Admin, co the upload anh)export async function createBook(
+// POST /api/books - Them sach moi (Admin, co the upload anh)
+export async function createBook(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const data = req.body;
 
-    //Neu co file upload gan uong dan anh    if (req.file) {
+    // Neu co file upload → gan duong dan anh
+    if (req.file) {
       data.anh_bia = `/uploads/books/${req.file.filename}`;
     }
 
-    //Validate co ban    if (!data.ten_sach || !data.isbn || !data.tac_gia ||
+    // Validate co ban
+    if (!data.ten_sach || !data.isbn || !data.tac_gia ||
         !data.gia_goc || !data.gia_ban ||
         !data.id_the_loai || !data.id_nha_xuat_ban) {
       res.status(400).json({
@@ -93,14 +98,16 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//PUT /api/books/:id - Cap nhat sach (Admin, co the upload anh moi)export async function updateBook(
+// PUT /api/books/:id - Cap nhat sach (Admin, co the upload anh moi)
+export async function updateBook(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const id = parseInt(req.params.id);
     const data = req.body;
 
-    //Neu co upload anh moi    if (req.file) {
+    // Neu co upload anh moi
+    if (req.file) {
       data.anh_bia = `/uploads/books/${req.file.filename}`;
     }
 
@@ -132,7 +139,8 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//PATCH /api/books/:id/status - Cap nhat trang thai sach (Admin)export async function updateBookStatus(
+// PATCH /api/books/:id/status - Cap nhat trang thai sach (Admin)
+export async function updateBookStatus(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -158,7 +166,8 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//GET /api/categories - Danh sach the loai (public)export async function getCategories(
+// GET /api/categories - Danh sach the loai (public)
+export async function getCategories(
   _req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -173,7 +182,8 @@ import * as bookService from '../services/book.service';
   }
 }
 
-//GET /api/publishers - Danh sach NXB (public)export async function getPublishers(
+// GET /api/publishers - Danh sach NXB (public)
+export async function getPublishers(
   _req: Request, res: Response, next: NextFunction
 ) {
   try {

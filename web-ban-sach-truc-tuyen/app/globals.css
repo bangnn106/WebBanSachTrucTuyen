@@ -851,9 +851,9 @@ footer p {
 }
 
 
-/* ============================================
-   AUTH FORMS
-   ============================================ */
+/* 
+ AUTH FORMS
+ */
 .auth-wrapper {
   min-height: 100vh;
   display: flex;
@@ -913,9 +913,9 @@ footer p {
 }
 
 
-/* ============================================
-   ADMIN / STAFF DASHBOARD LAYOUT
-   ============================================ */
+/* 
+ ADMIN / STAFF DASHBOARD LAYOUT
+ */
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
@@ -1026,9 +1026,9 @@ footer p {
 }
 
 
-/* ============================================
-   STAT CARDS
-   ============================================ */
+/* 
+ STAT CARDS
+ */
 .stat-card {
   background: white;
   border-radius: 12px;
@@ -1070,9 +1070,9 @@ footer p {
 }
 
 
-/* ============================================
-   DASHBOARD CHARTS (CSS-only)
-   ============================================ */
+/* 
+ DASHBOARD CHARTS (CSS-only)
+ */
 .chart-container {
   background: white;
   border-radius: 12px;
@@ -1129,9 +1129,9 @@ footer p {
 }
 
 
-/* ============================================
-   ORDER STATUS BADGE
-   ============================================ */
+/* 
+ ORDER STATUS BADGE
+ */
 .order-status {
   display: inline-block;
   padding: 4px 12px;
@@ -1167,9 +1167,9 @@ footer p {
 }
 
 
-/* ============================================
-   ADMIN TABLE
-   ============================================ */
+/* 
+ ADMIN TABLE
+ */
 .admin-table {
   background: white;
   border-radius: 12px;
@@ -1216,9 +1216,9 @@ footer p {
 }
 
 
-/* ============================================
-   CUSTOMER ACCOUNT SIDEBAR
-   ============================================ */
+/* 
+ CUSTOMER ACCOUNT SIDEBAR
+ */
 .account-layout {
   display: flex;
   gap: 24px;
@@ -1307,9 +1307,9 @@ footer p {
 }
 
 
-/* ============================================
-   INVENTORY PAGE
-   ============================================ */
+/* 
+ INVENTORY PAGE
+ */
 .inventory-form {
   background: white;
   border-radius: 12px;
@@ -1318,9 +1318,9 @@ footer p {
 }
 
 
-/* ============================================
-   RESPONSIVE - DASHBOARD
-   ============================================ */
+/* 
+ RESPONSIVE - DASHBOARD
+ */
 @media (max-width: 991px) {
   .dashboard-sidebar {
     transform: translateX(-100%);

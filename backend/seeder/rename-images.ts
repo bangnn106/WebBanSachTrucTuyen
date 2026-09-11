@@ -6,7 +6,8 @@ import { getPool } from '../config/database';
 
 dotenv.config();
 
-//Mapping: index (1-based) -> ten file moi (khong dau, slug)const danhSachDoiTen: { index: number; tenMoi: string; tenSach: string }[] = [
+// Mapping: index (1-based) -> ten file moi (khong dau, slug)
+const danhSachDoiTen: { index: number; tenMoi: string; tenSach: string }[] = [
   { index: 1,  tenMoi: 'dac-nhan-tam.jpg',                    tenSach: 'Đắc Nhân Tâm' },
   { index: 2,  tenMoi: 'nha-gia-kim.jpg',                     tenSach: 'Nhà Giả Kim' },
   { index: 3,  tenMoi: 'tuoi-tre-dang-gia-bao-nhieu.jpg',     tenSach: 'Tuổi Trẻ Đáng Giá Bao Nhiêu' },
@@ -45,7 +46,8 @@ async function doiTenAnh() {
       const fileMoi = path.join(uploadDir, item.tenMoi);
       const duongDanDB = `/uploads/books/${item.tenMoi}`;
 
-      //Buoc 1: Doi ten file      if (fs.existsSync(fileCu)) {
+      // Buoc 1: Doi ten file
+      if (fs.existsSync(fileCu)) {
         fs.renameSync(fileCu, fileMoi);
         console.log(`  [File] seed-book-${item.index}.jpg -> ${item.tenMoi}`);
       } else if (fs.existsSync(fileMoi)) {
@@ -55,7 +57,8 @@ async function doiTenAnh() {
         continue;
       }
 
-      //Buoc 2: Cap nhat DB      await pool.request()
+      // Buoc 2: Cap nhat DB
+      await pool.request()
         .input('anh_bia_moi', sql.NVarChar(1000), duongDanDB)
         .input('ten_sach', sql.NVarChar(255), item.tenSach)
         .query('UPDATE sach SET anh_bia = @anh_bia_moi WHERE ten_sach = @ten_sach');

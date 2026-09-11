@@ -16,7 +16,8 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
 
-  //Kiem tra quyen: NHAN VIEN hoac QUAN TRI VIEN  useEffect(() => {
+  // Kiem tra quyen: NHAN VIEN hoac QUAN TRI VIEN
+  useEffect(() => {
     if (!dangTai && (!daDangNhap || !["NHAN_VIEN", "QUAN_TRI_VIEN"].includes(user?.ten_vai_tro || ""))) {
       router.push("/auth/login");
     }

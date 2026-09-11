@@ -20,7 +20,8 @@ export default function HomePage() {
   useEffect(() => {
     async function taiDuLieu() {
       try {
-        //Goi 3 API song song e tai nhanh hon        const [resMoi, resChay, resTatCa] = await Promise.all([
+        // Goi 3 API song song de tai nhanh hon
+        const [resMoi, resChay, resTatCa] = await Promise.all([
           sachAPI.timKiem({ sap_xep: "MOI_NHAT", kich_thuoc_trang: 6 }),
           sachAPI.timKiem({ sap_xep: "BAN_CHAY", kich_thuoc_trang: 6 }),
           sachAPI.timKiem({ kich_thuoc_trang: 50 }),
@@ -29,13 +30,15 @@ export default function HomePage() {
         setSachMoi(resMoi.data.items || []);
         setSachBanChay(resChay.data.items || []);
 
-        //Loc sach ang giam gia (gia ban < gia goc)        const tatCa = resTatCa.data.items || [];
+        // Loc sach dang giam gia (gia ban < gia goc)
+        const tatCa = resTatCa.data.items || [];
         const giamGia = tatCa
           .filter((s: book) => s.gia_ban < s.gia_goc)
           .slice(0, 6);
         setSachGiamGia(giamGia);
       } catch {
-        //Neu API loi hien thi rong      } finally {
+        // Neu API loi hien thi rong
+      } finally {
         setDangTai(false);
       }
     }

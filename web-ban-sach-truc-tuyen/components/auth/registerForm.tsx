@@ -43,7 +43,8 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      //Goi API ang ky that      const { mat_khau_xac_nhan, ...duLieuGui } = form;
+      // Goi API dang ky that
+      const { mat_khau_xac_nhan, ...duLieuGui } = form;
       await dangKy(duLieuGui);
       alert("Đăng ký thành công! Vui lòng đăng nhập.");
       router.push("/auth/login");

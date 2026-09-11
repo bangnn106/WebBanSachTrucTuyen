@@ -12,11 +12,14 @@ export default function StaffInventoryPage() {
   const [thongBao, setThongBao] = useState("");
   const [loi, setLoi] = useState("");
 
-  //Form nhap kho  const [formNhap, setFormNhap] = useState({ id_sach: "", so_luong: "", ly_do: "" });
-  //Form ieu chinh  const [formDieuChinh, setFormDieuChinh] = useState({ id_sach: "", so_luong_thay_doi: "", ly_do: "" });
+  // Form nhap kho
+  const [formNhap, setFormNhap] = useState({ id_sach: "", so_luong: "", ly_do: "" });
+  // Form dieu chinh
+  const [formDieuChinh, setFormDieuChinh] = useState({ id_sach: "", so_luong_thay_doi: "", ly_do: "" });
   const [dangLuu, setDangLuu] = useState(false);
 
-  //Danh sach sach e chon  const [sachList, setSachList] = useState<any[]>([]);
+  // Danh sach sach de chon
+  const [sachList, setSachList] = useState<any[]>([]);
 
   useEffect(() => {
     sachAPI.timKiem({ kich_thuoc_trang: 200 })

@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import * as userService from '../services/user.service';
 
-//PUT /api/users/me - Cap nhat profile ban thanexport async function updateProfile(
+// PUT /api/users/me - Cap nhat profile ban than
+export async function updateProfile(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -33,7 +34,8 @@ import * as userService from '../services/user.service';
   }
 }
 
-//GET /api/users - Lay danh sach user (Admin only)export async function getUsers(
+// GET /api/users - Lay danh sach user (Admin only)
+export async function getUsers(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -56,7 +58,8 @@ import * as userService from '../services/user.service';
   }
 }
 
-//POST /api/users - Tao tai khoan moi (Admin only)export async function createUser(
+// POST /api/users - Tao tai khoan moi (Admin only)
+export async function createUser(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
@@ -70,7 +73,8 @@ import * as userService from '../services/user.service';
       return;
     }
 
-    //Chi cho tao nhan vien (2) hoac admin (3)    if (![2, 3].includes(Number(id_vai_tro))) {
+    // Chi cho tao nhan vien (2) hoac admin (3)
+    if (![2, 3].includes(Number(id_vai_tro))) {
       res.status(400).json({
         success: false,
         message: 'Chỉ được tạo tài khoản Nhân viên hoặc Quản trị viên.',
@@ -93,12 +97,13 @@ import * as userService from '../services/user.service';
   }
 }
 
-//PATCH /api/users/:id/status - Khoa/mo khoa tai khoan (Admin only)export async function toggleUserStatus(
+// PATCH /api/users/:id/status - Khoa/mo khoa tai khoan (Admin only)
+export async function toggleUserStatus(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
     const id = parseInt(req.params.id);
-    const { khoa } = req.body; //true khoa, false mo khoa
+    const { khoa } = req.body; // true: khoa, false: mo khoa
     if (id === req.user!.id) {
       res.status(400).json({
         success: false,

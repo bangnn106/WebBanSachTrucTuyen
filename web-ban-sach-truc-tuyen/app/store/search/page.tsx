@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Container, Row, Col, Form, Button, Spinner, Alert } from "react-bootstrap";
 import BookCard from "@/components/books/bookCard";
@@ -10,27 +10,31 @@ import { book } from "@/types/book";
 interface TheLoai { id: number; ten_the_loai: string; }
 interface NhaXuatBan { id: number; ten_nxb: string; }
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  //State cho bo loc  const [tuKhoa, setTuKhoa] = useState(searchParams.get("q") || "");
+  // State cho bo loc
+  const [tuKhoa, setTuKhoa] = useState(searchParams.get("q") || "");
   const [idTheLoai, setIdTheLoai] = useState(searchParams.get("id_the_loai") || "");
   const [sapXep, setSapXep] = useState("MOI_NHAT");
   const [trang, setTrang] = useState(1);
 
-  //State cho du lieu  const [danhSachSach, setDanhSachSach] = useState<book[]>([]);
+  // State cho du lieu
+  const [danhSachSach, setDanhSachSach] = useState<book[]>([]);
   const [tongTrang, setTongTrang] = useState(0);
   const [danhSachTheLoai, setDanhSachTheLoai] = useState<TheLoai[]>([]);
   const [dangTai, setDangTai] = useState(true);
 
-  //Load danh sach the loai khi mount  useEffect(() => {
+  // Load danh sach the loai khi mount
+  useEffect(() => {
     sachAPI.layDanhSachTheLoai()
       .then((res) => setDanhSachTheLoai(res.data || []))
       .catch(() => {});
   }, []);
 
-  //Load sach khi params thay oi  useEffect(() => {
+  // Load sach khi params thay doi
+  useEffect(() => {
     setDangTai(true);
     sachAPI
       .timKiem({
@@ -48,7 +52,8 @@ export default function SearchPage() {
       .finally(() => setDangTai(false));
   }, [tuKhoa, idTheLoai, sapXep, trang]);
 
-  //Cap nhat tuKhoa khi URL thay oi  useEffect(() => {
+  // Cap nhat tuKhoa khi URL thay doi
+  useEffect(() => {
     setTuKhoa(searchParams.get("q") || "");
     setIdTheLoai(searchParams.get("id_the_loai") || "");
     setTrang(1);
@@ -176,5 +181,20 @@ export default function SearchPage() {
         </Col>
       </Row>
     </Container>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense
+      fallback={
+        <Container fluid="xl" className="py-5 text-center">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3 text-secondary">Đang tải...</p>
+        </Container>
+      }
+    >
+      <SearchContent />
+    </Suspense>
   );
 }

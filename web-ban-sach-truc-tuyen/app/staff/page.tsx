@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-//Trang staff mac dinh -> chuyen den quan ly don hangexport default function StaffPage() {
+// Trang staff mac dinh -> chuyen den quan ly don hang
+export default function StaffPage() {
   const router = useRouter();
   useEffect(() => {
     router.replace("/staff/order");

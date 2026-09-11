@@ -1,4 +1,5 @@
-//ENTITY QUAN LY KHOexport interface QuanLiKho {
+// ENTITY QUAN LY KHO
+export interface QuanLiKho {
   id: number;
   loai_giao_dich: string;
   so_luong: number;
@@ -13,7 +14,8 @@
   tong_ban_ghi?: number;
 }
 
-//DTOs
+// DTOs
+
 export interface NhapKhoDTO {
   id_sach: number;
   so_luong: number;
@@ -22,7 +24,9 @@ export interface NhapKhoDTO {
 
 export interface DieuChinhKhoDTO {
   id_sach: number;
-  so_luong_thay_doi: number;   //duong tang, am giam  ly_do: string;                //bat buoc}
+  so_luong_thay_doi: number;   // duong tang, am giam
+  ly_do: string;                // bat buoc
+}
 
 export interface LichSuKhoDTO {
   id_sach?: number;

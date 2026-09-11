@@ -1,4 +1,7 @@
-/* CART PROVIDER Quan ly gio hang - Chua ang nhap luu gio vao localStorage - a ang nhap goi API backend that Khi ang nhap merge gio localStorage vao gio DB */
+/* CART PROVIDER: Quan ly gio hang
+   - Chua dang nhap: luu gio vao localStorage
+   - Da dang nhap: goi API backend that
+   Khi dang nhap: merge gio localStorage vao gio DB */
 "use client";
 
 import {
@@ -28,7 +31,7 @@ const CartContext = createContext<CartContextType | null>(null);
 
 const STORAGE_KEY = "bookstore_cart";
 
-/* Helper: oc/ghi localStorage */
+/* Helper: doc/ghi localStorage */
 function loadLocalCart(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
@@ -50,11 +53,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loaded, setLoaded] = useState(false);
 
-  /* Load gio khi mount hoac khi trang thai ang nhap thay oi */
+  /* Load gio khi mount hoac khi trang thai dang nhap thay doi */
   useEffect(() => {
-    if (authLoading) return; //Cho auth load xong
+    if (authLoading) return; // Cho auth load xong
     if (daDangNhap) {
-      //a ang nhap load gio tu API      gioHangAPI
+      // Da dang nhap: load gio tu API
+      gioHangAPI
         .layGioHang()
         .then((res) => {
           const apiItems: CartItem[] = (res.data || []).map((item: any) => ({
@@ -67,7 +71,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }));
           setItems(apiItems);
 
-          //Merge gio localStorage vao API (neu co)          const localItems = loadLocalCart();
+          // Merge gio localStorage vao API (neu co)
+          const localItems = loadLocalCart();
           if (localItems.length > 0) {
             Promise.all(
               localItems.map((li) =>
@@ -75,7 +80,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
               )
             ).then(() => {
               localStorage.removeItem(STORAGE_KEY);
-              //Reload gio sau khi merge              gioHangAPI.layGioHang().then((res2) => {
+              // Reload gio sau khi merge
+              gioHangAPI.layGioHang().then((res2) => {
                 const merged: CartItem[] = (res2.data || []).map((item: any) => ({
                   id_sach: item.id_sach,
                   ten_sach: item.ten_sach,
@@ -90,16 +96,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
           }
         })
         .catch(() => {
-          //Neu API loi dung localStorage          setItems(loadLocalCart());
+          // Neu API loi: dung localStorage
+          setItems(loadLocalCart());
         })
         .finally(() => setLoaded(true));
     } else {
-      //Chua ang nhap dung localStorage      setItems(loadLocalCart());
+      // Chua dang nhap: dung localStorage
+      setItems(loadLocalCart());
       setLoaded(true);
     }
   }, [daDangNhap, authLoading]);
 
-  /* Persist vao localStorage khi chua ang nhap */
+  /* Persist vao localStorage khi chua dang nhap */
   useEffect(() => {
     if (loaded && !daDangNhap) {
       saveLocalCart(items);

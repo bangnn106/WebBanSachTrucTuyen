@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JwtPayload } from '../models/user.model';
 
-//Mo rong kieu Request cua Express e them field userdeclare global {
+// Mo rong kieu Request cua Express de them field user
+declare global {
   namespace Express {
     interface Request {
       user?: JwtPayload;
@@ -10,13 +11,15 @@ import { JwtPayload } from '../models/user.model';
   }
 }
 
-//Middleware xac thuc JWT tokenexport function authMiddleware(
+// Middleware xac thuc JWT token
+export function authMiddleware(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
   try {
-    //Lay token tu header: Authorization: Bearer <token>    const authHeader = req.headers.authorization;
+    // Lay token tu header: Authorization: Bearer <token>
+    const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       res.status(401).json({
@@ -29,9 +32,11 @@ import { JwtPayload } from '../models/user.model';
     const token = authHeader.split(' ')[1];
     const secret = process.env.JWT_SECRET || 'default_secret';
 
-    //Verify va decode token    const decoded = jwt.verify(token, secret) as JwtPayload;
+    // Verify va decode token
+    const decoded = jwt.verify(token, secret) as JwtPayload;
 
-    //Gan payload vao req.user e cac handler sau dung    req.user = decoded;
+    // Gan payload vao req.user de cac handler sau dung
+    req.user = decoded;
     next();
   } catch (error) {
     res.status(401).json({

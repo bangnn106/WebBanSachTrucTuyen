@@ -6,35 +6,48 @@ import { getPool } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import apiRoutes from './routes/index';
 
-//Load bien moi truong tu file .envdotenv.config();
+// Load bien moi truong tu file .env
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-//MIDDLEWARES
-//Cho phep frontend goi API (CORS)app.use(cors());
+// MIDDLEWARES
 
-//Parse JSON bodyapp.use(express.json());
+// Cho phep frontend goi API (CORS)
+app.use(cors());
 
-//Parse URL-encoded body (form submit)app.use(express.urlencoded({ extended: true }));
+// Parse JSON body
+app.use(express.json());
 
-//Phuc vu file tinh (anh bia sach a upload)app.use(express.static(path.join(__dirname, 'public')));
+// Parse URL-encoded body (form submit)
+app.use(express.urlencoded({ extended: true }));
 
-//ROUTES
-//Mount tat ca API routes duoi prefix /apiapp.use('/api', apiRoutes);
+// Phuc vu file tinh (anh bia sach da upload)
+app.use(express.static(path.join(__dirname, 'public')));
 
-//Route kiem tra server hoat ongapp.get('/', (_req, res) => {
+// ROUTES
+
+// Mount tat ca API routes duoi prefix /api
+app.use('/api', apiRoutes);
+
+// Route kiem tra server hoat dong
+app.get('/', (_req, res) => {
   res.json({
     success: true,
     message: 'API Website Bán Sách Trực Tuyến đang hoạt động! 📚',
   });
 });
 
-//ERROR HANDLER//QUAN TRONG: Phai at SAU tat ca routesapp.use(errorHandler);
+// ERROR HANDLER
+// QUAN TRONG: Phai dat SAU tat ca routes
+app.use(errorHandler);
 
-//KHOI ONG SERVERasync function startServer() {
+// KHOI DONG SERVER
+async function startServer() {
   try {
-    //Ket noi database truoc khi lang nghe port    await getPool();
+    // Ket noi database truoc khi lang nghe port
+    await getPool();
 
     app.listen(PORT, () => {
       console.log(`\n🚀 Server đang chạy tại: http://localhost:${PORT}`);

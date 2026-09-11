@@ -1,7 +1,8 @@
 import sql from 'mssql';
 import { executeProcedure } from '../config/database';
 
-//THEM SACH VAO GIO HANGexport async function themSachVaoGio(
+// THEM SACH VAO GIO HANG
+export async function themSachVaoGio(
   idNguoiDung: number,
   idSach: number,
   soLuong: number
@@ -14,7 +15,8 @@ import { executeProcedure } from '../config/database';
   return result.recordset[0];
 }
 
-//CAP NHAT SO LUONG SACH TRONG GIOexport async function capNhatSoLuongGio(
+// CAP NHAT SO LUONG SACH TRONG GIO
+export async function capNhatSoLuongGio(
   idNguoiDung: number,
   idSach: number,
   soLuong: number
@@ -27,7 +29,8 @@ import { executeProcedure } from '../config/database';
   return result.recordset[0];
 }
 
-//XOA 1 SACH KHOI GIO HANGexport async function xoaSachKhoiGio(idNguoiDung: number, idSach: number) {
+// XOA 1 SACH KHOI GIO HANG
+export async function xoaSachKhoiGio(idNguoiDung: number, idSach: number) {
   const result = await executeProcedure('sp_xoa_sach_khoi_gio', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
     { name: 'id_sach',       type: sql.Int, value: idSach },
@@ -35,15 +38,18 @@ import { executeProcedure } from '../config/database';
   return result.recordset[0];
 }
 
-//XOA TOAN BO GIO HANGexport async function xoaToanBoGioHang(idNguoiDung: number) {
+// XOA TOAN BO GIO HANG
+export async function xoaToanBoGioHang(idNguoiDung: number) {
   const result = await executeProcedure('sp_xoa_toan_bo_gio_hang', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
   return result.recordset[0];
 }
 
-//LAY CHI TIET GIO HANGexport async function layChiTietGioHang(idNguoiDung: number) {
+// LAY CHI TIET GIO HANG
+export async function layChiTietGioHang(idNguoiDung: number) {
   const result = await executeProcedure('sp_lay_chi_tiet_gio_hang', [
     { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
   ]);
-  return result.recordset; //Mang cac san pham trong gio}
+  return result.recordset; // Mang cac san pham trong gio
+}

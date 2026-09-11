@@ -12,7 +12,8 @@ export default function AdminBookPage() {
   const [tuKhoa, setTuKhoa] = useState("");
   const [thongBao, setThongBao] = useState("");
 
-  //Du lieu cho form them/sua  const [showModal, setShowModal] = useState(false);
+  // Du lieu cho form them/sua
+  const [showModal, setShowModal] = useState(false);
   const [dangLuu, setDangLuu] = useState(false);
   const [loi, setLoi] = useState("");
   const [editId, setEditId] = useState<number | null>(null);

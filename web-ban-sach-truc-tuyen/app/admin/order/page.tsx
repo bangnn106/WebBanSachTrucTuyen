@@ -23,7 +23,8 @@ export default function AdminOrderPage() {
   const [tuKhoa, setTuKhoa] = useState("");
   const [thongBao, setThongBao] = useState("");
 
-  //Modal chi tiet  const [showModal, setShowModal] = useState(false);
+  // Modal chi tiet
+  const [showModal, setShowModal] = useState(false);
   const [chiTietDon, setChiTietDon] = useState<any>(null);
   const [chiTietSanPham, setChiTietSanPham] = useState<any[]>([]);
 

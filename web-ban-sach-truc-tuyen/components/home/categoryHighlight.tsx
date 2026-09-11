@@ -10,7 +10,8 @@ interface TheLoai {
   ten_the_loai: string;
 }
 
-//Bieu tuong cho mot so the loai pho bienconst bieuTuong: Record<string, string> = {
+// Bieu tuong cho mot so the loai pho bien
+const bieuTuong: Record<string, string> = {
   "Văn học": "📖",
   "Kinh tế": "💰",
   "Tâm lý": "🧠",

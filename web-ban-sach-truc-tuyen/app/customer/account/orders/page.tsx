@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { Badge, Button, Spinner, Table } from "react-bootstrap";
 import { donHangAPI } from "@/lib/api";
 
-//Mau cho tung trang thai on hangconst mauTrangThai: Record<string, string> = {
+// Mau cho tung trang thai don hang
+const mauTrangThai: Record<string, string> = {
   "Chờ xác nhận": "warning",
   "Đang chuẩn bị": "info",
   "Đang giao": "primary",

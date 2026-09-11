@@ -29,7 +29,8 @@ export default function BookDetailPage() {
 
   const bookId = Number(params.id);
 
-  //Goi API lay chi tiet sach  useEffect(() => {
+  // Goi API lay chi tiet sach
+  useEffect(() => {
     sachAPI
       .layChiTiet(bookId)
       .then((res) => setSach(res.data))

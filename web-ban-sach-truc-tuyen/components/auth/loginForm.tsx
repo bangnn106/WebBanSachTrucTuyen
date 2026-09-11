@@ -20,9 +20,11 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      //Goi API ang nhap that      const user = await dangNhap(email, password);
+      // Goi API dang nhap that
+      const user = await dangNhap(email, password);
 
-      //Chuyen huong theo vai tro      if (user.ten_vai_tro === "QUAN_TRI_VIEN") {
+      // Chuyen huong theo vai tro
+      if (user.ten_vai_tro === "QUAN_TRI_VIEN") {
         router.push("/admin/report");
       } else if (user.ten_vai_tro === "NHAN_VIEN") {
         router.push("/staff/order");
