@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Banner from "@/components/home/banner";
-import CategoryHighlight from "@/components/home/categoryHighlight";
 import BookSection from "@/components/books/bookSection";
 import TopBanner from "@/components/layout/topBanner";
 import Header from "@/components/layout/header";
@@ -64,7 +63,6 @@ export default function HomePage() {
       <TopBanner />
       <Header />
       <Banner />
-      <CategoryHighlight />
 
       {sachMoi.length > 0 && (
         <BookSection title="📚 Sách mới" books={sachMoi} />

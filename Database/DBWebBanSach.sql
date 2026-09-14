@@ -1,4 +1,4 @@
-﻿USE [master]  
+USE [master]  
 GO
 
 CREATE DATABASE WebBanSach
@@ -435,7 +435,7 @@ BEGIN
         AND
         (
             @tu_khoa IS NULL
-            OR nd.ho_ten LIKE N'%' + @tu_khoa + N'%'
+            OR nd.ho_ten COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
             OR nd.email LIKE '%' + CONVERT(VARCHAR(255), @tu_khoa) + '%'
             OR nd.so_dien_thoai LIKE '%' + CONVERT(VARCHAR(20), @tu_khoa) + '%'
         )
@@ -693,8 +693,10 @@ BEGIN
     WHERE
         (
             @tu_khoa IS NULL
-            OR s.ten_sach LIKE N'%' + @tu_khoa + N'%'
-            OR s.tac_gia LIKE N'%' + @tu_khoa + N'%'
+            OR s.ten_sach COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
+            OR s.tac_gia COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
+            OR s.mo_ta_ngan COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
+            OR tls.ten_the_loai COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
             OR s.isbn LIKE '%' + CONVERT(VARCHAR(255), @tu_khoa) + '%'
         )
         AND (@id_the_loai IS NULL OR s.id_the_loai = @id_the_loai)
@@ -1110,7 +1112,7 @@ BEGIN
         (
             @tu_khoa IS NULL
             OR dh.ma_don_hang LIKE '%' + CONVERT(VARCHAR(255), @tu_khoa) + '%'
-            OR dh.ten_nguoi_nhan LIKE N'%' + @tu_khoa + N'%'
+            OR dh.ten_nguoi_nhan COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
             OR dh.so_dien_thoai_nhan LIKE '%' + CONVERT(VARCHAR(20), @tu_khoa) + '%'
         )
     ORDER BY dh.ngay_dat DESC

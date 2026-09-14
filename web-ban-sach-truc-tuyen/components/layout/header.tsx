@@ -147,7 +147,7 @@ export default function Header() {
         </div>
       </Container>
 
-      <CategoryMenu show={showMenu} />
+      <CategoryMenu show={showMenu} onClose={() => setShowMenu(false)} />
     </header>
   );
 }

@@ -128,8 +128,12 @@ function SearchContent() {
         {/* DANH SACH SACH */}
         <Col lg={9}>
           <h4 className="fw-bold mb-3">
-            {tuKhoa
+            {tuKhoa && idTheLoai
+              ? `Kết quả "${tuKhoa}" - ${danhSachTheLoai.find((t) => String(t.id) === idTheLoai)?.ten_the_loai || ""}`
+              : tuKhoa
               ? `Kết quả tìm kiếm "${tuKhoa}"`
+              : idTheLoai
+              ? `Thể loại: ${danhSachTheLoai.find((t) => String(t.id) === idTheLoai)?.ten_the_loai || "Sách theo thể loại"}`
               : "Tất cả sách"}
           </h4>
 
