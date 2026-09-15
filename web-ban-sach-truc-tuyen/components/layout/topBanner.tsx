@@ -8,11 +8,11 @@ export default function TopBanner(){
                 src="/images/banner/top-banner.jpg"
                 alt="Khuyến mãi"
                 width={1920}
-                height={90}
+                height={150}
                 className="w-100"
                 style={{
                     height:"auto",
-                    maxHeight:"90px",
+                    maxHeight:"150px",
                     objectFit:"cover",
                 }}
                 priority
