@@ -1,5 +1,6 @@
 export interface Sach {
-    id: number;
+    id_sach: number;
+    id?: number;
     ten_sach: string;
     isbn: string;
     tac_gia: string;
@@ -9,13 +10,13 @@ export interface Sach {
     nam_xuat_ban: number | null;
     ngon_ngu: string | null;
     anh_bia: string | null;
-    so_luong_da_ban: number;
     so_luong_ton: number;
     trang_thai: string;
     id_the_loai: number;
     id_nha_xuat_ban: number;
     ten_the_loai?: string;
     ten_nxb?: string;
+    so_luong_da_ban?: number;
     tong_ban_ghi?: number;
 }
 export interface ThemSachDTO {
@@ -57,10 +58,12 @@ export interface TimKiemSachDTO {
     kich_thuoc_trang?: number;
 }
 export interface TheLoai {
-    id: number;
+    id_the_loai: number;
+    id?: number;
     ten_the_loai: string;
 }
 export interface NhaXuatBan {
-    id: number;
+    id_nha_xuat_ban: number;
+    id?: number;
     ten_nxb: string;
 }

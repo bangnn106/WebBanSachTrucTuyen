@@ -116,7 +116,7 @@ export default function AdminReportPage() {
                 </thead>
                 <tbody>
                   {topSach.map((s: any, i: number) => (
-                    <tr key={s.id}>
+                    <tr key={s.id_sach || s.id || i}>
                       <td>{i + 1}</td>
                       <td>{s.ten_sach}</td>
                       <td>{s.tac_gia}</td>

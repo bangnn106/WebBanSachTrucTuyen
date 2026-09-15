@@ -102,11 +102,11 @@ async function seed() {
         const adminEmail = 'admin@bookstore.com';
         const existingAdmin = await pool.request()
             .input('email', mssql_1.default.VarChar(255), adminEmail)
-            .query('SELECT id FROM nguoi_dung WHERE email = @email');
+            .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email');
         if (existingAdmin.recordset.length === 0) {
             const hashedPassword = await bcryptjs_1.default.hash('Admin@123', 10);
             const adminRole = await pool.request()
-                .query("SELECT id FROM vai_tro WHERE ten_vai_tro = N'QUAN_TRI_VIEN'");
+                .query("SELECT id_vai_tro FROM vai_tro WHERE ten_vai_tro = N'QUAN_TRI_VIEN'");
             await pool.request()
                 .input('ho_ten', mssql_1.default.NVarChar(100), 'Quản Trị Viên')
                 .input('email', mssql_1.default.VarChar(255), adminEmail)
@@ -115,7 +115,7 @@ async function seed() {
                 .input('tinh_thanh', mssql_1.default.NVarChar(100), 'Hồ Chí Minh')
                 .input('quan_huyen', mssql_1.default.NVarChar(100), 'Quận 1')
                 .input('phuong_xa', mssql_1.default.NVarChar(100), 'Phường Bến Nghé')
-                .input('id_vai_tro', mssql_1.default.Int, adminRole.recordset[0].id)
+                .input('id_vai_tro', mssql_1.default.Int, adminRole.recordset[0].id_vai_tro)
                 .query(`
           INSERT INTO nguoi_dung
           (ho_ten, email, mat_khau, so_dien_thoai, tinh_thanh, quan_huyen, phuong_xa, id_vai_tro)
@@ -125,9 +125,9 @@ async function seed() {
             // Tao gio hang cho admin
             const adminUser = await pool.request()
                 .input('email2', mssql_1.default.VarChar(255), adminEmail)
-                .query('SELECT id FROM nguoi_dung WHERE email = @email2');
+                .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email2');
             await pool.request()
-                .input('id_nguoi_dung', mssql_1.default.Int, adminUser.recordset[0].id)
+                .input('id_nguoi_dung', mssql_1.default.Int, adminUser.recordset[0].id_nguoi_dung)
                 .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
             console.log('✅ Đã tạo tài khoản Admin:');
             console.log('   📧 Email: admin@bookstore.com');
@@ -140,11 +140,11 @@ async function seed() {
         const staffEmail = 'nhanvien@bookstore.com';
         const existingStaff = await pool.request()
             .input('email', mssql_1.default.VarChar(255), staffEmail)
-            .query('SELECT id FROM nguoi_dung WHERE email = @email');
+            .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email');
         if (existingStaff.recordset.length === 0) {
             const hashedPassword = await bcryptjs_1.default.hash('Staff@123', 10);
             const staffRole = await pool.request()
-                .query("SELECT id FROM vai_tro WHERE ten_vai_tro = N'NHAN_VIEN'");
+                .query("SELECT id_vai_tro FROM vai_tro WHERE ten_vai_tro = N'NHAN_VIEN'");
             await pool.request()
                 .input('ho_ten', mssql_1.default.NVarChar(100), 'Nhân Viên')
                 .input('email', mssql_1.default.VarChar(255), staffEmail)
@@ -153,7 +153,7 @@ async function seed() {
                 .input('tinh_thanh', mssql_1.default.NVarChar(100), 'Hồ Chí Minh')
                 .input('quan_huyen', mssql_1.default.NVarChar(100), 'Quận 3')
                 .input('phuong_xa', mssql_1.default.NVarChar(100), 'Phường 1')
-                .input('id_vai_tro', mssql_1.default.Int, staffRole.recordset[0].id)
+                .input('id_vai_tro', mssql_1.default.Int, staffRole.recordset[0].id_vai_tro)
                 .query(`
           INSERT INTO nguoi_dung
           (ho_ten, email, mat_khau, so_dien_thoai, tinh_thanh, quan_huyen, phuong_xa, id_vai_tro)
@@ -163,9 +163,9 @@ async function seed() {
             // Tao gio hang cho nhan vien
             const staffUser = await pool.request()
                 .input('email2', mssql_1.default.VarChar(255), staffEmail)
-                .query('SELECT id FROM nguoi_dung WHERE email = @email2');
+                .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email2');
             await pool.request()
-                .input('id_nguoi_dung', mssql_1.default.Int, staffUser.recordset[0].id)
+                .input('id_nguoi_dung', mssql_1.default.Int, staffUser.recordset[0].id_nguoi_dung)
                 .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
             console.log('✅ Đã tạo tài khoản Nhân viên:');
             console.log('   📧 Email: nhanvien@bookstore.com');
@@ -183,7 +183,7 @@ async function seed() {
         for (const cat of categories) {
             const exists = await pool.request()
                 .input('ten', mssql_1.default.NVarChar(150), cat)
-                .query('SELECT id FROM the_loai_sach WHERE ten_the_loai = @ten');
+                .query('SELECT id_the_loai FROM the_loai_sach WHERE ten_the_loai = @ten');
             if (exists.recordset.length === 0) {
                 await pool.request()
                     .input('ten', mssql_1.default.NVarChar(150), cat)
@@ -199,7 +199,7 @@ async function seed() {
         for (const pub of publishers) {
             const exists = await pool.request()
                 .input('ten', mssql_1.default.NVarChar(200), pub)
-                .query('SELECT id FROM nha_xuat_ban WHERE ten_nxb = @ten');
+                .query('SELECT id_nha_xuat_ban FROM nha_xuat_ban WHERE ten_nxb = @ten');
             if (exists.recordset.length === 0) {
                 await pool.request()
                     .input('ten', mssql_1.default.NVarChar(200), pub)
@@ -207,7 +207,7 @@ async function seed() {
             }
         }
         console.log(`✅ Đã kiểm tra/thêm ${publishers.length} nhà xuất bản.`);
-        // 6. THEM SACH MAU + ANH BIA
+        // 6. THEM SACH MAU + ANH BIA (bo so_luong_da_ban)
         const sachCount = await pool.request()
             .query('SELECT COUNT(*) AS count FROM sach');
         if (sachCount.recordset[0].count > 0) {
@@ -217,18 +217,13 @@ async function seed() {
             console.log('📖 Đang tải ảnh bìa và thêm sách...');
             // Lay ID the loai & nha xuat ban
             const theLoaiResult = await pool.request()
-                .query('SELECT id, ten_the_loai FROM the_loai_sach');
+                .query('SELECT id_the_loai, ten_the_loai FROM the_loai_sach');
             const nxbResult = await pool.request()
-                .query('SELECT id, ten_nxb FROM nha_xuat_ban');
+                .query('SELECT id_nha_xuat_ban, ten_nxb FROM nha_xuat_ban');
             const theLoaiMap = {};
-            theLoaiResult.recordset.forEach((r) => { theLoaiMap[r.ten_the_loai] = r.id; });
+            theLoaiResult.recordset.forEach((r) => { theLoaiMap[r.ten_the_loai] = r.id_the_loai; });
             const nxbMap = {};
-            nxbResult.recordset.forEach((r) => { nxbMap[r.ten_nxb] = r.id; });
-            // Lay ID admin de ghi nhan nguoi tao
-            const adminUser = await pool.request()
-                .input('email', mssql_1.default.VarChar(255), 'admin@bookstore.com')
-                .query('SELECT id FROM nguoi_dung WHERE email = @email');
-            const idAdmin = adminUser.recordset[0]?.id || 1;
+            nxbResult.recordset.forEach((r) => { nxbMap[r.ten_nxb] = r.id_nha_xuat_ban; });
             let demThanhCong = 0;
             for (let i = 0; i < danhSachSach.length; i++) {
                 const sach = danhSachSach[i];
@@ -252,7 +247,7 @@ async function seed() {
                         console.log(`   ⚠️  Bỏ qua "${sach.ten}" — không tìm thấy thể loại hoặc NXB.`);
                         continue;
                     }
-                    // Them sach bang INSERT truc tiep (khong can stored procedure)
+                    // Them sach bang INSERT truc tiep (khong co cot so_luong_da_ban)
                     await pool.request()
                         .input('ten_sach', mssql_1.default.NVarChar(255), sach.ten)
                         .input('isbn', mssql_1.default.VarChar(20), sach.isbn)

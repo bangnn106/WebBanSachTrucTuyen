@@ -9,9 +9,9 @@ filter: DanhSachDonHangDTO): Promise<{
     kich_thuoc_trang: number;
     tong_trang: number;
 }>;
-export declare function layChiTietDonHang(idDonHang: number, idNguoiDung: number | null): Promise<{
+export declare function layChiTietDonHang(maDonHang: string, idNguoiDung: number | null): Promise<{
     don_hang: any;
     chi_tiet: any;
 }>;
-export declare function capNhatTrangThaiDonHang(idDonHang: number, trangThaiMoi: string): Promise<any>;
-export declare function huyDonHang(idDonHang: number, idNguoiThucHien: number, lyDo?: string): Promise<any>;
+export declare function capNhatTrangThaiDonHang(maDonHang: string, trangThaiMoi: string): Promise<any>;
+export declare function huyDonHang(maDonHang: string, idNguoiThucHien: number, lyDo?: string): Promise<any>;

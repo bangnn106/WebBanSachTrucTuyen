@@ -13,16 +13,16 @@ router.post('/', roleMiddleware('KHACH_HANG'), orderController.createOrder);
 
 // Xem danh sach & chi tiet (tat ca role, logic phan quyen trong controller)
 router.get('/', orderController.getOrders);
-router.get('/:id', orderController.getOrderById);
+router.get('/:maDon', orderController.getOrderByMaDon);
 
 // Cap nhat trang thai (nhan vien/admin)
 router.patch(
-  '/:id/status',
+  '/:maDon/status',
   roleMiddleware('NHAN_VIEN', 'QUAN_TRI_VIEN'),
   orderController.updateOrderStatus
 );
 
 // Huy don (tat ca role, logic kiem tra trong SP)
-router.patch('/:id/cancel', orderController.cancelOrder);
+router.patch('/:maDon/cancel', orderController.cancelOrder);
 
 export default router;

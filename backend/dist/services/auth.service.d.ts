@@ -3,6 +3,7 @@ export declare function dangKy(data: DangKyDTO): Promise<any>;
 export declare function dangNhap(data: DangNhapDTO): Promise<{
     token: string;
     user: {
+        id_nguoi_dung: number;
         id: number;
         ho_ten: string;
         email: string;

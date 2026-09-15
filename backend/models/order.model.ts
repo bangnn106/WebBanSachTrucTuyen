@@ -1,6 +1,5 @@
-// ENTITY DON HANG
+// ENTITY DON HANG (dung ma_don_hang lam PK, bo cot id)
 export interface DonHang {
-  id: number;
   ma_don_hang: string;
   tong_tien: number;
   ten_nguoi_nhan: string;
@@ -16,11 +15,10 @@ export interface DonHang {
   tong_ban_ghi?: number;
 }
 
-// CHI TIET DON HANG
+// CHI TIET DON HANG (khoa kep ma_don_hang + id_sach, bo ten_sach - lay qua JOIN)
 export interface ChiTietDonHang {
-  id: number;
   id_sach: number;
-  ten_sach: string;
+  ten_sach: string;    // lay tu bang sach qua JOIN
   anh_bia: string | null;
   don_gia: number;
   so_luong: number;

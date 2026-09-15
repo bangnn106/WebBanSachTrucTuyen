@@ -16,7 +16,7 @@ const mauTrangThai: Record<string, string> = {
 export default function OrderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const idDonHang = Number(params.id);
+  const maDonHang = String(params.id);
 
   const [donHang, setDonHang] = useState<any>(null);
   const [chiTiet, setChiTiet] = useState<any[]>([]);
@@ -25,24 +25,25 @@ export default function OrderDetailPage() {
   const [thongBao, setThongBao] = useState("");
 
   useEffect(() => {
+    if (!maDonHang) return;
     donHangAPI
-      .layChiTiet(idDonHang)
+      .layChiTiet(maDonHang)
       .then((res) => {
         setDonHang(res.data.don_hang);
         setChiTiet(res.data.chi_tiet || []);
       })
       .catch(() => {})
       .finally(() => setDangTai(false));
-  }, [idDonHang]);
+  }, [maDonHang]);
 
   async function handleHuyDon() {
     if (!confirm("Bạn có chắc chắn muốn hủy đơn hàng này?")) return;
     setDangHuy(true);
     try {
-      await donHangAPI.huyDon(idDonHang, "Khách hàng yêu cầu hủy");
+      await donHangAPI.huyDon(maDonHang, "Khách hàng yêu cầu hủy");
       setThongBao("Đã hủy đơn hàng thành công.");
       // Reload data
-      const res = await donHangAPI.layChiTiet(idDonHang);
+      const res = await donHangAPI.layChiTiet(maDonHang);
       setDonHang(res.data.don_hang);
     } catch (err: any) {
       setThongBao(err.message || "Không thể hủy đơn hàng.");

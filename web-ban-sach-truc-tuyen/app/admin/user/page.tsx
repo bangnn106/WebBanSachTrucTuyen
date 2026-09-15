@@ -79,8 +79,8 @@ export default function AdminUserPage() {
             </thead>
             <tbody>
               {users.map((u: any) => (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
+                <tr key={u.id_nguoi_dung || u.id}>
+                  <td>{u.id_nguoi_dung || u.id}</td>
                   <td className="fw-bold">{u.ho_ten}</td>
                   <td>{u.email}</td>
                   <td>{u.so_dien_thoai}</td>

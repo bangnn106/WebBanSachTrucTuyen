@@ -4,6 +4,7 @@ export declare enum VaiTro {
     QUAN_TRI_VIEN = "QUAN_TRI_VIEN"
 }
 export interface NguoiDung {
+    id_nguoi_dung: number;
     id: number;
     ho_ten: string;
     email: string;
@@ -40,6 +41,7 @@ export interface CapNhatNguoiDungDTO {
     dia_chi_chi_tiet?: string;
 }
 export interface JwtPayload {
+    id_nguoi_dung: number;
     id: number;
     email: string;
     id_vai_tro: number;

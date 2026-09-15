@@ -16,7 +16,8 @@ import { xacThucAPI } from "@/lib/api";
 
 /* Kieu du lieu User */
 export interface ThongTinUser {
-  id: number;
+  id_nguoi_dung: number;
+  id?: number;
   ho_ten: string;
   email: string;
   so_dien_thoai: string;

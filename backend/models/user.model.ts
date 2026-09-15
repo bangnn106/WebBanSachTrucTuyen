@@ -5,9 +5,10 @@ export enum VaiTro {
   QUAN_TRI_VIEN = 'QUAN_TRI_VIEN',
 }
 
-// ENTITY NGUOI DUNG (map tu bang nguoi_dung)
+// ENTITY NGUOI DUNG (map tu bang nguoi_dung voi PK id_nguoi_dung)
 export interface NguoiDung {
-  id: number;
+  id_nguoi_dung: number;
+  id: number; // Tuong thich nguoc
   ho_ten: string;
   email: string;
   mat_khau: string;
@@ -53,7 +54,8 @@ export interface CapNhatNguoiDungDTO {
 
 // JWT PAYLOAD
 export interface JwtPayload {
-  id: number;
+  id_nguoi_dung: number;
+  id: number; // Tuong thich nguoc
   email: string;
   id_vai_tro: number;
   ten_vai_tro: string;

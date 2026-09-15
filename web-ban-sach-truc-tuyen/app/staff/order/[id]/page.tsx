@@ -18,7 +18,7 @@ const luongTrangThai = ["Chờ xác nhận", "Đang chuẩn bị", "Đang giao",
 export default function StaffOrderDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const idDonHang = Number(params.id);
+  const maDonHang = String(params.id);
 
   const [donHang, setDonHang] = useState<any>(null);
   const [chiTiet, setChiTiet] = useState<any[]>([]);
@@ -30,7 +30,7 @@ export default function StaffOrderDetailPage() {
   function taiChiTiet() {
     setDangTai(true);
     donHangAPI
-      .layChiTiet(idDonHang)
+      .layChiTiet(maDonHang)
       .then((res) => {
         setDonHang(res.data.don_hang);
         setChiTiet(res.data.chi_tiet || []);
@@ -40,13 +40,13 @@ export default function StaffOrderDetailPage() {
   }
 
   useEffect(() => {
-    if (idDonHang) taiChiTiet();
-  }, [idDonHang]);
+    if (maDonHang) taiChiTiet();
+  }, [maDonHang]);
 
   async function doiTrangThai(trangThaiMoi: string) {
     setDangXuLy(true);
     try {
-      await donHangAPI.capNhatTrangThai(idDonHang, trangThaiMoi);
+      await donHangAPI.capNhatTrangThai(maDonHang, trangThaiMoi);
       setThongBao(`Đã chuyển sang "${trangThaiMoi}"`);
       setLoiThongBao("");
       taiChiTiet();
@@ -62,7 +62,7 @@ export default function StaffOrderDetailPage() {
     if (!lyDo) return;
     setDangXuLy(true);
     try {
-      await donHangAPI.huyDon(idDonHang, lyDo);
+      await donHangAPI.huyDon(maDonHang, lyDo);
       setThongBao("Đã hủy đơn hàng thành công.");
       setLoiThongBao("");
       taiChiTiet();

@@ -1,5 +1,4 @@
 export interface ChiTietGioHang {
-    id: number;
     id_sach: number;
     ten_sach: string;
     anh_bia: string | null;

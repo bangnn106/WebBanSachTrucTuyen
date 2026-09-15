@@ -1,6 +1,5 @@
-// CHI TIET GIO HANG (output tu sp_lay_chi_tiet_gio_hang)
+// CHI TIET GIO HANG (output tu sp_lay_chi_tiet_gio_hang, bo cot id rieng)
 export interface ChiTietGioHang {
-  id: number;
   id_sach: number;
   ten_sach: string;
   anh_bia: string | null;

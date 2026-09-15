@@ -61,7 +61,7 @@ export async function taoTaiKhoan(data: {
   // Kiem tra email da ton tai chua
   const existing = await pool.request()
     .input('email', sql.VarChar(255), data.email)
-    .query('SELECT id FROM nguoi_dung WHERE email = @email');
+    .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email');
 
   if (existing.recordset.length > 0) {
     throw { statusCode: 400, message: 'Email này đã được sử dụng.' };
@@ -79,18 +79,18 @@ export async function taoTaiKhoan(data: {
     .input('id_vai_tro', sql.Int, data.id_vai_tro)
     .query(`
       INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, id_vai_tro)
-      OUTPUT INSERTED.id
+      OUTPUT INSERTED.id_nguoi_dung
       VALUES (@ho_ten, @email, @mat_khau, @so_dien_thoai, @id_vai_tro)
     `);
 
-  const newUserId = result.recordset[0].id;
+  const newUserId = result.recordset[0].id_nguoi_dung;
 
   // Tao gio hang cho user moi
   await pool.request()
     .input('id_nguoi_dung', sql.Int, newUserId)
     .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
 
-  return { id: newUserId };
+  return { id_nguoi_dung: newUserId, id: newUserId };
 }
 
 // KHOA / MO KHOA TAI KHOAN (Admin)
@@ -101,7 +101,7 @@ export async function khoaMoKhoaTaiKhoan(idNguoiDung: number, khoa: boolean) {
   const result = await pool.request()
     .input('id', sql.Int, idNguoiDung)
     .input('trang_thai', sql.Bit, khoa ? 0 : 1)
-    .query('UPDATE nguoi_dung SET trang_thai = @trang_thai WHERE id = @id');
+    .query('UPDATE nguoi_dung SET trang_thai = @trang_thai WHERE id_nguoi_dung = @id');
 
   if (result.rowsAffected[0] === 0) {
     throw { statusCode: 404, message: 'Không tìm thấy người dùng.' };

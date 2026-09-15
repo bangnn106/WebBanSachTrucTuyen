@@ -92,9 +92,9 @@ export default function CheckoutPage() {
       // Xoa gio hang local
       clearCart();
 
-      // Chuyen sang trang xac nhan voi ID don hang that
-      const idDonHang = res.data.id_don_hang;
-      router.push(`/customer/checkout/${idDonHang}`);
+      // Chuyen sang trang xac nhan voi ma don hang that
+      const maDonHang = res.data.ma_don_hang || res.data.id_don_hang;
+      router.push(`/customer/checkout/${maDonHang}`);
     } catch (err: any) {
       setError(err.message || "Đặt hàng thất bại. Vui lòng thử lại.");
     } finally {

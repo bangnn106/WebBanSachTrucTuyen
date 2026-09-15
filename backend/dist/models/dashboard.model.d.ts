@@ -16,7 +16,8 @@ export interface DoanhThuThongKe {
     doanh_thu: number;
 }
 export interface SachBanChay {
-    id: number;
+    id_sach: number;
+    id?: number;
     ten_sach: string;
     tac_gia: string;
     gia_goc: number;

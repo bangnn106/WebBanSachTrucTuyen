@@ -66,7 +66,7 @@ export default function BookDetailPage() {
 
   function handleAddToCart() {
     addToCart({
-      id_sach: sach!.id,
+      id_sach: sach!.id_sach || sach!.id!,
       ten_sach: sach!.ten_sach,
       anh_bia: sach!.anh_bia,
       gia_ban: sach!.gia_ban,
@@ -78,7 +78,7 @@ export default function BookDetailPage() {
 
   function handleBuyNow() {
     addToCart({
-      id_sach: sach!.id,
+      id_sach: sach!.id_sach || sach!.id!,
       ten_sach: sach!.ten_sach,
       anh_bia: sach!.anh_bia,
       gia_ban: sach!.gia_ban,
@@ -143,7 +143,7 @@ export default function BookDetailPage() {
 
           {/* COT PHAI: THONG TIN */}
           <Col lg={7}>
-            {sach.so_luong_da_ban >= 200 && (
+            {(sach.so_luong_da_ban || 0) >= 200 && (
               <Badge bg="danger" className="me-2 mb-2">
                 <i className="bi bi-fire me-1" />
                 Bán chạy
@@ -256,7 +256,7 @@ export default function BookDetailPage() {
                   </tr>
                   <tr>
                     <td className="book-detail-table-label">Đã bán</td>
-                    <td>{sach.so_luong_da_ban}</td>
+                    <td>{sach.so_luong_da_ban ?? 0}</td>
                   </tr>
                 </tbody>
               </Table>

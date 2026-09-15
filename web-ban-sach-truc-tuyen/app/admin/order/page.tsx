@@ -47,18 +47,18 @@ export default function AdminOrderPage() {
 
   useEffect(() => { taiDanhSach(); }, [trang, locTrangThai]);
 
-  async function xemChiTiet(id: number) {
+  async function xemChiTiet(maDon: string) {
     try {
-      const res = await donHangAPI.layChiTiet(id);
+      const res = await donHangAPI.layChiTiet(maDon);
       setChiTietDon(res.data.don_hang);
       setChiTietSanPham(res.data.chi_tiet || []);
       setShowModal(true);
     } catch {}
   }
 
-  async function doiTrangThai(id: number, trangThaiMoi: string) {
+  async function doiTrangThai(maDon: string, trangThaiMoi: string) {
     try {
-      await donHangAPI.capNhatTrangThai(id, trangThaiMoi);
+      await donHangAPI.capNhatTrangThai(maDon, trangThaiMoi);
       setThongBao(`Đã chuyển sang "${trangThaiMoi}"`);
       setTimeout(() => setThongBao(""), 3000);
       taiDanhSach();
@@ -67,11 +67,11 @@ export default function AdminOrderPage() {
     }
   }
 
-  async function huyDonHang(id: number) {
+  async function huyDonHang(maDon: string) {
     const lyDo = prompt("Nhập lý do hủy:");
     if (!lyDo) return;
     try {
-      await donHangAPI.huyDon(id, lyDo);
+      await donHangAPI.huyDon(maDon, lyDo);
       setThongBao("Đã hủy đơn hàng.");
       setTimeout(() => setThongBao(""), 3000);
       taiDanhSach();
@@ -123,7 +123,7 @@ export default function AdminOrderPage() {
                   ? luongTrangThai[viTriHienTai + 1] : null;
 
                 return (
-                  <tr key={dh.id}>
+                  <tr key={dh.ma_don_hang}>
                     <td className="fw-bold">{dh.ma_don_hang}</td>
                     <td>{dh.ten_khach_hang || dh.ten_nguoi_nhan || "—"}</td>
                     <td>{new Date(dh.ngay_dat).toLocaleDateString("vi-VN")}</td>
@@ -135,16 +135,16 @@ export default function AdminOrderPage() {
                     </td>
                     <td>
                       <div className="d-flex gap-1 flex-wrap">
-                        <Button variant="outline-primary" size="sm" onClick={() => xemChiTiet(dh.id)}>
+                        <Button variant="outline-primary" size="sm" onClick={() => xemChiTiet(dh.ma_don_hang)}>
                           <i className="bi bi-eye" />
                         </Button>
                         {trangThaiTiepTheo && (
-                          <Button variant="outline-success" size="sm" onClick={() => doiTrangThai(dh.id, trangThaiTiepTheo)}>
+                          <Button variant="outline-success" size="sm" onClick={() => doiTrangThai(dh.ma_don_hang, trangThaiTiepTheo)}>
                             → {trangThaiTiepTheo}
                           </Button>
                         )}
                         {["Chờ xác nhận", "Đang chuẩn bị"].includes(dh.trang_thai_don_hang) && (
-                          <Button variant="outline-danger" size="sm" onClick={() => huyDonHang(dh.id)}>
+                          <Button variant="outline-danger" size="sm" onClick={() => huyDonHang(dh.ma_don_hang)}>
                             Hủy
                           </Button>
                         )}

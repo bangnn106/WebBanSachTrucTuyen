@@ -156,7 +156,7 @@ export const gioHangAPI = {
   xoaToanBo: () => goiAPI("/cart", { method: "DELETE" }),
 };
 
-// DON HANG (tao don, xem, cap nhat trang thai, huy)
+// DON HANG (tao don, xem, cap nhat trang thai, huy) — dung ma_don_hang (string)
 export const donHangAPI = {
   taoDonHang: (data: {
     ten_nguoi_nhan: string;
@@ -175,16 +175,16 @@ export const donHangAPI = {
     kich_thuoc_trang?: number;
   } = {}) => goiAPI(`/orders${taoQuery(params)}`),
 
-  layChiTiet: (id: number) => goiAPI(`/orders/${id}`),
+  layChiTiet: (maDon: string) => goiAPI(`/orders/${maDon}`),
 
-  capNhatTrangThai: (id: number, trang_thai_moi: string) =>
-    goiAPI(`/orders/${id}/status`, {
+  capNhatTrangThai: (maDon: string, trang_thai_moi: string) =>
+    goiAPI(`/orders/${maDon}/status`, {
       method: "PATCH",
       body: JSON.stringify({ trang_thai_moi }),
     }),
 
-  huyDon: (id: number, ly_do?: string) =>
-    goiAPI(`/orders/${id}/cancel`, {
+  huyDon: (maDon: string, ly_do?: string) =>
+    goiAPI(`/orders/${maDon}/cancel`, {
       method: "PATCH",
       body: JSON.stringify({ ly_do }),
     }),
@@ -207,33 +207,44 @@ export const thongKeAPI = {
     goiAPI(`/dashboard/order-stats${taoQuery({ tu_ngay, den_ngay })}`),
 };
 
-// KHO HANG (nhap kho, dieu chinh, lich su)
-export const khoHangAPI = {
-  nhapKho: (id_sach: number, so_luong: number, ly_do?: string) =>
-    goiAPI("/inventory/import", {
+// NHAP HANG SACH (thay the khoHangAPI)
+export const nhapHangAPI = {
+  nhapHang: (id_sach: number, so_luong: number, don_gia_nhap?: number, ghi_chu?: string) =>
+    goiAPI("/nhaphang", {
       method: "POST",
-      body: JSON.stringify({ id_sach, so_luong, ly_do }),
+      body: JSON.stringify({ id_sach, so_luong, don_gia_nhap, ghi_chu }),
     }),
 
-  dieuChinhKho: (
-    id_sach: number,
-    so_luong_thay_doi: number,
-    ly_do: string
-  ) =>
-    goiAPI("/inventory/adjust", {
+  nhapKho: (id_sach: number, so_luong: number, ghi_chu?: string, don_gia_nhap: number = 0) =>
+    goiAPI("/nhaphang", {
       method: "POST",
-      body: JSON.stringify({ id_sach, so_luong_thay_doi, ly_do }),
+      body: JSON.stringify({ id_sach, so_luong, don_gia_nhap, ghi_chu }),
     }),
 
-  layLichSu: (params: {
+  dieuChinhKho: (id_sach: number, so_luong_thay_doi: number, ly_do: string) =>
+    goiAPI("/nhaphang", {
+      method: "POST",
+      body: JSON.stringify({ id_sach, so_luong: Math.abs(so_luong_thay_doi), ghi_chu: ly_do }),
+    }),
+
+  layDanhSach: (params: {
     id_sach?: number;
-    loai_giao_dich?: string;
     tu_ngay?: string;
     den_ngay?: string;
     trang?: number;
     kich_thuoc_trang?: number;
-  } = {}) => goiAPI(`/inventory/history${taoQuery(params)}`),
+  } = {}) => goiAPI(`/nhaphang${taoQuery(params)}`),
+
+  layLichSu: (params: {
+    id_sach?: number;
+    tu_ngay?: string;
+    den_ngay?: string;
+    trang?: number;
+    kich_thuoc_trang?: number;
+  } = {}) => goiAPI(`/nhaphang${taoQuery(params)}`),
 };
+
+export const khoHangAPI = nhapHangAPI;
 
 // NGUOI DUNG (cap nhat profile, danh sach user)
 export const nguoiDungAPI = {

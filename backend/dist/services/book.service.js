@@ -41,9 +41,9 @@ async function timKiemSach(filter) {
 async function laySachTheoId(id) {
     const result = await (0, database_1.executeQuery)(`SELECT s.*, tls.ten_the_loai, nxb.ten_nxb
      FROM sach s
-     JOIN the_loai_sach tls ON tls.id = s.id_the_loai
-     JOIN nha_xuat_ban nxb ON nxb.id = s.id_nha_xuat_ban
-     WHERE s.id = @id`, [{ name: 'id', type: mssql_1.default.Int, value: id }]);
+     JOIN the_loai_sach tls ON tls.id_the_loai = s.id_the_loai
+     JOIN nha_xuat_ban nxb ON nxb.id_nha_xuat_ban = s.id_nha_xuat_ban
+     WHERE s.id_sach = @id`, [{ name: 'id', type: mssql_1.default.Int, value: id }]);
     if (result.recordset.length === 0) {
         throw { statusCode: 404, message: 'Sách không tồn tại.' };
     }
@@ -96,12 +96,12 @@ async function capNhatTrangThai(id, trangThai) {
 }
 // LAY DANH SACH THE LOAI
 async function layDanhSachTheLoai() {
-    const result = await (0, database_1.executeQuery)('SELECT id, ten_the_loai FROM the_loai_sach ORDER BY ten_the_loai');
+    const result = await (0, database_1.executeQuery)('SELECT id_the_loai, id_the_loai AS id, ten_the_loai FROM the_loai_sach ORDER BY ten_the_loai');
     return result.recordset;
 }
 // LAY DANH SACH NHA XUAT BAN
 async function layDanhSachNhaXuatBan() {
-    const result = await (0, database_1.executeQuery)('SELECT id, ten_nxb FROM nha_xuat_ban ORDER BY ten_nxb');
+    const result = await (0, database_1.executeQuery)('SELECT id_nha_xuat_ban, id_nha_xuat_ban AS id, ten_nxb FROM nha_xuat_ban ORDER BY ten_nxb');
     return result.recordset;
 }
 //# sourceMappingURL=book.service.js.map

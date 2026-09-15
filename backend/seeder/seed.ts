@@ -115,13 +115,13 @@ async function seed() {
     const adminEmail = 'admin@bookstore.com';
     const existingAdmin = await pool.request()
       .input('email', sql.VarChar(255), adminEmail)
-      .query('SELECT id FROM nguoi_dung WHERE email = @email');
+      .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email');
 
     if (existingAdmin.recordset.length === 0) {
       const hashedPassword = await bcrypt.hash('Admin@123', 10);
 
       const adminRole = await pool.request()
-        .query("SELECT id FROM vai_tro WHERE ten_vai_tro = N'QUAN_TRI_VIEN'");
+        .query("SELECT id_vai_tro FROM vai_tro WHERE ten_vai_tro = N'QUAN_TRI_VIEN'");
 
       await pool.request()
         .input('ho_ten', sql.NVarChar(100), 'Quản Trị Viên')
@@ -131,7 +131,7 @@ async function seed() {
         .input('tinh_thanh', sql.NVarChar(100), 'Hồ Chí Minh')
         .input('quan_huyen', sql.NVarChar(100), 'Quận 1')
         .input('phuong_xa', sql.NVarChar(100), 'Phường Bến Nghé')
-        .input('id_vai_tro', sql.Int, adminRole.recordset[0].id)
+        .input('id_vai_tro', sql.Int, adminRole.recordset[0].id_vai_tro)
         .query(`
           INSERT INTO nguoi_dung
           (ho_ten, email, mat_khau, so_dien_thoai, tinh_thanh, quan_huyen, phuong_xa, id_vai_tro)
@@ -142,10 +142,10 @@ async function seed() {
       // Tao gio hang cho admin
       const adminUser = await pool.request()
         .input('email2', sql.VarChar(255), adminEmail)
-        .query('SELECT id FROM nguoi_dung WHERE email = @email2');
+        .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email2');
       
       await pool.request()
-        .input('id_nguoi_dung', sql.Int, adminUser.recordset[0].id)
+        .input('id_nguoi_dung', sql.Int, adminUser.recordset[0].id_nguoi_dung)
         .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
 
       console.log('✅ Đã tạo tài khoản Admin:');
@@ -159,13 +159,13 @@ async function seed() {
     const staffEmail = 'nhanvien@bookstore.com';
     const existingStaff = await pool.request()
       .input('email', sql.VarChar(255), staffEmail)
-      .query('SELECT id FROM nguoi_dung WHERE email = @email');
+      .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email');
 
     if (existingStaff.recordset.length === 0) {
       const hashedPassword = await bcrypt.hash('Staff@123', 10);
 
       const staffRole = await pool.request()
-        .query("SELECT id FROM vai_tro WHERE ten_vai_tro = N'NHAN_VIEN'");
+        .query("SELECT id_vai_tro FROM vai_tro WHERE ten_vai_tro = N'NHAN_VIEN'");
 
       await pool.request()
         .input('ho_ten', sql.NVarChar(100), 'Nhân Viên')
@@ -175,7 +175,7 @@ async function seed() {
         .input('tinh_thanh', sql.NVarChar(100), 'Hồ Chí Minh')
         .input('quan_huyen', sql.NVarChar(100), 'Quận 3')
         .input('phuong_xa', sql.NVarChar(100), 'Phường 1')
-        .input('id_vai_tro', sql.Int, staffRole.recordset[0].id)
+        .input('id_vai_tro', sql.Int, staffRole.recordset[0].id_vai_tro)
         .query(`
           INSERT INTO nguoi_dung
           (ho_ten, email, mat_khau, so_dien_thoai, tinh_thanh, quan_huyen, phuong_xa, id_vai_tro)
@@ -186,10 +186,10 @@ async function seed() {
       // Tao gio hang cho nhan vien
       const staffUser = await pool.request()
         .input('email2', sql.VarChar(255), staffEmail)
-        .query('SELECT id FROM nguoi_dung WHERE email = @email2');
+        .query('SELECT id_nguoi_dung FROM nguoi_dung WHERE email = @email2');
       
       await pool.request()
-        .input('id_nguoi_dung', sql.Int, staffUser.recordset[0].id)
+        .input('id_nguoi_dung', sql.Int, staffUser.recordset[0].id_nguoi_dung)
         .query('INSERT INTO gio_hang (id_nguoi_dung) VALUES (@id_nguoi_dung)');
 
       console.log('✅ Đã tạo tài khoản Nhân viên:');
@@ -209,7 +209,7 @@ async function seed() {
     for (const cat of categories) {
       const exists = await pool.request()
         .input('ten', sql.NVarChar(150), cat)
-        .query('SELECT id FROM the_loai_sach WHERE ten_the_loai = @ten');
+        .query('SELECT id_the_loai FROM the_loai_sach WHERE ten_the_loai = @ten');
 
       if (exists.recordset.length === 0) {
         await pool.request()
@@ -228,7 +228,7 @@ async function seed() {
     for (const pub of publishers) {
       const exists = await pool.request()
         .input('ten', sql.NVarChar(200), pub)
-        .query('SELECT id FROM nha_xuat_ban WHERE ten_nxb = @ten');
+        .query('SELECT id_nha_xuat_ban FROM nha_xuat_ban WHERE ten_nxb = @ten');
 
       if (exists.recordset.length === 0) {
         await pool.request()
@@ -238,7 +238,7 @@ async function seed() {
     }
     console.log(`✅ Đã kiểm tra/thêm ${publishers.length} nhà xuất bản.`);
 
-    // 6. THEM SACH MAU + ANH BIA
+    // 6. THEM SACH MAU + ANH BIA (bo so_luong_da_ban)
     const sachCount = await pool.request()
       .query('SELECT COUNT(*) AS count FROM sach');
 
@@ -249,21 +249,15 @@ async function seed() {
 
       // Lay ID the loai & nha xuat ban
       const theLoaiResult = await pool.request()
-        .query('SELECT id, ten_the_loai FROM the_loai_sach');
+        .query('SELECT id_the_loai, ten_the_loai FROM the_loai_sach');
       const nxbResult = await pool.request()
-        .query('SELECT id, ten_nxb FROM nha_xuat_ban');
+        .query('SELECT id_nha_xuat_ban, ten_nxb FROM nha_xuat_ban');
 
       const theLoaiMap: Record<string, number> = {};
-      theLoaiResult.recordset.forEach((r: any) => { theLoaiMap[r.ten_the_loai] = r.id; });
+      theLoaiResult.recordset.forEach((r: any) => { theLoaiMap[r.ten_the_loai] = r.id_the_loai; });
 
       const nxbMap: Record<string, number> = {};
-      nxbResult.recordset.forEach((r: any) => { nxbMap[r.ten_nxb] = r.id; });
-
-      // Lay ID admin de ghi nhan nguoi tao
-      const adminUser = await pool.request()
-        .input('email', sql.VarChar(255), 'admin@bookstore.com')
-        .query('SELECT id FROM nguoi_dung WHERE email = @email');
-      const idAdmin = adminUser.recordset[0]?.id || 1;
+      nxbResult.recordset.forEach((r: any) => { nxbMap[r.ten_nxb] = r.id_nha_xuat_ban; });
 
       let demThanhCong = 0;
 
@@ -293,7 +287,7 @@ async function seed() {
             continue;
           }
 
-          // Them sach bang INSERT truc tiep (khong can stored procedure)
+          // Them sach bang INSERT truc tiep (khong co cot so_luong_da_ban)
           await pool.request()
             .input('ten_sach', sql.NVarChar(255), sach.ten)
             .input('isbn', sql.VarChar(20), sach.isbn)

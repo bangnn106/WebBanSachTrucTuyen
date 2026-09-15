@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -8,23 +8,23 @@ import { donHangAPI } from "@/lib/api";
 export default function OrderConfirmPage() {
   const params = useParams();
   const router = useRouter();
-  const idDonHang = Number(params.maDon);
+  const maDonHang = String(params.maDon);
 
   const [donHang, setDonHang] = useState<any>(null);
   const [chiTiet, setChiTiet] = useState<any[]>([]);
   const [dangTai, setDangTai] = useState(true);
 
   useEffect(() => {
-    if (!idDonHang) return;
+    if (!maDonHang) return;
     donHangAPI
-      .layChiTiet(idDonHang)
+      .layChiTiet(maDonHang)
       .then((res) => {
         setDonHang(res.data.don_hang);
         setChiTiet(res.data.chi_tiet || []);
       })
       .catch(() => {})
       .finally(() => setDangTai(false));
-  }, [idDonHang]);
+  }, [maDonHang]);
 
   if (dangTai) {
     return (

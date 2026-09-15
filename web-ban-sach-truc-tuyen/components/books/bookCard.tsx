@@ -28,7 +28,7 @@ export default function BookCard({
 
       <div className="book-image-wrapper position-relative">
 
-        <Link href={`/store/book/${book.id}`}>
+        <Link href={`/store/book/${book.id_sach || book.id}`}>
           <Image
             src={layUrlAnh(book.anh_bia)}
             alt={book.ten_sach}
@@ -50,7 +50,7 @@ export default function BookCard({
 
       <Card.Body className="px-1 pb-2">
 
-        <Link href={`/store/book/${book.id}`}>
+        <Link href={`/store/book/${book.id_sach || book.id}`}>
           <div className="book-card-title">
             {book.ten_sach}
           </div>

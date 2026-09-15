@@ -65,7 +65,7 @@ export default function OrdersPage() {
             </thead>
             <tbody>
               {donHangs.map((dh: any) => (
-                <tr key={dh.id}>
+                <tr key={dh.ma_don_hang}>
                   <td className="fw-bold">{dh.ma_don_hang}</td>
                   <td>{new Date(dh.ngay_dat).toLocaleDateString("vi-VN")}</td>
                   <td>{dh.tong_tien?.toLocaleString("vi-VN")} đ</td>
@@ -78,7 +78,7 @@ export default function OrdersPage() {
                     <Button
                       variant="outline-primary"
                       size="sm"
-                      onClick={() => router.push(`/customer/account/orders/${dh.id}`)}
+                      onClick={() => router.push(`/customer/account/orders/${dh.ma_don_hang}`)}
                     >
                       Chi tiết
                     </Button>

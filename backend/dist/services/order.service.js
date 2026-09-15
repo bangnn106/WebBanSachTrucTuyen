@@ -19,7 +19,7 @@ async function taoDonHangTuGio(idNguoiDung, data) {
         { name: 'dia_chi_giao_hang', type: mssql_1.default.NVarChar(500), value: data.dia_chi_giao_hang },
         { name: 'ghi_chu', type: mssql_1.default.NVarChar(500), value: data.ghi_chu || null },
     ]);
-    return result.recordset[0]; // { id_don_hang, ma_don_hang, tong_tien, thong_bao }
+    return result.recordset[0]; // { ma_don_hang, tong_tien, thong_bao }
 }
 // LAY DANH SACH DON HANG
 async function layDanhSachDonHang(idNguoiDung, // null lay tat ca (nhan vien/admin)
@@ -45,12 +45,12 @@ filter) {
         tong_trang: Math.ceil(tongBanGhi / kichThuocTrang),
     };
 }
-// LAY CHI TIET DON HANG
+// LAY CHI TIET DON HANG (dung ma_don_hang thay vi id)
 // SP tra ve 2 recordsets: [0] thong tin don, [1] danh sach san pham
-async function layChiTietDonHang(idDonHang, idNguoiDung // null khong gioi han (nhan vien/admin)
+async function layChiTietDonHang(maDonHang, idNguoiDung // null khong gioi han (nhan vien/admin)
 ) {
     const result = await (0, database_1.executeProcedure)('sp_lay_chi_tiet_don_hang', [
-        { name: 'id_don_hang', type: mssql_1.default.Int, value: idDonHang },
+        { name: 'ma_don_hang', type: mssql_1.default.VarChar(30), value: maDonHang },
         { name: 'id_nguoi_dung', type: mssql_1.default.Int, value: idNguoiDung },
     ]);
     return {
@@ -59,17 +59,17 @@ async function layChiTietDonHang(idDonHang, idNguoiDung // null khong gioi han (
     };
 }
 // CAP NHAT TRANG THAI DON HANG (nhan vien/admin)
-async function capNhatTrangThaiDonHang(idDonHang, trangThaiMoi) {
+async function capNhatTrangThaiDonHang(maDonHang, trangThaiMoi) {
     const result = await (0, database_1.executeProcedure)('sp_cap_nhat_trang_thai_don_hang', [
-        { name: 'id_don_hang', type: mssql_1.default.Int, value: idDonHang },
+        { name: 'ma_don_hang', type: mssql_1.default.VarChar(30), value: maDonHang },
         { name: 'trang_thai_moi', type: mssql_1.default.NVarChar(30), value: trangThaiMoi },
     ]);
     return result.recordset[0]; // { thong_bao }
 }
 // HUY DON HANG
-async function huyDonHang(idDonHang, idNguoiThucHien, lyDo) {
+async function huyDonHang(maDonHang, idNguoiThucHien, lyDo) {
     const result = await (0, database_1.executeProcedure)('sp_huy_don_hang', [
-        { name: 'id_don_hang', type: mssql_1.default.Int, value: idDonHang },
+        { name: 'ma_don_hang', type: mssql_1.default.VarChar(30), value: maDonHang },
         { name: 'id_nguoi_thuc_hien', type: mssql_1.default.Int, value: idNguoiThucHien },
         { name: 'ly_do', type: mssql_1.default.NVarChar(500), value: lyDo || null },
     ]);

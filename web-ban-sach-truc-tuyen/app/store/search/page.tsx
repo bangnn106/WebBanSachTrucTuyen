@@ -7,8 +7,8 @@ import BookCard from "@/components/books/bookCard";
 import { sachAPI } from "@/lib/api";
 import { book } from "@/types/book";
 
-interface TheLoai { id: number; ten_the_loai: string; }
-interface NhaXuatBan { id: number; ten_nxb: string; }
+interface TheLoai { id_the_loai: number; id?: number; ten_the_loai: string; }
+interface NhaXuatBan { id_nha_xuat_ban: number; id?: number; ten_nxb: string; }
 
 function SearchContent() {
   const searchParams = useSearchParams();
@@ -100,7 +100,7 @@ function SearchContent() {
                 >
                   <option value="">Tất cả thể loại</option>
                   {danhSachTheLoai.map((tl) => (
-                    <option key={tl.id} value={tl.id}>{tl.ten_the_loai}</option>
+                    <option key={tl.id_the_loai || tl.id} value={tl.id_the_loai || tl.id}>{tl.ten_the_loai}</option>
                   ))}
                 </Form.Select>
               </Form.Group>
@@ -129,11 +129,11 @@ function SearchContent() {
         <Col lg={9}>
           <h4 className="fw-bold mb-3">
             {tuKhoa && idTheLoai
-              ? `Kết quả "${tuKhoa}" - ${danhSachTheLoai.find((t) => String(t.id) === idTheLoai)?.ten_the_loai || ""}`
+              ? `Kết quả "${tuKhoa}" - ${danhSachTheLoai.find((t) => String(t.id_the_loai || t.id) === idTheLoai)?.ten_the_loai || ""}`
               : tuKhoa
               ? `Kết quả tìm kiếm "${tuKhoa}"`
               : idTheLoai
-              ? `Thể loại: ${danhSachTheLoai.find((t) => String(t.id) === idTheLoai)?.ten_the_loai || "Sách theo thể loại"}`
+              ? `Thể loại: ${danhSachTheLoai.find((t) => String(t.id_the_loai || t.id) === idTheLoai)?.ten_the_loai || "Sách theo thể loại"}`
               : "Tất cả sách"}
           </h4>
 
@@ -150,7 +150,7 @@ function SearchContent() {
             <>
               <Row className="g-3">
                 {danhSachSach.map((s) => (
-                  <Col key={s.id} xs={6} md={4} lg={3}>
+                  <Col key={s.id_sach || s.id} xs={6} md={4} lg={3}>
                     <BookCard book={s} />
                   </Col>
                 ))}

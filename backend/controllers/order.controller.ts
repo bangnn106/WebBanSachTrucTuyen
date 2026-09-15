@@ -28,7 +28,7 @@ export async function createOrder(
 
     // Gui email xac nhan don hang (khong cho ket qua, khong crash neu loi)
     try {
-      const detail = await orderService.layChiTietDonHang(result.id_don_hang, null);
+      const detail = await orderService.layChiTietDonHang(result.ma_don_hang, null);
       await sendMail(
         req.user!.email,
         `Xác nhận đơn hàng ${result.ma_don_hang}`,
@@ -86,18 +86,18 @@ export async function getOrders(
   }
 }
 
-// GET /api/orders/:id - Chi tiet don hang
-export async function getOrderById(
+// GET /api/orders/:maDon - Chi tiet don hang (dung ma_don_hang thay vi id)
+export async function getOrderByMaDon(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
-    const idDonHang = parseInt(req.params.id);
+    const maDonHang = req.params.maDon;
 
     // KHACH_HANG chi xem don cua minh
     const idNguoiDung =
       req.user!.ten_vai_tro === VaiTro.KHACH_HANG ? req.user!.id : null;
 
-    const result = await orderService.layChiTietDonHang(idDonHang, idNguoiDung);
+    const result = await orderService.layChiTietDonHang(maDonHang, idNguoiDung);
 
     res.json({
       success: true,
@@ -109,12 +109,12 @@ export async function getOrderById(
   }
 }
 
-// PATCH /api/orders/:id/status - Cap nhat trang thai (nhan vien/admin)
+// PATCH /api/orders/:maDon/status - Cap nhat trang thai (nhan vien/admin)
 export async function updateOrderStatus(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
-    const idDonHang = parseInt(req.params.id);
+    const maDonHang = req.params.maDon;
     const { trang_thai_moi } = req.body;
 
     if (!trang_thai_moi) {
@@ -126,7 +126,7 @@ export async function updateOrderStatus(
     }
 
     const result = await orderService.capNhatTrangThaiDonHang(
-      idDonHang, trang_thai_moi
+      maDonHang, trang_thai_moi
     );
 
     res.json({
@@ -138,21 +138,21 @@ export async function updateOrderStatus(
   }
 }
 
-// PATCH /api/orders/:id/cancel - Huy don hang
+// PATCH /api/orders/:maDon/cancel - Huy don hang
 export async function cancelOrder(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
-    const idDonHang = parseInt(req.params.id);
+    const maDonHang = req.params.maDon;
     const { ly_do } = req.body;
 
     const result = await orderService.huyDonHang(
-      idDonHang, req.user!.id, ly_do
+      maDonHang, req.user!.id, ly_do
     );
 
     // Gui email thong bao huy don
     try {
-      const detail = await orderService.layChiTietDonHang(idDonHang, null);
+      const detail = await orderService.layChiTietDonHang(maDonHang, null);
       if (detail.don_hang?.email) {
         await sendMail(
           detail.don_hang.email,

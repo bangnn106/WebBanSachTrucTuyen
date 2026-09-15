@@ -44,10 +44,10 @@ router.use(authMiddleware_1.authMiddleware);
 router.post('/', (0, roleMiddleware_1.roleMiddleware)('KHACH_HANG'), orderController.createOrder);
 // Xem danh sach & chi tiet (tat ca role, logic phan quyen trong controller)
 router.get('/', orderController.getOrders);
-router.get('/:id', orderController.getOrderById);
+router.get('/:maDon', orderController.getOrderByMaDon);
 // Cap nhat trang thai (nhan vien/admin)
-router.patch('/:id/status', (0, roleMiddleware_1.roleMiddleware)('NHAN_VIEN', 'QUAN_TRI_VIEN'), orderController.updateOrderStatus);
+router.patch('/:maDon/status', (0, roleMiddleware_1.roleMiddleware)('NHAN_VIEN', 'QUAN_TRI_VIEN'), orderController.updateOrderStatus);
 // Huy don (tat ca role, logic kiem tra trong SP)
-router.patch('/:id/cancel', orderController.cancelOrder);
+router.patch('/:maDon/cancel', orderController.cancelOrder);
 exports.default = router;
 //# sourceMappingURL=order.routes.js.map

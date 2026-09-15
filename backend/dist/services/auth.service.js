@@ -15,7 +15,8 @@ const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
 // TAO JWT TOKEN
 function taoToken(payload) {
     return jsonwebtoken_1.default.sign({
-        id: payload.id,
+        id_nguoi_dung: payload.id_nguoi_dung,
+        id: payload.id_nguoi_dung, // Tuong thich nguoc cho cac code cu
         email: payload.email,
         id_vai_tro: payload.id_vai_tro,
         ten_vai_tro: payload.ten_vai_tro,
@@ -55,7 +56,8 @@ async function dangNhap(data) {
     }
     // 3. Tao JWT token
     const token = taoToken({
-        id: user.id,
+        id_nguoi_dung: user.id_nguoi_dung,
+        id: user.id_nguoi_dung,
         email: user.email,
         id_vai_tro: user.id_vai_tro,
         ten_vai_tro: user.ten_vai_tro,
@@ -64,7 +66,8 @@ async function dangNhap(data) {
     return {
         token,
         user: {
-            id: user.id,
+            id_nguoi_dung: user.id_nguoi_dung,
+            id: user.id_nguoi_dung,
             ho_ten: user.ho_ten,
             email: user.email,
             so_dien_thoai: user.so_dien_thoai,
@@ -87,6 +90,9 @@ async function layThongTinHienTai(email) {
     const user = result.recordset[0];
     // Loai bo mat khau truoc khi tra ve
     const { mat_khau, ...userInfo } = user;
-    return userInfo;
+    return {
+        ...userInfo,
+        id: userInfo.id_nguoi_dung,
+    };
 }
 //# sourceMappingURL=auth.service.js.map

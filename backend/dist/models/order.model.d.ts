@@ -1,5 +1,4 @@
 export interface DonHang {
-    id: number;
     ma_don_hang: string;
     tong_tien: number;
     ten_nguoi_nhan: string;
@@ -15,7 +14,6 @@ export interface DonHang {
     tong_ban_ghi?: number;
 }
 export interface ChiTietDonHang {
-    id: number;
     id_sach: number;
     ten_sach: string;
     anh_bia: string | null;

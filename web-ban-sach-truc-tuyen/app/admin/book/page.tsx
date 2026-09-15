@@ -61,7 +61,7 @@ export default function AdminBookPage() {
   }
 
   function moFormSua(sach: any) {
-    setEditId(sach.id);
+    setEditId(sach.id_sach || sach.id);
     setFormSach({
       ten_sach: sach.ten_sach, isbn: sach.isbn, tac_gia: sach.tac_gia,
       mo_ta_ngan: sach.mo_ta_ngan || "", gia_goc: String(sach.gia_goc),
@@ -147,7 +147,7 @@ export default function AdminBookPage() {
             <tbody>
               {sachList.map((s: any) => (
                 <tr key={s.id}>
-                  <td>{s.id}</td>
+                  <td>{s.id_sach || s.id}</td>
                   <td style={{ maxWidth: 250 }}>{s.ten_sach}</td>
                   <td>{s.tac_gia}</td>
                   <td className="text-end">{s.gia_ban?.toLocaleString("vi-VN")} đ</td>
@@ -163,11 +163,11 @@ export default function AdminBookPage() {
                         <i className="bi bi-pencil" />
                       </Button>
                       {s.trang_thai !== "Ngừng bán" ? (
-                        <Button variant="outline-danger" size="sm" onClick={() => doiTrangThai(s.id, "Ngừng bán")}>
+                        <Button variant="outline-danger" size="sm" onClick={() => doiTrangThai(s.id_sach || s.id, "Ngừng bán")}>
                           Ngừng
                         </Button>
                       ) : (
-                        <Button variant="outline-success" size="sm" onClick={() => doiTrangThai(s.id, s.so_luong_ton > 0 ? "Còn hàng" : "Hết hàng")}>
+                        <Button variant="outline-success" size="sm" onClick={() => doiTrangThai(s.id_sach || s.id, s.so_luong_ton > 0 ? "Còn hàng" : "Hết hàng")}>
                           Mở lại
                         </Button>
                       )}
@@ -225,7 +225,7 @@ export default function AdminBookPage() {
               <Form.Group><Form.Label>Thể loại *</Form.Label>
                 <Form.Select value={formSach.id_the_loai} onChange={(e) => setFormSach(p => ({...p, id_the_loai: e.target.value}))} required>
                   <option value="">Chọn thể loại</option>
-                  {theLoais.map((tl: any) => <option key={tl.id} value={tl.id}>{tl.ten_the_loai}</option>)}
+                  {theLoais.map((tl: any) => <option key={tl.id_the_loai || tl.id} value={tl.id_the_loai || tl.id}>{tl.ten_the_loai}</option>)}
                 </Form.Select>
               </Form.Group>
             </Col>
@@ -233,7 +233,7 @@ export default function AdminBookPage() {
               <Form.Group><Form.Label>NXB *</Form.Label>
                 <Form.Select value={formSach.id_nha_xuat_ban} onChange={(e) => setFormSach(p => ({...p, id_nha_xuat_ban: e.target.value}))} required>
                   <option value="">Chọn NXB</option>
-                  {nxbs.map((nxb: any) => <option key={nxb.id} value={nxb.id}>{nxb.ten_nxb}</option>)}
+                  {nxbs.map((nxb: any) => <option key={nxb.id_nha_xuat_ban || nxb.id} value={nxb.id_nha_xuat_ban || nxb.id}>{nxb.ten_nxb}</option>)}
                 </Form.Select>
               </Form.Group>
             </Col>

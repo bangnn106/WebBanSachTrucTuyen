@@ -42,7 +42,7 @@ const user_routes_1 = __importDefault(require("./user.routes"));
 const book_routes_1 = __importDefault(require("./book.routes"));
 const cart_routes_1 = __importDefault(require("./cart.routes"));
 const order_routes_1 = __importDefault(require("./order.routes"));
-const inventory_routes_1 = __importDefault(require("./inventory.routes"));
+const nhaphang_routes_1 = __importDefault(require("./nhaphang.routes"));
 const dashboard_routes_1 = __importDefault(require("./dashboard.routes"));
 // Import them cho catalog routes
 const bookController = __importStar(require("../controllers/book.controller"));
@@ -53,7 +53,7 @@ router.use('/users', user_routes_1.default);
 router.use('/books', book_routes_1.default);
 router.use('/cart', cart_routes_1.default);
 router.use('/orders', order_routes_1.default);
-router.use('/inventory', inventory_routes_1.default);
+router.use('/nhaphang', nhaphang_routes_1.default);
 router.use('/dashboard', dashboard_routes_1.default);
 // CATALOG ROUTES (public, nam ngoai /books)
 router.get('/categories', bookController.getCategories);

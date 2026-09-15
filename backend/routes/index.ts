@@ -4,7 +4,7 @@ import userRoutes from './user.routes';
 import bookRoutes from './book.routes';
 import cartRoutes from './cart.routes';
 import orderRoutes from './order.routes';
-import inventoryRoutes from './inventory.routes';
+import nhaphangRoutes from './nhaphang.routes';
 import dashboardRoutes from './dashboard.routes';
 
 // Import them cho catalog routes
@@ -18,7 +18,7 @@ router.use('/users', userRoutes);
 router.use('/books', bookRoutes);
 router.use('/cart', cartRoutes);
 router.use('/orders', orderRoutes);
-router.use('/inventory', inventoryRoutes);
+router.use('/nhaphang', nhaphangRoutes);
 router.use('/dashboard', dashboardRoutes);
 
 // CATALOG ROUTES (public, nam ngoai /books)

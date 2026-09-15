@@ -21,7 +21,8 @@ export interface DoanhThuThongKe {
 
 // SACH BAN CHAY
 export interface SachBanChay {
-  id: number;
+  id_sach: number;
+  id?: number; // Tuong thich nguoc
   ten_sach: string;
   tac_gia: string;
   gia_goc: number;

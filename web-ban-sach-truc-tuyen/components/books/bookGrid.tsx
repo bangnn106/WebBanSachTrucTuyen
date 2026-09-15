@@ -23,7 +23,7 @@ export default function BookGrid({ books }: Props) {
   return (
     <Row className="g-3">
       {books.map((b) => (
-        <Col key={b.id} xl={3} lg={4} md={4} sm={6} xs={6}>
+        <Col key={b.id_sach || b.id} xl={3} lg={4} md={4} sm={6} xs={6}>
           <BookCard book={b} />
         </Col>
       ))}

@@ -15,6 +15,7 @@ export declare function taoTaiKhoan(data: {
     so_dien_thoai: string;
     id_vai_tro: number;
 }): Promise<{
+    id_nguoi_dung: any;
     id: any;
 }>;
 export declare function khoaMoKhoaTaiKhoan(idNguoiDung: number, khoa: boolean): Promise<{

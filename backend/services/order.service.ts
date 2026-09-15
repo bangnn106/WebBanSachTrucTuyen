@@ -15,7 +15,7 @@ export async function taoDonHangTuGio(
     { name: 'ghi_chu',            type: sql.NVarChar(500), value: data.ghi_chu || null },
   ]);
 
-  return result.recordset[0]; // { id_don_hang, ma_don_hang, tong_tien, thong_bao }
+  return result.recordset[0]; // { ma_don_hang, tong_tien, thong_bao }
 }
 
 // LAY DANH SACH DON HANG
@@ -47,15 +47,15 @@ export async function layDanhSachDonHang(
   };
 }
 
-// LAY CHI TIET DON HANG
+// LAY CHI TIET DON HANG (dung ma_don_hang thay vi id)
 // SP tra ve 2 recordsets: [0] thong tin don, [1] danh sach san pham
 export async function layChiTietDonHang(
-  idDonHang: number,
+  maDonHang: string,
   idNguoiDung: number | null    // null khong gioi han (nhan vien/admin)
 ) {
   const result = await executeProcedure('sp_lay_chi_tiet_don_hang', [
-    { name: 'id_don_hang',   type: sql.Int, value: idDonHang },
-    { name: 'id_nguoi_dung', type: sql.Int, value: idNguoiDung },
+    { name: 'ma_don_hang',   type: sql.VarChar(30), value: maDonHang },
+    { name: 'id_nguoi_dung', type: sql.Int,          value: idNguoiDung },
   ]);
 
   return {
@@ -66,11 +66,11 @@ export async function layChiTietDonHang(
 
 // CAP NHAT TRANG THAI DON HANG (nhan vien/admin)
 export async function capNhatTrangThaiDonHang(
-  idDonHang: number,
+  maDonHang: string,
   trangThaiMoi: string
 ) {
   const result = await executeProcedure('sp_cap_nhat_trang_thai_don_hang', [
-    { name: 'id_don_hang',     type: sql.Int,          value: idDonHang },
+    { name: 'ma_don_hang',     type: sql.VarChar(30), value: maDonHang },
     { name: 'trang_thai_moi',  type: sql.NVarChar(30), value: trangThaiMoi },
   ]);
   return result.recordset[0]; // { thong_bao }
@@ -78,12 +78,12 @@ export async function capNhatTrangThaiDonHang(
 
 // HUY DON HANG
 export async function huyDonHang(
-  idDonHang: number,
+  maDonHang: string,
   idNguoiThucHien: number,
   lyDo?: string
 ) {
   const result = await executeProcedure('sp_huy_don_hang', [
-    { name: 'id_don_hang',        type: sql.Int,           value: idDonHang },
+    { name: 'ma_don_hang',        type: sql.VarChar(30),   value: maDonHang },
     { name: 'id_nguoi_thuc_hien', type: sql.Int,           value: idNguoiThucHien },
     { name: 'ly_do',              type: sql.NVarChar(500), value: lyDo || null },
   ]);

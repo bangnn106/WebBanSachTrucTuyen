@@ -35,7 +35,7 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOrder = createOrder;
 exports.getOrders = getOrders;
-exports.getOrderById = getOrderById;
+exports.getOrderByMaDon = getOrderByMaDon;
 exports.updateOrderStatus = updateOrderStatus;
 exports.cancelOrder = cancelOrder;
 const orderService = __importStar(require("../services/order.service"));
@@ -58,7 +58,7 @@ async function createOrder(req, res, next) {
         });
         // Gui email xac nhan don hang (khong cho ket qua, khong crash neu loi)
         try {
-            const detail = await orderService.layChiTietDonHang(result.id_don_hang, null);
+            const detail = await orderService.layChiTietDonHang(result.ma_don_hang, null);
             await (0, mail_1.sendMail)(req.user.email, `Xác nhận đơn hàng ${result.ma_don_hang}`, (0, mailTemplates_1.orderConfirmationTemplate)({
                 ma_don_hang: result.ma_don_hang,
                 ten_nguoi_nhan,
@@ -106,13 +106,13 @@ async function getOrders(req, res, next) {
         next(error);
     }
 }
-// GET /api/orders/:id - Chi tiet don hang
-async function getOrderById(req, res, next) {
+// GET /api/orders/:maDon - Chi tiet don hang (dung ma_don_hang thay vi id)
+async function getOrderByMaDon(req, res, next) {
     try {
-        const idDonHang = parseInt(req.params.id);
+        const maDonHang = req.params.maDon;
         // KHACH_HANG chi xem don cua minh
         const idNguoiDung = req.user.ten_vai_tro === user_model_1.VaiTro.KHACH_HANG ? req.user.id : null;
-        const result = await orderService.layChiTietDonHang(idDonHang, idNguoiDung);
+        const result = await orderService.layChiTietDonHang(maDonHang, idNguoiDung);
         res.json({
             success: true,
             message: 'Lấy chi tiết đơn hàng thành công.',
@@ -123,10 +123,10 @@ async function getOrderById(req, res, next) {
         next(error);
     }
 }
-// PATCH /api/orders/:id/status - Cap nhat trang thai (nhan vien/admin)
+// PATCH /api/orders/:maDon/status - Cap nhat trang thai (nhan vien/admin)
 async function updateOrderStatus(req, res, next) {
     try {
-        const idDonHang = parseInt(req.params.id);
+        const maDonHang = req.params.maDon;
         const { trang_thai_moi } = req.body;
         if (!trang_thai_moi) {
             res.status(400).json({
@@ -135,7 +135,7 @@ async function updateOrderStatus(req, res, next) {
             });
             return;
         }
-        const result = await orderService.capNhatTrangThaiDonHang(idDonHang, trang_thai_moi);
+        const result = await orderService.capNhatTrangThaiDonHang(maDonHang, trang_thai_moi);
         res.json({
             success: true,
             message: result.thong_bao,
@@ -145,15 +145,15 @@ async function updateOrderStatus(req, res, next) {
         next(error);
     }
 }
-// PATCH /api/orders/:id/cancel - Huy don hang
+// PATCH /api/orders/:maDon/cancel - Huy don hang
 async function cancelOrder(req, res, next) {
     try {
-        const idDonHang = parseInt(req.params.id);
+        const maDonHang = req.params.maDon;
         const { ly_do } = req.body;
-        const result = await orderService.huyDonHang(idDonHang, req.user.id, ly_do);
+        const result = await orderService.huyDonHang(maDonHang, req.user.id, ly_do);
         // Gui email thong bao huy don
         try {
-            const detail = await orderService.layChiTietDonHang(idDonHang, null);
+            const detail = await orderService.layChiTietDonHang(maDonHang, null);
             if (detail.don_hang?.email) {
                 await (0, mail_1.sendMail)(detail.don_hang.email, `Đơn hàng ${detail.don_hang.ma_don_hang} đã bị hủy`, (0, mailTemplates_1.orderCancelledTemplate)({
                     ma_don_hang: detail.don_hang.ma_don_hang,

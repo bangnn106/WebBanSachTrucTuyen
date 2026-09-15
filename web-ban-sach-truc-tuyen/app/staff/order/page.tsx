@@ -47,9 +47,9 @@ export default function StaffOrderPage() {
     taiDanhSach();
   }, [trang, locTrangThai]);
 
-  async function doiTrangThai(id: number, trangThaiMoi: string) {
+  async function doiTrangThai(maDon: string, trangThaiMoi: string) {
     try {
-      await donHangAPI.capNhatTrangThai(id, trangThaiMoi);
+      await donHangAPI.capNhatTrangThai(maDon, trangThaiMoi);
       setThongBao(`Đã chuyển sang "${trangThaiMoi}"`);
       setLoiThongBao("");
       setTimeout(() => setThongBao(""), 3000);
@@ -60,11 +60,11 @@ export default function StaffOrderPage() {
     }
   }
 
-  async function huyDonHang(id: number) {
+  async function huyDonHang(maDon: string) {
     const lyDo = prompt("Nhập lý do hủy:");
     if (!lyDo) return;
     try {
-      await donHangAPI.huyDon(id, lyDo);
+      await donHangAPI.huyDon(maDon, lyDo);
       setThongBao("Đã hủy đơn hàng.");
       setLoiThongBao("");
       setTimeout(() => setThongBao(""), 3000);
@@ -145,7 +145,7 @@ export default function StaffOrderPage() {
                     : null;
 
                 return (
-                  <tr key={dh.id}>
+                  <tr key={dh.ma_don_hang}>
                     <td className="fw-bold">{dh.ma_don_hang}</td>
                     <td>{dh.ten_khach_hang || dh.ten_nguoi_nhan || "—"}</td>
                     <td>{new Date(dh.ngay_dat).toLocaleDateString("vi-VN")}</td>
@@ -177,7 +177,7 @@ export default function StaffOrderPage() {
                         <Button
                           variant="outline-primary"
                           size="sm"
-                          onClick={() => router.push(`/staff/order/${dh.id}`)}
+                          onClick={() => router.push(`/staff/order/${dh.ma_don_hang}`)}
                         >
                           <i className="bi bi-eye" />
                         </Button>
@@ -185,7 +185,7 @@ export default function StaffOrderPage() {
                           <Button
                             variant="outline-success"
                             size="sm"
-                            onClick={() => doiTrangThai(dh.id, trangThaiTiepTheo)}
+                            onClick={() => doiTrangThai(dh.ma_don_hang, trangThaiTiepTheo)}
                           >
                             → {trangThaiTiepTheo}
                           </Button>
@@ -196,7 +196,7 @@ export default function StaffOrderPage() {
                           <Button
                             variant="outline-danger"
                             size="sm"
-                            onClick={() => huyDonHang(dh.id)}
+                            onClick={() => huyDonHang(dh.ma_don_hang)}
                           >
                             Hủy
                           </Button>

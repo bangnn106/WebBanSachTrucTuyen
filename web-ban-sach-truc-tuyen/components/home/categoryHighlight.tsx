@@ -6,7 +6,8 @@ import { Container, Spinner } from "react-bootstrap";
 import { sachAPI } from "@/lib/api";
 
 interface TheLoai {
-  id: number;
+  id_the_loai: number;
+  id?: number;
   ten_the_loai: string;
 }
 
@@ -53,8 +54,8 @@ export default function CategoryHighlight() {
         <div className="category-grid">
           {danhSach.map((tl) => (
             <Link
-              key={tl.id}
-              href={`/store/search?id_the_loai=${tl.id}`}
+              key={tl.id_the_loai || tl.id}
+              href={`/store/search?id_the_loai=${tl.id_the_loai || tl.id}`}
               className="category-card"
             >
               <span className="category-icon">

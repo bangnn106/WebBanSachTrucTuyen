@@ -35,7 +35,7 @@ export default function BookSection({
 
           {books.map((book) => (
             <Col
-              key={book.id}
+              key={book.id_sach || book.id}
               xl={2}
               lg={3}
               md={4}

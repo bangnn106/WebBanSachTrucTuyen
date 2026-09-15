@@ -13,7 +13,7 @@ export default function AdminInventoryPage() {
   const [loi, setLoi] = useState("");
 
   // Form nhap kho
-  const [formNhap, setFormNhap] = useState({ id_sach: "", so_luong: "", ly_do: "" });
+  const [formNhap, setFormNhap] = useState({ id_sach: "", so_luong: "", don_gia_nhap: "", ly_do: "" });
   // Form dieu chinh
   const [formDieuChinh, setFormDieuChinh] = useState({ id_sach: "", so_luong_thay_doi: "", ly_do: "" });
   const [dangLuu, setDangLuu] = useState(false);
@@ -47,10 +47,11 @@ export default function AdminInventoryPage() {
       await khoHangAPI.nhapKho(
         parseInt(formNhap.id_sach),
         parseInt(formNhap.so_luong),
-        formNhap.ly_do || undefined
+        formNhap.ly_do || undefined,
+        formNhap.don_gia_nhap ? parseFloat(formNhap.don_gia_nhap) : 0
       );
       setThongBao("Nhập kho thành công!");
-      setFormNhap({ id_sach: "", so_luong: "", ly_do: "" });
+      setFormNhap({ id_sach: "", so_luong: "", don_gia_nhap: "", ly_do: "" });
       taiLichSu();
     } catch (err: any) {
       setLoi(err.message || "Nhập kho thất bại");
@@ -100,10 +101,12 @@ export default function AdminInventoryPage() {
             <h6 className="fw-bold mb-3"><i className="bi bi-plus-circle me-2" />Nhập kho</h6>
             <Form.Select className="mb-2" value={formNhap.id_sach} onChange={(e) => setFormNhap(p => ({...p, id_sach: e.target.value}))}>
               <option value="">Chọn sách</option>
-              {sachList.map((s: any) => <option key={s.id} value={s.id}>{s.ten_sach} (Tồn: {s.so_luong_ton})</option>)}
+              {sachList.map((s: any) => <option key={s.id_sach || s.id} value={s.id_sach || s.id}>{s.ten_sach} (Tồn: {s.so_luong_ton})</option>)}
             </Form.Select>
             <Form.Control type="number" className="mb-2" placeholder="Số lượng nhập" min={1}
               value={formNhap.so_luong} onChange={(e) => setFormNhap(p => ({...p, so_luong: e.target.value}))} />
+            <Form.Control type="number" className="mb-2" placeholder="Đơn giá nhập (VNĐ)" min={0} step={1000}
+              value={formNhap.don_gia_nhap} onChange={(e) => setFormNhap(p => ({...p, don_gia_nhap: e.target.value}))} />
             <Form.Control className="mb-2" placeholder="Lý do (tuỳ chọn)"
               value={formNhap.ly_do} onChange={(e) => setFormNhap(p => ({...p, ly_do: e.target.value}))} />
             <Button variant="success" onClick={handleNhapKho} disabled={dangLuu}>
@@ -118,7 +121,7 @@ export default function AdminInventoryPage() {
             <h6 className="fw-bold mb-3"><i className="bi bi-arrow-left-right me-2" />Điều chỉnh kho</h6>
             <Form.Select className="mb-2" value={formDieuChinh.id_sach} onChange={(e) => setFormDieuChinh(p => ({...p, id_sach: e.target.value}))}>
               <option value="">Chọn sách</option>
-              {sachList.map((s: any) => <option key={s.id} value={s.id}>{s.ten_sach} (Tồn: {s.so_luong_ton})</option>)}
+              {sachList.map((s: any) => <option key={s.id_sach || s.id} value={s.id_sach || s.id}>{s.ten_sach} (Tồn: {s.so_luong_ton})</option>)}
             </Form.Select>
             <Form.Control type="number" className="mb-2" placeholder="SL thay đổi (dương: tăng, âm: giảm)"
               value={formDieuChinh.so_luong_thay_doi} onChange={(e) => setFormDieuChinh(p => ({...p, so_luong_thay_doi: e.target.value}))} />

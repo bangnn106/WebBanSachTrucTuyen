@@ -35,9 +35,9 @@ export async function laySachTheoId(id: number) {
   const result = await executeQuery(
     `SELECT s.*, tls.ten_the_loai, nxb.ten_nxb
      FROM sach s
-     JOIN the_loai_sach tls ON tls.id = s.id_the_loai
-     JOIN nha_xuat_ban nxb ON nxb.id = s.id_nha_xuat_ban
-     WHERE s.id = @id`,
+     JOIN the_loai_sach tls ON tls.id_the_loai = s.id_the_loai
+     JOIN nha_xuat_ban nxb ON nxb.id_nha_xuat_ban = s.id_nha_xuat_ban
+     WHERE s.id_sach = @id`,
     [{ name: 'id', type: sql.Int, value: id }]
   );
 
@@ -101,7 +101,7 @@ export async function capNhatTrangThai(id: number, trangThai: string) {
 // LAY DANH SACH THE LOAI
 export async function layDanhSachTheLoai() {
   const result = await executeQuery(
-    'SELECT id, ten_the_loai FROM the_loai_sach ORDER BY ten_the_loai'
+    'SELECT id_the_loai, id_the_loai AS id, ten_the_loai FROM the_loai_sach ORDER BY ten_the_loai'
   );
   return result.recordset;
 }
@@ -109,7 +109,7 @@ export async function layDanhSachTheLoai() {
 // LAY DANH SACH NHA XUAT BAN
 export async function layDanhSachNhaXuatBan() {
   const result = await executeQuery(
-    'SELECT id, ten_nxb FROM nha_xuat_ban ORDER BY ten_nxb'
+    'SELECT id_nha_xuat_ban, id_nha_xuat_ban AS id, ten_nxb FROM nha_xuat_ban ORDER BY ten_nxb'
   );
   return result.recordset;
 }

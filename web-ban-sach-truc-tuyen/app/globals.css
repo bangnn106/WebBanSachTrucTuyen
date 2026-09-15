@@ -670,6 +670,7 @@ footer p {
   font-weight: 600;
   font-size: 15px;
   outline: none;
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 
