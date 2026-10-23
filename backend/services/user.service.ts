@@ -55,6 +55,10 @@ export async function taoTaiKhoan(data: {
   mat_khau: string;
   so_dien_thoai: string;
   id_vai_tro: number;
+  tinh_thanh?: string;
+  quan_huyen?: string;
+  phuong_xa?: string;
+  dia_chi_chi_tiet?: string;
 }) {
   const pool = await getPool();
 
@@ -70,17 +74,21 @@ export async function taoTaiKhoan(data: {
   // Hash mat khau
   const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
 
-  // Tao tai khoan
+  // Tao tai khoan (dam bao cac cot dia chi NOT NULL luon co gia tri hop le)
   const result = await pool.request()
     .input('ho_ten', sql.NVarChar(100), data.ho_ten)
     .input('email', sql.VarChar(255), data.email)
     .input('mat_khau', sql.VarChar(255), hashedPassword)
     .input('so_dien_thoai', sql.VarChar(10), data.so_dien_thoai)
+    .input('tinh_thanh', sql.NVarChar(100), data.tinh_thanh || 'Hồ Chí Minh')
+    .input('quan_huyen', sql.NVarChar(100), data.quan_huyen || 'Quận 1')
+    .input('phuong_xa', sql.NVarChar(100), data.phuong_xa || 'Phường Bến Nghé')
+    .input('dia_chi_chi_tiet', sql.NVarChar(255), data.dia_chi_chi_tiet || null)
     .input('id_vai_tro', sql.Int, data.id_vai_tro)
     .query(`
-      INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, id_vai_tro)
+      INSERT INTO nguoi_dung (ho_ten, email, mat_khau, so_dien_thoai, tinh_thanh, quan_huyen, phuong_xa, dia_chi_chi_tiet, id_vai_tro)
       OUTPUT INSERTED.id_nguoi_dung
-      VALUES (@ho_ten, @email, @mat_khau, @so_dien_thoai, @id_vai_tro)
+      VALUES (@ho_ten, @email, @mat_khau, @so_dien_thoai, @tinh_thanh, @quan_huyen, @phuong_xa, @dia_chi_chi_tiet, @id_vai_tro)
     `);
 
   const newUserId = result.recordset[0].id_nguoi_dung;

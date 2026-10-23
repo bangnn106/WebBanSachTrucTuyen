@@ -1,26 +1,40 @@
 USE [master]
-GO CREATE DATABASE WebBanSach
-GO ALTER DATABASE WebBanSach
-SET AUTO_CLOSE OFF
-GO ALTER DATABASE WebBanSach
-SET AUTO_SHRINK OFF
-GO ALTER DATABASE WebBanSach
-SET AUTO_UPDATE_STATISTICS ON
-GO ALTER DATABASE WebBanSach
-SET TRUSTWORTHY OFF
-GO ALTER DATABASE WebBanSach
-SET PAGE_VERIFY CHECKSUM
-GO ALTER DATABASE WebBanSach
-SET AUTO_CREATE_STATISTICS ON
-GO ALTER DATABASE WebBanSach
-SET AUTO_UPDATE_STATISTICS_ASYNC OFF
-GO USE WebBanSach
-GO -- table vai tro
+GO 
+CREATE DATABASE WebBanSach
+GO 
+ALTER DATABASE WebBanSach
+SET AUTO_CLOSE OFF -- Giu cho csdl luon mo -> tranh csdl lien tuc dong mo lai db khi co request moi
+GO 
+ALTER DATABASE WebBanSach
+SET AUTO_SHRINK OFF -- Tat chuc nang tu dong thu nho (shrink) kich thuoc file du lieu va file log. shrink gay pha,m  
+GO 
+ALTER DATABASE WebBanSach
+SET AUTO_UPDATE_STATISTICS ON  -- Tu dong cap nhat so lieu thong ke (statistics)
+GO 
+ALTER DATABASE WebBanSach
+SET TRUSTWORTHY OFF  -- khog cho phep db truy cap tai nguyen nam ngoai pham vi db cua chinh no
+GO 
+ALTER DATABASE WebBanSach
+SET PAGE_VERIFY CHECKSUM  -- Tinh toan va ghi mot ma kiem tra (checksum) vao header cua moi trang du lieu  -> giup phat hien som loi hong vat li
+GO
+ALTER DATABASE WebBanSach
+SET AUTO_CREATE_STATISTICS ON  -- Cho phep tu dong thong ke cac cot rieng le dc su dung trong WHERE hoac JOIN neu cot do chua co thong ke
+GO 
+ALTER DATABASE WebBanSach
+SET AUTO_UPDATE_STATISTICS_ASYNC OFF  -- Cap naht thong ke theo co che dong bo
+GO 
+
+USE WebBanSach
+GO 
+
+-- table vai tro
     CREATE TABLE vai_tro (
         id_vai_tro INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         ten_vai_tro NVARCHAR(50) UNIQUE NOT NULL
     )
-GO -- table nguoi dung
+GO
+
+-- table nguoi dung
     CREATE TABLE nguoi_dung (
         id_nguoi_dung INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         ho_ten NVARCHAR(100) NOT NULL,
@@ -34,17 +48,24 @@ GO -- table nguoi dung
         id_vai_tro INT NOT NULL,
         CONSTRAINT fk_nguoi_dung_vai_tro FOREIGN KEY (id_vai_tro) REFERENCES vai_tro(id_vai_tro)
     )
-GO -- table the loai
+GO 
+
+-- table the loai
     CREATE TABLE the_loai_sach (
         id_the_loai INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         ten_the_loai NVARCHAR(150) UNIQUE NOT NULL
     )
-GO -- table nha xuat ban
+GO
+
+-- table nha xuat ban
     CREATE TABLE nha_xuat_ban (
         id_nha_xuat_ban INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         ten_nxb NVARCHAR(200) UNIQUE NOT NULL
     )
-GO -- table sach (bo cot so_luong_da_ban, tinh qua query khi can)
+GO
+
+-- table sach 
+-- (bo cot so_luong_da_ban, tinh qua query khi can)
     CREATE TABLE sach (
         id_sach INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         ten_sach NVARCHAR(255) NOT NULL,
@@ -74,19 +95,23 @@ GO -- table sach (bo cot so_luong_da_ban, tinh qua query khi can)
             trang_thai IN (
                 N'Còn hàng',
                 N'Hết hàng',
-                N 'Ngừng bán'
+                N'Ngừng bán'
             )
         ),
         CONSTRAINT fk_sach_the_loai FOREIGN KEY (id_the_loai) REFERENCES the_loai_sach(id_the_loai),
         CONSTRAINT fk_sach_nha_xuat_ban FOREIGN KEY (id_nha_xuat_ban) REFERENCES nha_xuat_ban(id_nha_xuat_ban)
     )
-GO -- table gio hang
+GO 
+
+-- table gio hang
     CREATE TABLE gio_hang (
         id_gio_hang INT IDENTITY(1, 1) PRIMARY KEY NOT NULL,
         id_nguoi_dung INT NOT NULL UNIQUE,
         CONSTRAINT fk_gio_hang_nguoi_dung FOREIGN KEY (id_nguoi_dung) REFERENCES nguoi_dung(id_nguoi_dung)
     )
-GO -- table chi tiet gio hang 
+GO 
+
+-- table chi tiet gio hang 
     CREATE TABLE chi_tiet_gio_hang (
         id_gio_hang INT NOT NULL,
         id_sach INT NOT NULL,
@@ -96,7 +121,9 @@ GO -- table chi tiet gio hang
         CONSTRAINT fk_ctgh_gio_hang FOREIGN KEY (id_gio_hang) REFERENCES gio_hang(id_gio_hang) ON DELETE CASCADE,
         CONSTRAINT fk_ctgh_sach FOREIGN KEY (id_sach) REFERENCES sach(id_sach)
     )
-GO -- table don hang
+GO 
+
+-- table don hang
     CREATE TABLE don_hang (
         ma_don_hang VARCHAR(30) PRIMARY KEY NOT NULL,
         tong_tien DECIMAL(18, 2) NOT NULL,
@@ -127,7 +154,9 @@ GO -- table don hang
         ),
         CONSTRAINT fk_don_hang_nguoi_dung FOREIGN KEY (id_nguoi_dung) REFERENCES nguoi_dung(id_nguoi_dung)
     )
-GO -- table chi tiet don hang 
+GO 
+
+-- table chi tiet don hang 
     CREATE TABLE chi_tiet_don_hang (
         ma_don_hang VARCHAR(30) NOT NULL,
         id_sach INT NOT NULL,
@@ -142,7 +171,9 @@ GO -- table chi tiet don hang
         CONSTRAINT fk_ctdh_don_hang FOREIGN KEY (ma_don_hang) REFERENCES don_hang(ma_don_hang),
         CONSTRAINT fk_ctdh_sach FOREIGN KEY (id_sach) REFERENCES sach(id_sach)
     )
-GO -- table nhap hang sach 
+GO 
+
+-- table nhap hang sach 
     CREATE TABLE nhap_hang_sach (
         ma_phieu_nhap VARCHAR(30) PRIMARY KEY NOT NULL,
         so_luong INT NOT NULL,
@@ -159,44 +190,64 @@ GO -- table nhap hang sach
         CONSTRAINT fk_nhs_sach FOREIGN KEY (id_sach) REFERENCES sach(id_sach),
         CONSTRAINT fk_nhs_nguoi_nhap FOREIGN KEY (id_nguoi_nhap) REFERENCES nguoi_dung(id_nguoi_dung)
     )
-GO -- them cac vai tro
+GO 
+
+-- them cac vai tro
 INSERT INTO vai_tro (ten_vai_tro)
-VALUES (N 'KHACH_HANG'),
-    (N 'NHAN_VIEN'),
-    (N 'QUAN_TRI_VIEN')
-GO -- index ho tro tim kiem va thong ke
-    CREATE INDEX ix_sach_ten_sach ON sach(ten_sach)
-GO CREATE INDEX ix_sach_id_the_loai ON sach(id_the_loai)
-GO CREATE INDEX ix_sach_id_nha_xuat_ban ON sach(id_nha_xuat_ban)
-GO CREATE INDEX ix_don_hang_nguoi_dung_ngay_dat ON don_hang(id_nguoi_dung, ngay_dat DESC)
-GO CREATE INDEX ix_don_hang_trang_thai_ngay_dat ON don_hang(trang_thai_don_hang, ngay_dat DESC)
-GO CREATE INDEX ix_nhap_hang_sach_ngay ON nhap_hang_sach(id_sach, ngay_nhap DESC)
-GO -- STORED PROCEDURE
-    -- Dang ky tai khoan khach hang va tao gio hang
-    CREATE
-    OR ALTER PROCEDURE sp_dang_ky_nguoi_dung @ho_ten NVARCHAR(100),
+VALUES (N'KHACH_HANG'),
+    (N'NHAN_VIEN'),
+    (N'QUAN_TRI_VIEN')
+GO 
+
+-- index (chi muc) ho tro tim kiem va thong ke
+CREATE INDEX ix_sach_ten_sach ON sach(ten_sach)
+GO 
+CREATE INDEX ix_sach_id_the_loai ON sach(id_the_loai)
+GO 
+CREATE INDEX ix_sach_id_nha_xuat_ban ON sach(id_nha_xuat_ban)
+GO 
+CREATE INDEX ix_don_hang_nguoi_dung_ngay_dat ON don_hang(id_nguoi_dung, ngay_dat DESC)
+GO 
+CREATE INDEX ix_don_hang_trang_thai_ngay_dat ON don_hang(trang_thai_don_hang, ngay_dat DESC)
+GO 
+CREATE INDEX ix_nhap_hang_sach_ngay ON nhap_hang_sach(id_sach, ngay_nhap DESC)
+GO 
+
+-- STORED PROCEDURE
+
+-- Dang ky tai khoan khach hang va tao gio hang
+CREATE OR ALTER PROCEDURE sp_dang_ky_nguoi_dung 
+    @ho_ten NVARCHAR(100),
     @email VARCHAR(255),
     @mat_khau VARCHAR(255),
     @so_dien_thoai VARCHAR(10),
     @tinh_thanh NVARCHAR(100),
     @quan_huyen NVARCHAR(100),
     @phuong_xa NVARCHAR(100),
-    @dia_chi_chi_tiet NVARCHAR(255) = NULL AS BEGIN
+    @dia_chi_chi_tiet NVARCHAR(255) = NULL 
+AS 
+BEGIN
 SET NOCOUNT ON
-SET XACT_ABORT ON IF EXISTS (
+SET XACT_ABORT ON 
+
+IF EXISTS (
         SELECT 1
         FROM nguoi_dung
         WHERE email = @email
-    ) THROW 50001,
-    N'Email đã tồn tại.',
-    1
+    ) THROW 50001, N'Email đã tồn tại.',1
+
 DECLARE @id_vai_tro INT
 DECLARE @id_nguoi_dung INT
+
 SELECT @id_vai_tro = id_vai_tro
 FROM vai_tro
-WHERE ten_vai_tro = N 'KHACH_HANG' IF @id_vai_tro IS NULL THROW 50002,
-    N 'Chưa có vai trò KHACH_HANG.',
-    1 BEGIN TRY BEGIN TRANSACTION
+WHERE ten_vai_tro = N'KHACH_HANG' 
+
+IF @id_vai_tro IS NULL THROW 50002, N'Chưa có vai trò KHACH_HANG.', 1 
+
+BEGIN TRY 
+BEGIN TRANSACTION
+-- them thong tin nguoi dung vao bang nguoi_dung 
 INSERT INTO nguoi_dung (
         ho_ten,
         email,
@@ -219,18 +270,34 @@ VALUES (
         @dia_chi_chi_tiet,
         @id_vai_tro
     )
+-- lay id nguoi dung vua sinh tu dong 
 SET @id_nguoi_dung = SCOPE_IDENTITY()
+
+-- tu dong tao gio hang gan voi nguoi dung nay
 INSERT INTO gio_hang(id_nguoi_dung)
-VALUES (@id_nguoi_dung) COMMIT TRANSACTION
+VALUES (@id_nguoi_dung) 
+
+COMMIT TRANSACTION
+
 SELECT @id_nguoi_dung AS id_nguoi_dung,
     N'Đăng ký tài khoản thành công.' AS thong_bao
-END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION THROW
+END TRY 
+
+BEGIN CATCH 
+IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION -- kiem tra giao dich dang mo co dang do hay khong, neu co loi ROLLBACK se hoan tac toan bo thao tac da ghi vao database, tra du lieu trang thai sach se
+THROW
 END CATCH
 END
-GO -- Lay nguoi dung theo email (backend kiem tra dang nhap)
-    CREATE
-    OR ALTER PROCEDURE sp_lay_nguoi_dung_theo_email @email VARCHAR(255) AS BEGIN
+GO 
+
+
+
+-- Lay nguoi dung theo email (backend kiem tra dang nhap)
+CREATE OR ALTER PROCEDURE sp_lay_nguoi_dung_theo_email 
+    @email VARCHAR(255) AS BEGIN
+-- tat thong bao so dong tra ve 
 SET NOCOUNT ON
+-- nd: nguoi dung; vt: vai tro 
 SELECT nd.id_nguoi_dung,
     nd.ho_ten,
     nd.email,
@@ -246,30 +313,32 @@ FROM nguoi_dung nd
     JOIN vai_tro vt ON vt.id_vai_tro = nd.id_vai_tro
 WHERE nd.email = @email
 END
-GO -- Cap nhat thong tin nguoi dung
-    CREATE
-    OR ALTER PROCEDURE sp_cap_nhat_nguoi_dung @id_nguoi_dung INT,
+GO 
+
+
+-- Cap nhat thong tin nguoi dung
+CREATE OR ALTER PROCEDURE sp_cap_nhat_nguoi_dung 
+    @id_nguoi_dung INT,
     @ho_ten NVARCHAR(100),
     @email VARCHAR(255),
     @so_dien_thoai VARCHAR(10),
     @tinh_thanh NVARCHAR(100),
     @quan_huyen NVARCHAR(100),
     @phuong_xa NVARCHAR(100),
-    @dia_chi_chi_tiet NVARCHAR(255) = NULL AS BEGIN
-SET NOCOUNT ON IF NOT EXISTS (
+    @dia_chi_chi_tiet NVARCHAR(255) = NULL 
+AS BEGIN
+SET NOCOUNT ON 
+IF NOT EXISTS (
         SELECT 1
         FROM nguoi_dung
         WHERE id_nguoi_dung = @id_nguoi_dung
-    ) THROW 50003,
-    N 'Người dùng không tồn tại.',
-    1 IF EXISTS (
+    ) THROW 50003, N'Người dùng không tồn tại.', 1 
+IF EXISTS (
         SELECT 1
         FROM nguoi_dung
         WHERE email = @email
             AND id_nguoi_dung <> @id_nguoi_dung
-    ) THROW 50004,
-    N'Email đã tồn tại!',
-    1
+    ) THROW 50004, N'Email đã tồn tại!',1
 UPDATE nguoi_dung
 SET ho_ten = @ho_ten,
     email = @email,
@@ -279,18 +348,28 @@ SET ho_ten = @ho_ten,
     phuong_xa = @phuong_xa,
     dia_chi_chi_tiet = @dia_chi_chi_tiet
 WHERE id_nguoi_dung = @id_nguoi_dung
+
 SELECT N'Cập nhật thông tin thành công.' AS thong_bao
 END
-GO -- Lay danh sach nguoi dung co tim kiem va phan trang
-    CREATE
-    OR ALTER PROCEDURE sp_lay_danh_sach_nguoi_dung @tu_khoa NVARCHAR(255) = NULL,
+GO 
+
+
+-- Lay danh sach nguoi dung co tim kiem va phan trang
+CREATE OR ALTER PROCEDURE sp_lay_danh_sach_nguoi_dung 
+    @tu_khoa NVARCHAR(255) = NULL,
     @id_vai_tro INT = NULL,
     @trang INT = 1,
-    @kich_thuoc_trang INT = 20 AS BEGIN
-SET NOCOUNT ON IF @trang < 1
-SET @trang = 1 IF @kich_thuoc_trang < 1
-SET @kich_thuoc_trang = 20
-SELECT nd.id_nguoi_dung,
+    @kich_thuoc_trang INT = 20 
+AS BEGIN
+
+SET NOCOUNT ON 
+IF @trang < 1
+    SET @trang = 1 
+IF @kich_thuoc_trang < 1
+    SET @kich_thuoc_trang = 20
+
+SELECT 
+    nd.id_nguoi_dung,
     nd.ho_ten,
     nd.email,
     nd.so_dien_thoai,
@@ -299,24 +378,33 @@ SELECT nd.id_nguoi_dung,
     nd.phuong_xa,
     nd.dia_chi_chi_tiet,
     vt.ten_vai_tro,
-    COUNT(*) OVER() AS tong_ban_ghi
+    COUNT(*) OVER() AS tong_ban_ghi  -- tra ve so luong ban ghi thoa man dieu kien loc ma khong can viet cau lenh SELECT COUNT(*) phu 
 FROM nguoi_dung nd
     JOIN vai_tro vt ON vt.id_vai_tro = nd.id_vai_tro
 WHERE (
+        -- Loc 
         @id_vai_tro IS NULL
         OR nd.id_vai_tro = @id_vai_tro
     )
-    AND (
+
+AND (
+        -- Tim kiem
         @tu_khoa IS NULL
         OR nd.ho_ten COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
         OR nd.email LIKE '%' + CONVERT(VARCHAR(255), @tu_khoa) + '%'
         OR nd.so_dien_thoai LIKE '%' + CONVERT(VARCHAR(20), @tu_khoa) + '%'
     )
-ORDER BY nd.id_nguoi_dung DESC OFFSET (@trang - 1) * @kich_thuoc_trang ROWS FETCH NEXT @kich_thuoc_trang ROWS ONLY
+
+ORDER BY nd.id_nguoi_dung DESC 
+OFFSET (@trang - 1) * @kich_thuoc_trang ROWS 
+FETCH NEXT @kich_thuoc_trang ROWS ONLY
 END
-GO -- Them sach (khong tu dong nhap kho, phai tao phieu nhap rieng)
-    CREATE
-    OR ALTER PROCEDURE sp_them_sach @ten_sach NVARCHAR(255),
+GO
+
+
+-- Them sach (khong tu dong nhap kho, phai tao phieu nhap rieng)
+CREATE OR ALTER PROCEDURE sp_them_sach 
+    @ten_sach NVARCHAR(255),
     @isbn VARCHAR(20),
     @tac_gia NVARCHAR(255),
     @mo_ta_ngan NVARCHAR(2000) = NULL,
@@ -328,39 +416,37 @@ GO -- Them sach (khong tu dong nhap kho, phai tao phieu nhap rieng)
     @so_luong_ton INT = 0,
     @id_the_loai INT,
     @id_nha_xuat_ban INT,
-    @id_nguoi_thuc_hien INT = NULL AS BEGIN
+    @id_nguoi_thuc_hien INT = NULL 
+AS BEGIN
 SET NOCOUNT ON
-SET XACT_ABORT ON IF EXISTS (
-        SELECT 1
-        FROM sach
-        WHERE isbn = @isbn
-    ) THROW 50010,
-    N 'ISBN đã tồn tại.',
-    1 IF @gia_goc < 0
-    OR @gia_ban < 0
-    OR @gia_ban > @gia_goc THROW 50011,
-    N'Giá sách không hợp lệ.',
-    1 IF @so_luong_ton < 0 THROW 50012,
-    N'Số lượng tồn không được âm.',
-    1 IF NOT EXISTS (
-        SELECT 1
-        FROM the_loai_sach
-        WHERE id_the_loai = @id_the_loai
-    ) THROW 50013,
-    N'Thể loại sách không tồn tại.',
-    1 IF NOT EXISTS (
-        SELECT 1
-        FROM nha_xuat_ban
-        WHERE id_nha_xuat_ban = @id_nha_xuat_ban
-    ) THROW 50014,
-    N 'Nhà xuất bản không tồn tại.',
-    1
+SET XACT_ABORT ON
+IF EXISTS (
+        SELECT 1 FROM sach WHERE isbn = @isbn
+    ) THROW 50010, N'ISBN đã tồn tại.', 1 
+
+IF @gia_goc < 0 OR @gia_ban < 0 OR @gia_ban > @gia_goc 
+THROW 50011, N'Giá sách không hợp lệ.',1 
+
+IF @so_luong_ton < 0 
+THROW 50012, N'Số lượng tồn không được âm.',1 
+
+IF NOT EXISTS (
+        SELECT 1 FROM the_loai_sach WHERE id_the_loai = @id_the_loai
+    ) THROW 50013, N'Thể loại sách không tồn tại.', 1 
+
+IF NOT EXISTS (
+        SELECT 1 FROM nha_xuat_ban WHERE id_nha_xuat_ban = @id_nha_xuat_ban
+    ) THROW 50014, N'Nhà xuất bản không tồn tại.', 1
+
+-- Tu dong tinh toan trang thai sach
 DECLARE @id_sach INT
 DECLARE @trang_thai NVARCHAR(20)
+
 SET @trang_thai = CASE
         WHEN @so_luong_ton > 0 THEN N'Còn hàng'
         ELSE N'Hết hàng'
     END
+
 INSERT INTO sach (
         ten_sach,
         isbn,
@@ -392,12 +478,15 @@ VALUES (
         @id_nha_xuat_ban
     )
 SET @id_sach = SCOPE_IDENTITY()
-SELECT @id_sach AS id_sach,
-    N'Thêm sách thành công.' AS thong_bao
+
+SELECT @id_sach AS id_sach, N'Thêm sách thành công.' AS thong_bao
 END
-GO -- Cap nhat thong tin sach, khong cap nhat ton kho tai day
-    CREATE
-    OR ALTER PROCEDURE sp_cap_nhat_sach @id_sach INT,
+GO 
+
+
+-- Cap nhat thong tin sach (khong cap nhat ton kho)
+CREATE OR ALTER PROCEDURE sp_cap_nhat_sach 
+    @id_sach INT,
     @ten_sach NVARCHAR(255),
     @isbn VARCHAR(20),
     @tac_gia NVARCHAR(255),
@@ -408,37 +497,31 @@ GO -- Cap nhat thong tin sach, khong cap nhat ton kho tai day
     @ngon_ngu NVARCHAR(50) = NULL,
     @anh_bia NVARCHAR(1000) = NULL,
     @id_the_loai INT,
-    @id_nha_xuat_ban INT AS BEGIN
-SET NOCOUNT ON IF NOT EXISTS (
-        SELECT 1
-        FROM sach
-        WHERE id_sach = @id_sach
-    ) THROW 50015,
-    N'Sách không tồn tại.',
-    1 IF EXISTS (
-        SELECT 1
-        FROM sach
-        WHERE isbn = @isbn
-            AND id_sach <> @id_sach
-    ) THROW 50016,
-    N 'ISBN đã được sử dụng cho sách khác.',
-    1 IF @gia_goc < 0
-    OR @gia_ban < 0
-    OR @gia_ban > @gia_goc THROW 50017,
-    N'Giá sách không hợp lệ.',
-    1 IF NOT EXISTS (
-        SELECT 1
-        FROM the_loai_sach
-        WHERE id_the_loai = @id_the_loai
-    ) THROW 50018,
-    N'Thể loại sách không tồn tại.',
-    1 IF NOT EXISTS (
-        SELECT 1
-        FROM nha_xuat_ban
-        WHERE id_nha_xuat_ban = @id_nha_xuat_ban
-    ) THROW 50019,
-    N 'Nhà xuất bản không tồn tại.',
-    1
+    @id_nha_xuat_ban INT 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+IF NOT EXISTS (
+        SELECT 1 FROM sach WHERE id_sach = @id_sach
+    ) THROW 50015, N'Sách không tồn tại.',1 
+
+IF EXISTS (
+        SELECT 1 FROM sach WHERE isbn = @isbn AND id_sach <> @id_sach
+    ) THROW 50016, N'ISBN đã được sử dụng cho sách khác.', 1 
+
+IF @gia_goc < 0 OR @gia_ban < 0 OR @gia_ban > @gia_goc 
+THROW 50017, N'Giá sách không hợp lệ.', 1 
+
+IF NOT EXISTS (
+        SELECT 1 FROM the_loai_sach WHERE id_the_loai = @id_the_loai
+    ) THROW 50018, N'Thể loại sách không tồn tại.', 1 
+
+IF NOT EXISTS (
+        SELECT 1 FROM nha_xuat_ban WHERE id_nha_xuat_ban = @id_nha_xuat_ban
+    ) THROW 50019, N'Nhà xuất bản không tồn tại.', 1
+
+
 UPDATE sach
 SET ten_sach = @ten_sach,
     isbn = @isbn,
@@ -448,41 +531,50 @@ SET ten_sach = @ten_sach,
     gia_ban = @gia_ban,
     nam_xuat_ban = @nam_xuat_ban,
     ngon_ngu = @ngon_ngu,
-    anh_bia = @anh_bia,
+    anh_bia = ISNULL(@anh_bia, anh_bia),
     id_the_loai = @id_the_loai,
     id_nha_xuat_ban = @id_nha_xuat_ban
 WHERE id_sach = @id_sach
-SELECT N'Cập nhật sách thành công.' AS thong_bao
+
+SELECT N'Cập nhật sách thành công' AS thong_bao
 END
-GO -- Cap nhat trang thai sach
-    CREATE
-    OR ALTER PROCEDURE sp_cap_nhat_trang_thai_sach @id_sach INT,
-    @trang_thai NVARCHAR(20) AS BEGIN
-SET NOCOUNT ON IF @trang_thai NOT IN (N'Còn hàng', N'Hết hàng', N 'Ngừng bán') THROW 50020,
-    N'Trạng thái sách không hợp lệ.',
-    1 IF NOT EXISTS (
-        SELECT 1
-        FROM sach
-        WHERE id_sach = @id_sach
-    ) THROW 50021,
-    N'Sách không tồn tại.',
-    1 IF @trang_thai = N'Còn hàng'
-    AND EXISTS (
-        SELECT 1
-        FROM sach
-        WHERE id_sach = @id_sach
-            AND so_luong_ton = 0
-    ) THROW 50022,
-    N'Không thể đặt Còn hàng khi số lượng tồn bằng 0.',
-    1
+GO
+
+
+-- Cap nhat trang thai sach
+CREATE OR ALTER PROCEDURE sp_cap_nhat_trang_thai_sach 
+    @id_sach INT,
+    @trang_thai NVARCHAR(20) 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+-- Kiem tra trang thai co nam trong danh muc cho phep khong
+IF @trang_thai NOT IN (N'Còn hàng', N'Hết hàng', N'Ngừng bán') 
+THROW 50020, N'Trạng thái sách không hợp lệ.', 1 
+
+IF NOT EXISTS (
+        SELECT 1 FROM sach WHERE id_sach = @id_sach
+    ) THROW 50021, N'Sách không tồn tại.', 1 
+
+IF @trang_thai = N'Còn hàng'
+AND EXISTS (
+        SELECT 1 FROM sach WHERE id_sach = @id_sach AND so_luong_ton = 0
+    ) THROW 50022, N'Không thể đặt Còn hàng khi số lượng tồn bằng 0.', 1
+
+
 UPDATE sach
 SET trang_thai = @trang_thai
 WHERE id_sach = @id_sach
+
 SELECT N'Cập nhật trạng thái sách thành công.' AS thong_bao
 END
-GO -- Tim kiem, loc, sap xep va phan trang sach (tinh so_luong_da_ban qua query)
-    CREATE
-    OR ALTER PROCEDURE sp_tim_kiem_sach @tu_khoa NVARCHAR(255) = NULL,
+GO 
+
+
+-- Tim kiem, loc, sap xep va phan trang sach (tinh so_luong_da_ban qua query)
+CREATE OR ALTER PROCEDURE sp_tim_kiem_sach 
+    @tu_khoa NVARCHAR(255) = NULL,
     @id_the_loai INT = NULL,
     @id_nha_xuat_ban INT = NULL,
     @gia_tu DECIMAL(18, 2) = NULL,
@@ -490,11 +582,15 @@ GO -- Tim kiem, loc, sap xep va phan trang sach (tinh so_luong_da_ban qua query)
     @trang_thai NVARCHAR(20) = NULL,
     @sap_xep VARCHAR(20) = 'MOI_NHAT',
     @trang INT = 1,
-    @kich_thuoc_trang INT = 12 AS BEGIN
-SET NOCOUNT ON IF @trang < 1
-SET @trang = 1 IF @kich_thuoc_trang < 1
-SET @kich_thuoc_trang = 12
-SELECT s.id_sach,
+    @kich_thuoc_trang INT = 12 
+AS BEGIN
+SET NOCOUNT ON 
+IF @trang < 1
+    SET @trang = 1 
+IF @kich_thuoc_trang < 1
+    SET @kich_thuoc_trang = 12
+SELECT 
+    s.id_sach,
     s.ten_sach,
     s.isbn,
     s.tac_gia,
@@ -511,10 +607,11 @@ SELECT s.id_sach,
     tls.ten_the_loai,
     nxb.id_nha_xuat_ban,
     nxb.ten_nxb,
-    COUNT(*) OVER() AS tong_ban_ghi
+    COUNT(*) OVER() AS tong_ban_ghi  -- Dem tong so sach thoa dieu kien lap de phan trang 
 FROM sach s
     JOIN the_loai_sach tls ON tls.id_the_loai = s.id_the_loai
     JOIN nha_xuat_ban nxb ON nxb.id_nha_xuat_ban = s.id_nha_xuat_ban
+
     LEFT JOIN (
         SELECT ctdh.id_sach,
             SUM(ctdh.so_luong) AS tong_da_ban
@@ -551,6 +648,8 @@ WHERE (
         @trang_thai IS NULL
         OR s.trang_thai = @trang_thai
     )
+
+-- Sap xeo dong va phan trang
 ORDER BY CASE
         WHEN @sap_xep = 'GIA_TANG' THEN s.gia_ban
     END ASC,
@@ -559,47 +658,69 @@ ORDER BY CASE
     END DESC,
     CASE
         WHEN @sap_xep = 'BAN_CHAY' THEN ISNULL(ban.tong_da_ban, 0)
-    END DESC,
+    END DESC, -- Neu khong thoa dieu kien nao thi mac dinh la moi nhat 
     s.id_sach DESC OFFSET (@trang - 1) * @kich_thuoc_trang ROWS FETCH NEXT @kich_thuoc_trang ROWS ONLY
 END
-GO -- Them sach vao gio hang, neu da co thi tang so luong
-    CREATE
-    OR ALTER PROCEDURE sp_them_sach_vao_gio @id_nguoi_dung INT,
+GO 
+
+
+-- Them sach vao gio hang, neu da co thi tang so luong
+CREATE OR ALTER PROCEDURE sp_them_sach_vao_gio 
+    @id_nguoi_dung INT,
     @id_sach INT,
-    @so_luong INT AS BEGIN
+    @so_luong INT 
+AS BEGIN
+
 SET NOCOUNT ON
-SET XACT_ABORT ON IF @so_luong <= 0 THROW 50030,
-    N'Số lượng phải lớn hơn 0.',
-    1
+SET XACT_ABORT ON 
+
+IF @so_luong <= 0 THROW 50030, N'Số lượng phải lớn hơn 0.', 1
+
 DECLARE @id_gio_hang INT
 DECLARE @so_luong_ton INT
 DECLARE @so_luong_hien_tai INT
+
 SELECT @so_luong_ton = so_luong_ton
 FROM sach
 WHERE id_sach = @id_sach
-    AND trang_thai = N'Còn hàng' IF @so_luong_ton IS NULL THROW 50031,
-    N'Sách không tồn tại hoặc không còn bán.',
-    1 BEGIN TRY BEGIN TRANSACTION
+    AND trang_thai = N'Còn hàng' 
+
+IF @so_luong_ton IS NULL THROW 50031, N'Sách không tồn tại hoặc không còn bán.', 1 
+
+-- Mo Transaction va dam bao nguoi dung co gio hang 
+BEGIN TRY 
+BEGIN TRANSACTION
 SELECT @id_gio_hang = id_gio_hang
 FROM gio_hang
-WHERE id_nguoi_dung = @id_nguoi_dung IF @id_gio_hang IS NULL BEGIN
-INSERT INTO gio_hang(id_nguoi_dung)
-VALUES (@id_nguoi_dung)
-SET @id_gio_hang = SCOPE_IDENTITY()
+WHERE id_nguoi_dung = @id_nguoi_dung 
+
+IF @id_gio_hang IS NULL 
+BEGIN
+    INSERT INTO gio_hang(id_nguoi_dung)
+    VALUES (@id_nguoi_dung)
+    SET @id_gio_hang = SCOPE_IDENTITY()
 END
+
+-- Kiem tra vuot qua ton kho 
 SELECT @so_luong_hien_tai = so_luong
 FROM chi_tiet_gio_hang
 WHERE id_gio_hang = @id_gio_hang
     AND id_sach = @id_sach
-SET @so_luong_hien_tai = ISNULL(@so_luong_hien_tai, 0) IF @so_luong_hien_tai + @so_luong > @so_luong_ton THROW 50032,
-    N'Số lượng trong giỏ vượt quá tồn kho.',
-    1 IF @so_luong_hien_tai > 0 BEGIN
+SET @so_luong_hien_tai = ISNULL(@so_luong_hien_tai, 0) 
+
+IF @so_luong_hien_tai + @so_luong > @so_luong_ton 
+THROW 50032, N'Số lượng trong giỏ vượt quá tồn kho.', 1 
+
+-- Thuc hien cong don hoac them moi 
+IF @so_luong_hien_tai > 0 
+BEGIN
 UPDATE chi_tiet_gio_hang
 SET so_luong = so_luong + @so_luong
 WHERE id_gio_hang = @id_gio_hang
     AND id_sach = @id_sach
 END
-ELSE BEGIN
+ELSE 
+BEGIN
 INSERT INTO chi_tiet_gio_hang (
         id_gio_hang,
         id_sach,
@@ -610,41 +731,61 @@ VALUES (
         @id_sach,
         @so_luong
     )
-END COMMIT TRANSACTION
+END 
+
+COMMIT TRANSACTION
 SELECT N'Thêm sách vào giỏ hàng thành công.' AS thong_bao
-END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION THROW
+END TRY 
+
+-- Bat ngoai le va huy giao dich 
+BEGIN CATCH 
+    IF @@TRANCOUNT > 0 
+        ROLLBACK TRANSACTION 
+    THROW
 END CATCH
 END
-GO -- Cap nhat so luong sach trong gio
-    CREATE
-    OR ALTER PROCEDURE sp_cap_nhat_so_luong_gio @id_nguoi_dung INT,
+GO 
+
+
+-- Cap nhat so luong sach trong gio
+CREATE OR ALTER PROCEDURE sp_cap_nhat_so_luong_gio 
+    @id_nguoi_dung INT,
     @id_sach INT,
-    @so_luong INT AS BEGIN
-SET NOCOUNT ON IF @so_luong <= 0 THROW 50033,
-    N'Số lượng phải lớn hơn 0.',
-    1
+    @so_luong INT 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+IF @so_luong <= 0 THROW 50033, N'Số lượng phải lớn hơn 0.', 1
+
 DECLARE @so_luong_ton INT
+
 SELECT @so_luong_ton = so_luong_ton
 FROM sach
 WHERE id_sach = @id_sach
-    AND trang_thai = N'Còn hàng' IF @so_luong_ton IS NULL THROW 50034,
-    N'Sách không tồn tại hoặc không còn bán.',
-    1 IF @so_luong > @so_luong_ton THROW 50035,
-    N'Số lượng yêu cầu vượt quá tồn kho.',
-    1
+    AND trang_thai = N'Còn hàng' 
+
+IF @so_luong_ton IS NULL THROW 50034, N'Sách không tồn tại hoặc không còn bán.', 1 
+IF @so_luong > @so_luong_ton THROW 50035, N'Số lượng yêu cầu vượt quá tồn kho.', 1
+
+-- cth: chi tiet hang 
 UPDATE cth
 SET cth.so_luong = @so_luong
 FROM chi_tiet_gio_hang cth
     JOIN gio_hang gh ON gh.id_gio_hang = cth.id_gio_hang
 WHERE gh.id_nguoi_dung = @id_nguoi_dung
-    AND cth.id_sach = @id_sach IF @@ROWCOUNT = 0 THROW 50036,
-    N'Sách không có trong giỏ hàng.',
-    1
+    AND cth.id_sach = @id_sach 
+
+-- Kiem tra ket qua thuc thi (ROWCOUNT kiem tra so dong du lieu bi tac dong)
+IF @@ROWCOUNT = 0 THROW 50036, N'Sách không có trong giỏ hàng.', 1
 SELECT N'Cập nhật số lượng thành công.' AS thong_bao
 END
-GO -- Xoa mot sach khoi gio hang
-    CREATE
-    OR ALTER PROCEDURE sp_xoa_sach_khoi_gio @id_nguoi_dung INT,
+GO 
+
+
+-- Xoa mot sach khoi gio hang
+CREATE OR ALTER PROCEDURE sp_xoa_sach_khoi_gio 
+    @id_nguoi_dung INT,
     @id_sach INT AS BEGIN
 SET NOCOUNT ON
 
@@ -652,27 +793,40 @@ SET NOCOUNT ON
 FROM chi_tiet_gio_hang cth
     JOIN gio_hang gh ON gh.id_gio_hang = cth.id_gio_hang
 WHERE gh.id_nguoi_dung = @id_nguoi_dung
-    AND cth.id_sach = @id_sach IF @@ROWCOUNT = 0 THROW 50037,
-    N'Sách không có trong giỏ hàng.',
-    1
+    AND cth.id_sach = @id_sach 
+IF @@ROWCOUNT = 0 THROW 50037, N'Sách không có trong giỏ hàng.', 1
 SELECT N'Xóa sách khỏi giỏ hàng thành công.' AS thong_bao
 END
-GO -- Xoa toan bo gio hang
-    CREATE
-    OR ALTER PROCEDURE sp_xoa_toan_bo_gio_hang @id_nguoi_dung INT AS BEGIN
+GO
+
+
+-- Xoa toan bo gio hang
+CREATE OR ALTER PROCEDURE sp_xoa_toan_bo_gio_hang 
+    @id_nguoi_dung INT 
+AS BEGIN
+
 SET NOCOUNT ON
 
-    DELETE cth
+DELETE cth
+
 FROM chi_tiet_gio_hang cth
     JOIN gio_hang gh ON gh.id_gio_hang = cth.id_gio_hang
 WHERE gh.id_nguoi_dung = @id_nguoi_dung
+
 SELECT N'Đã xóa toàn bộ giỏ hàng.' AS thong_bao
 END
-GO -- Lay chi tiet gio hang
-    CREATE
-    OR ALTER PROCEDURE sp_lay_chi_tiet_gio_hang @id_nguoi_dung INT AS BEGIN
+GO 
+
+
+-- Lay chi tiet gio hang
+CREATE OR ALTER PROCEDURE sp_lay_chi_tiet_gio_hang 
+    @id_nguoi_dung INT
+AS BEGIN
+
 SET NOCOUNT ON
-SELECT s.id_sach,
+
+SELECT 
+    s.id_sach,
     s.ten_sach,
     s.anh_bia,
     s.gia_ban,
@@ -680,33 +834,51 @@ SELECT s.id_sach,
     s.so_luong_ton,
     s.trang_thai,
     CONVERT(DECIMAL(18, 2), s.gia_ban * cth.so_luong) AS thanh_tien,
+
     CONVERT (
         DECIMAL(18, 2),
         SUM(s.gia_ban * cth.so_luong) OVER()
     ) AS tong_tien_gio_hang
+
+-- Ket noi ca bang, loc theo nguoi dung va sap xep 
 FROM gio_hang gh
     JOIN chi_tiet_gio_hang cth ON cth.id_gio_hang = gh.id_gio_hang
     JOIN sach s ON s.id_sach = cth.id_sach
 WHERE gh.id_nguoi_dung = @id_nguoi_dung
 ORDER BY cth.id_sach DESC
 END
-GO -- Tao don hang tu gio hang (dung ma_don_hang lam PK)
-    CREATE
-    OR ALTER PROCEDURE sp_tao_don_hang_tu_gio @id_nguoi_dung INT,
+GO 
+
+
+-- Tao don hang tu gio hang (dung ma_don_hang lam PK)
+CREATE OR ALTER PROCEDURE sp_tao_don_hang_tu_gio 
+    @id_nguoi_dung INT,
     @ten_nguoi_nhan NVARCHAR(150),
     @so_dien_thoai_nhan VARCHAR(15),
     @dia_chi_giao_hang NVARCHAR(500),
-    @ghi_chu NVARCHAR(500) = NULL AS BEGIN
+    @ghi_chu NVARCHAR(500) = NULL 
+AS BEGIN
+
 SET NOCOUNT ON
 SET XACT_ABORT ON
+
 DECLARE @id_gio_hang INT
 DECLARE @ma_don_hang VARCHAR(30)
 DECLARE @tong_tien DECIMAL(18, 2)
+
+
 SELECT @id_gio_hang = id_gio_hang
 FROM gio_hang
-WHERE id_nguoi_dung = @id_nguoi_dung IF @id_gio_hang IS NULL THROW 50040,
-    N'Không tìm thấy giỏ hàng.',
-    1 BEGIN TRY BEGIN TRANSACTION
+WHERE id_nguoi_dung = @id_nguoi_dung 
+
+IF @id_gio_hang IS NULL 
+THROW 50040, N'Không tìm thấy giỏ hàng.', 1 
+
+-- Su dung Bang bien va co che khoa chong tranh chap (UPDLOCK, HOLDLOCK) 
+BEGIN TRY 
+BEGIN TRANSACTION
+
+-- Bang @du_lieu_gio chup lai trang thai sach trong gio 
 DECLARE @du_lieu_gio TABLE (
         id_sach INT PRIMARY KEY,
         don_gia DECIMAL(18, 2),
@@ -724,21 +896,24 @@ SELECT s.id_sach,
     cth.so_luong,
     s.so_luong_ton
 FROM chi_tiet_gio_hang cth
-    JOIN sach s WITH (UPDLOCK, HOLDLOCK) ON s.id_sach = cth.id_sach
-WHERE cth.id_gio_hang = @id_gio_hang IF NOT EXISTS (
+    JOIN sach s WITH (UPDLOCK, HOLDLOCK) ON s.id_sach = cth.id_sach  -- Ngan chan hien tuong Race Condition (2 nguoi cung mua 1 cuon sach cuoi tai cung mot tich tac)
+                                                                     -- Cac giao dich khac muon sua hoac mua phai cho don hang hoan tat
+WHERE cth.id_gio_hang = @id_gio_hang 
+
+IF NOT EXISTS (
         SELECT 1
         FROM @du_lieu_gio
-    ) THROW 50041,
-    N'Giỏ hàng đang trống.',
-    1 IF EXISTS (
+    ) THROW 50041, N'Giỏ hàng đang trống.', 1 
+    
+IF EXISTS (
         SELECT 1
         FROM @du_lieu_gio dl
             JOIN sach s ON s.id_sach = dl.id_sach
         WHERE s.trang_thai <> N'Còn hàng'
             OR dl.so_luong > dl.ton_truoc
-    ) THROW 50042,
-    N'Có sách đã hết hàng, ngừng bán hoặc không đủ số lượng.',
-    1
+    ) THROW 50042, N'Có sách đã hết hàng, ngừng bán hoặc không đủ số lượng.', 1
+
+-- Tinh tong tien va sinh ma don 
 SELECT @tong_tien = SUM(don_gia * so_luong)
 FROM @du_lieu_gio
 SET @ma_don_hang = CONCAT (
@@ -751,6 +926,7 @@ SET @ma_don_hang = CONCAT (
             )
         )
     )
+-- Luu thong tin chinh vao bang don_hang
 INSERT INTO don_hang (
         ma_don_hang,
         tong_tien,
@@ -769,6 +945,8 @@ VALUES (
         @ghi_chu,
         @id_nguoi_dung
     )
+
+-- Sao chep cac mat hang vao bang chi_tiet_don_hang 
 INSERT INTO chi_tiet_don_hang (
         ma_don_hang,
         id_sach,
@@ -779,7 +957,9 @@ SELECT @ma_don_hang,
     id_sach,
     don_gia,
     so_luong
-FROM @du_lieu_gio -- Tru ton kho truc tiep
+FROM @du_lieu_gio 
+
+-- Tru ton kho truc tiep va tu dong doi trng thai sach neu ve 0 
 UPDATE s
 SET s.so_luong_ton = s.so_luong_ton - dl.so_luong,
     s.trang_thai = CASE
@@ -788,26 +968,41 @@ SET s.so_luong_ton = s.so_luong_ton - dl.so_luong,
     END
 FROM sach s
     JOIN @du_lieu_gio dl ON dl.id_sach = s.id_sach
+
+-- Xoa sach cac mat hang trong gio sau khi dat hang thanh cong 
 DELETE FROM chi_tiet_gio_hang
 WHERE id_gio_hang = @id_gio_hang COMMIT TRANSACTION
 SELECT @ma_don_hang AS ma_don_hang,
     @tong_tien AS tong_tien,
     N'Tạo đơn hàng thành công.' AS thong_bao
-END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION THROW
+END TRY 
+BEGIN CATCH 
+IF @@TRANCOUNT > 0 
+    ROLLBACK TRANSACTION 
+THROW
 END CATCH
 END
-GO -- Lay danh sach don hang cho khach hang hoac nhan vien
-    CREATE
-    OR ALTER PROCEDURE sp_lay_danh_sach_don_hang @id_nguoi_dung INT = NULL,
+GO 
+
+
+-- Lay danh sach don hang cho khach hang hoac nhan vien
+CREATE OR ALTER PROCEDURE sp_lay_danh_sach_don_hang 
+    @id_nguoi_dung INT = NULL,
     @tu_khoa NVARCHAR(255) = NULL,
     @trang_thai NVARCHAR(30) = NULL,
     @tu_ngay DATE = NULL,
     @den_ngay DATE = NULL,
     @trang INT = 1,
-    @kich_thuoc_trang INT = 20 AS BEGIN
-SET NOCOUNT ON IF @trang < 1
-SET @trang = 1 IF @kich_thuoc_trang < 1
-SET @kich_thuoc_trang = 20
+    @kich_thuoc_trang INT = 20 
+AS BEGIN
+
+SET NOCOUNT ON 
+IF @trang < 1
+    SET @trang = 1 
+IF @kich_thuoc_trang < 1
+    SET @kich_thuoc_trang = 20
+
+-- Lay thong tin don hang va dem tong ban ghi voi Count 
 SELECT dh.ma_don_hang,
     dh.tong_tien,
     dh.ten_nguoi_nhan,
@@ -821,6 +1016,7 @@ SELECT dh.ma_don_hang,
     COUNT(*) OVER() AS tong_ban_ghi
 FROM don_hang dh
     JOIN nguoi_dung nd ON nd.id_nguoi_dung = dh.id_nguoi_dung
+
 WHERE (
         @id_nguoi_dung IS NULL
         OR dh.id_nguoi_dung = @id_nguoi_dung
@@ -829,6 +1025,7 @@ WHERE (
         @trang_thai IS NULL
         OR dh.trang_thai_don_hang = @trang_thai
     )
+    -- Xu li khoang ngay voi ky thuat tranh mat du lieu gio 
     AND (
         @tu_ngay IS NULL
         OR dh.ngay_dat >= @tu_ngay
@@ -837,19 +1034,29 @@ WHERE (
         @den_ngay IS NULL
         OR dh.ngay_dat < DATEADD(DAY, 1, @den_ngay)
     )
+    -- Tim kiem tu khoa va phan trang 
     AND (
         @tu_khoa IS NULL
         OR dh.ma_don_hang LIKE '%' + CONVERT(VARCHAR(255), @tu_khoa) + '%'
         OR dh.ten_nguoi_nhan COLLATE SQL_Latin1_General_CP1_CI_AI LIKE N'%' + @tu_khoa + N'%' COLLATE SQL_Latin1_General_CP1_CI_AI
         OR dh.so_dien_thoai_nhan LIKE '%' + CONVERT(VARCHAR(20), @tu_khoa) + '%'
     )
-ORDER BY dh.ngay_dat DESC OFFSET (@trang - 1) * @kich_thuoc_trang ROWS FETCH NEXT @kich_thuoc_trang ROWS ONLY
+ORDER BY dh.ngay_dat DESC 
+OFFSET (@trang - 1) * @kich_thuoc_trang ROWS 
+FETCH NEXT @kich_thuoc_trang ROWS ONLY
 END
-GO -- Lay chi tiet don hang (dung ma_don_hang thay vi id)
-    CREATE
-    OR ALTER PROCEDURE sp_lay_chi_tiet_don_hang @ma_don_hang VARCHAR(30),
-    @id_nguoi_dung INT = NULL AS BEGIN
-SET NOCOUNT ON IF NOT EXISTS (
+GO 
+
+
+-- Lay chi tiet don hang (dung ma_don_hang thay vi id)
+CREATE OR ALTER PROCEDURE sp_lay_chi_tiet_don_hang 
+    @ma_don_hang VARCHAR(30),
+    @id_nguoi_dung INT = NULL 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+IF NOT EXISTS (
         SELECT 1
         FROM don_hang
         WHERE ma_don_hang = @ma_don_hang
@@ -857,9 +1064,9 @@ SET NOCOUNT ON IF NOT EXISTS (
                 @id_nguoi_dung IS NULL
                 OR id_nguoi_dung = @id_nguoi_dung
             )
-    ) THROW 50043,
-    N'Không tìm thấy đơn hàng.',
-    1 -- Recordset 1: thong tin don hang
+    ) THROW 50043, N'Không tìm thấy đơn hàng.', 1 
+    
+-- 1: thong tin don hang
 SELECT dh.ma_don_hang,
     dh.tong_tien,
     dh.ten_nguoi_nhan,
@@ -874,7 +1081,9 @@ SELECT dh.ma_don_hang,
     nd.email
 FROM don_hang dh
     JOIN nguoi_dung nd ON nd.id_nguoi_dung = dh.id_nguoi_dung
-WHERE dh.ma_don_hang = @ma_don_hang -- Recordset 2: chi tiet san pham (lay ten_sach tu bang sach qua JOIN)
+WHERE dh.ma_don_hang = @ma_don_hang 
+
+-- 2: chi tiet san pham (lay ten_sach tu bang sach qua JOIN)
 SELECT ctdh.id_sach,
     s.ten_sach,
     s.anh_bia,
@@ -886,18 +1095,26 @@ FROM chi_tiet_don_hang ctdh
 WHERE ctdh.ma_don_hang = @ma_don_hang
 ORDER BY ctdh.id_sach
 END
-GO -- Cap nhat trang thai don hang theo dung thu tu
-    CREATE
-    OR ALTER PROCEDURE sp_cap_nhat_trang_thai_don_hang @ma_don_hang VARCHAR(30),
-    @trang_thai_moi NVARCHAR(30) AS BEGIN
+GO 
+
+-- Cap nhat trang thai don hang theo dung thu tu
+CREATE OR ALTER PROCEDURE sp_cap_nhat_trang_thai_don_hang 
+    @ma_don_hang VARCHAR(30),
+    @trang_thai_moi NVARCHAR(30) 
+AS BEGIN
+
 SET NOCOUNT ON
 SET XACT_ABORT ON
+
 DECLARE @trang_thai_cu NVARCHAR(30)
 SELECT @trang_thai_cu = trang_thai_don_hang
 FROM don_hang
-WHERE ma_don_hang = @ma_don_hang IF @trang_thai_cu IS NULL THROW 50044,
-    N'Đơn hàng không tồn tại.',
-    1 IF NOT (
+WHERE ma_don_hang = @ma_don_hang 
+
+IF @trang_thai_cu IS NULL THROW 50044, N'Đơn hàng không tồn tại.', 1 
+
+-- Kiem soat luong chuyen doi trang thai 
+IF NOT (
         (
             @trang_thai_cu = N'Chờ xác nhận'
             AND @trang_thai_moi = N'Đang chuẩn bị'
@@ -910,9 +1127,9 @@ WHERE ma_don_hang = @ma_don_hang IF @trang_thai_cu IS NULL THROW 50044,
             @trang_thai_cu = N'Đang giao'
             AND @trang_thai_moi = N'Đã giao'
         )
-    ) THROW 50045,
-    N'Không thể chuyển sang trạng thái này.',
-    1
+    ) THROW 50045, N'Không thể chuyển sang trạng thái này.', 1
+
+-- Cap nhat trang thai va tu dong thanh toan 
 UPDATE don_hang
 SET trang_thai_don_hang = @trang_thai_moi,
     trang_thai_thanh_toan = CASE
@@ -922,42 +1139,63 @@ SET trang_thai_don_hang = @trang_thai_moi,
 WHERE ma_don_hang = @ma_don_hang
 SELECT N'Cập nhật trạng thái đơn hàng thành công.' AS thong_bao
 END
-GO -- Huy don hang va hoan lai ton kho (truc tiep, khong ghi bang nhat ky)
-    CREATE
-    OR ALTER PROCEDURE sp_huy_don_hang @ma_don_hang VARCHAR(30),
+GO 
+
+
+-- Huy don hang va hoan lai ton kho (truc tiep, khong ghi bang nhat ky)
+CREATE OR ALTER PROCEDURE sp_huy_don_hang 
+    @ma_don_hang VARCHAR(30),
     @id_nguoi_thuc_hien INT,
-    @ly_do NVARCHAR(500) = NULL AS BEGIN
+    @ly_do NVARCHAR(500) = NULL 
+
+AS BEGIN
+
 SET NOCOUNT ON
 SET XACT_ABORT ON
+
 DECLARE @trang_thai_hien_tai NVARCHAR(30)
 DECLARE @id_chu_don INT
 DECLARE @ten_vai_tro NVARCHAR(50)
+
+-- Kiem tra su ton tai cua don hang va nguoi thuc hien 
 SELECT @trang_thai_hien_tai = trang_thai_don_hang,
     @id_chu_don = id_nguoi_dung
 FROM don_hang
-WHERE ma_don_hang = @ma_don_hang IF @trang_thai_hien_tai IS NULL THROW 50046,
-    N'Đơn hàng không tồn tại.',
-    1
+WHERE ma_don_hang = @ma_don_hang 
+
+IF @trang_thai_hien_tai IS NULL 
+THROW 50046, N'Đơn hàng không tồn tại.', 1
+
 SELECT @ten_vai_tro = vt.ten_vai_tro
 FROM nguoi_dung nd
     JOIN vai_tro vt ON vt.id_vai_tro = nd.id_vai_tro
-WHERE nd.id_nguoi_dung = @id_nguoi_thuc_hien IF @ten_vai_tro IS NULL THROW 50047,
-    N 'Người thực hiện không tồn tại.',
-    1 IF @id_nguoi_thuc_hien <> @id_chu_don
-    AND @ten_vai_tro NOT IN (N 'NHAN_VIEN', N 'QUAN_TRI_VIEN') THROW 50048,
-    N'Bạn không có quyền hủy đơn hàng này.',
-    1 IF @trang_thai_hien_tai NOT IN (N'Chờ xác nhận', N'Đang chuẩn bị') THROW 50049,
-    N'Chỉ có thể hủy đơn đang chờ xác nhận hoặc đang chuẩn bị.',
-    1 BEGIN TRY BEGIN TRANSACTION -- Hoan lai ton kho truc tiep
+WHERE nd.id_nguoi_dung = @id_nguoi_thuc_hien 
+
+IF @ten_vai_tro IS NULL THROW 50047, N'Người thực hiện không tồn tại.', 1 
+    
+-- Kiem tra quyen va dieu kien trang thai duoc phep huy 
+IF @id_nguoi_thuc_hien <> @id_chu_don
+    AND @ten_vai_tro NOT IN (N'NHAN_VIEN', N'QUAN_TRI_VIEN') 
+    THROW 50048, N'Bạn không có quyền hủy đơn hàng này.', 1 
+    
+IF @trang_thai_hien_tai NOT IN (N'Chờ xác nhận', N'Đang chuẩn bị') 
+    THROW 50049, N'Chỉ có thể hủy đơn đang chờ xác nhận hoặc đang chuẩn bị.', 1 
+
+BEGIN TRY 
+BEGIN TRANSACTION 
+
+-- Hoan lai ton kho truc tiep
 UPDATE s
 SET s.so_luong_ton = s.so_luong_ton + ctdh.so_luong,
     s.trang_thai = CASE
-        WHEN s.trang_thai = N 'Ngừng bán' THEN N 'Ngừng bán'
+        WHEN s.trang_thai = N'Ngừng bán' THEN N'Ngừng bán'
         ELSE N'Còn hàng'
     END
 FROM sach s
     JOIN chi_tiet_don_hang ctdh ON ctdh.id_sach = s.id_sach
 WHERE ctdh.ma_don_hang = @ma_don_hang
+
+-- Cap nhat trang thai don hang 
 UPDATE don_hang
 SET trang_thai_don_hang = N'Đã hủy',
     trang_thai_thanh_toan = CASE
@@ -969,54 +1207,74 @@ SET trang_thai_don_hang = N'Đã hủy',
         WHEN ghi_chu IS NULL THEN N'Lý do hủy: ' + @ly_do
         ELSE ghi_chu + N' | Lý do hủy: ' + @ly_do
     END
+
 WHERE ma_don_hang = @ma_don_hang COMMIT TRANSACTION
 SELECT N'Hủy đơn hàng và hoàn kho thành công.' AS thong_bao
-END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION THROW
+END TRY 
+
+BEGIN CATCH 
+IF @@TRANCOUNT > 0 
+    ROLLBACK TRANSACTION 
+    THROW
 END CATCH
 END
-GO -- Nhap hang sach (tao phieu nhap)
-    CREATE
-    OR ALTER PROCEDURE sp_nhap_hang_sach @id_sach INT,
+GO 
+
+-- Nhap hang sach (tao phieu nhap)
+CREATE OR ALTER PROCEDURE sp_nhap_hang_sach 
+    @id_sach INT,
     @so_luong INT,
     @don_gia_nhap DECIMAL(18, 2) = 0,
     @id_nguoi_nhap INT,
-    @ghi_chu NVARCHAR(500) = NULL AS BEGIN
+    @ghi_chu NVARCHAR(500) = NULL 
+AS BEGIN
+
 SET NOCOUNT ON
-SET XACT_ABORT ON IF @so_luong <= 0 THROW 50060,
-    N'Số lượng nhập phải lớn hơn 0.',
-    1 IF NOT EXISTS (
+SET XACT_ABORT ON 
+
+IF @so_luong <= 0 
+    THROW 50060, N'Số lượng nhập phải lớn hơn 0.', 1 
+    
+-- Kiem tra quyen 
+IF NOT EXISTS (
         SELECT 1
         FROM nguoi_dung nd
             JOIN vai_tro vt ON vt.id_vai_tro = nd.id_vai_tro
         WHERE nd.id_nguoi_dung = @id_nguoi_nhap
-            AND vt.ten_vai_tro IN (N 'NHAN_VIEN', N 'QUAN_TRI_VIEN')
-    ) THROW 50061,
-    N 'Người dùng không có quyền nhập hàng.',
-    1 BEGIN TRY BEGIN TRANSACTION
+            AND vt.ten_vai_tro IN (N'NHAN_VIEN', N'QUAN_TRI_VIEN')
+    ) THROW 50061, N'Người dùng không có quyền nhập hàng.', 1 
+    
+BEGIN TRY 
+BEGIN TRANSACTION
 DECLARE @trang_thai_cu NVARCHAR(20)
 DECLARE @ma_phieu_nhap VARCHAR(30)
+
+-- Khoa du lieu va kiem tra trang thai ton tai 
 SELECT @trang_thai_cu = trang_thai
 FROM sach WITH (UPDLOCK, HOLDLOCK)
-WHERE id_sach = @id_sach IF @trang_thai_cu IS NULL THROW 50062,
-    N'Sách không tồn tại.',
-    1 -- Tao ma phieu nhap
+WHERE id_sach = @id_sach IF @trang_thai_cu IS NULL 
+THROW 50062, N'Sách không tồn tại.', 1 
+
+-- Tao ma phieu nhap
 SET @ma_phieu_nhap = CONCAT (
-        'PN',
+        'PN', -- PN: phieu nhap
         CONVERT(CHAR(8), GETDATE(), 112),
         UPPER(
             RIGHT(
-                REPLACE(CONVERT(VARCHAR(36), NEWID()), '-', ''),
-                8
+                REPLACE(CONVERT(VARCHAR(36), NEWID()), '-', ''), 8
             )
         )
-    ) -- Tang ton kho
+    ) 
+-- Tang ton kho
 UPDATE sach
 SET so_luong_ton = so_luong_ton + @so_luong,
     trang_thai = CASE
-        WHEN @trang_thai_cu = N 'Ngừng bán' THEN N 'Ngừng bán'
+        WHEN @trang_thai_cu = N'Ngừng bán' THEN N'Ngừng bán'
         ELSE N'Còn hàng'
     END
-WHERE id_sach = @id_sach -- Ghi phieu nhap
+WHERE id_sach = @id_sach 
+
+-- Ghi phieu nhap
 INSERT INTO nhap_hang_sach (
         ma_phieu_nhap,
         so_luong,
@@ -1029,25 +1287,38 @@ VALUES (
         @ma_phieu_nhap,
         @so_luong,
         @don_gia_nhap,
-        ISNULL(@ghi_chu, N 'Nhập hàng sách'),
+        ISNULL(@ghi_chu, N'Nhập hàng sách'),
         @id_sach,
         @id_nguoi_nhap
     ) COMMIT TRANSACTION
 SELECT @ma_phieu_nhap AS ma_phieu_nhap,
-    N 'Nhập hàng thành công.' AS thong_bao
-END TRY BEGIN CATCH IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION THROW
+    N'Nhập hàng thành công.' AS thong_bao
+END TRY
+BEGIN CATCH 
+IF @@TRANCOUNT > 0 
+    ROLLBACK TRANSACTION 
+THROW
 END CATCH
 END
-GO -- Lay danh sach phieu nhap hang
-    CREATE
-    OR ALTER PROCEDURE sp_lay_danh_sach_nhap_hang @id_sach INT = NULL,
+GO 
+
+-- Lay danh sach phieu nhap hang
+CREATE OR ALTER PROCEDURE sp_lay_danh_sach_nhap_hang 
+    @id_sach INT = NULL,
     @tu_ngay DATE = NULL,
     @den_ngay DATE = NULL,
     @trang INT = 1,
-    @kich_thuoc_trang INT = 30 AS BEGIN
-SET NOCOUNT ON IF @trang < 1
-SET @trang = 1 IF @kich_thuoc_trang < 1
-SET @kich_thuoc_trang = 30
+    @kich_thuoc_trang INT = 30 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+IF @trang < 1
+    SET @trang = 1 
+IF @kich_thuoc_trang < 1
+    SET @kich_thuoc_trang = 30
+
+-- Lay thong tin phieu nhap kem tong so dong 
 SELECT nhs.ma_phieu_nhap,
     nhs.so_luong,
     nhs.don_gia_nhap,
@@ -1061,6 +1332,7 @@ SELECT nhs.ma_phieu_nhap,
 FROM nhap_hang_sach nhs
     JOIN sach s ON s.id_sach = nhs.id_sach
     JOIN nguoi_dung nd ON nd.id_nguoi_dung = nhs.id_nguoi_nhap
+-- Bo loc theo ma sach va thoi gian 
 WHERE (
         @id_sach IS NULL
         OR nhs.id_sach = @id_sach
@@ -1073,13 +1345,23 @@ WHERE (
         @den_ngay IS NULL
         OR nhs.ngay_nhap < DATEADD(DAY, 1, @den_ngay)
     )
-ORDER BY nhs.ngay_nhap DESC OFFSET (@trang - 1) * @kich_thuoc_trang ROWS FETCH NEXT @kich_thuoc_trang ROWS ONLY
+-- Sap xep va phan trang du lieu 
+ORDER BY nhs.ngay_nhap DESC 
+OFFSET (@trang - 1) * @kich_thuoc_trang ROWS 
+FETCH NEXT @kich_thuoc_trang ROWS ONLY
 END
-GO -- Tong quan (tinh so_luong_da_ban qua query)
-    CREATE
-    OR ALTER PROCEDURE sp_dashboard_tong_quan @tu_ngay DATE = NULL,
-    @den_ngay DATE = NULL AS BEGIN
+GO 
+
+
+-- Tong quan (tinh so_luong_da_ban qua query)
+CREATE OR ALTER PROCEDURE sp_dashboard_tong_quan 
+    @tu_ngay DATE = NULL,
+    @den_ngay DATE = NULL 
+AS BEGIN
+
 SET NOCOUNT ON
+
+-- Thong ke doanh thu va phan loai so luong don hang 
 SELECT ISNULL (
         SUM (
             CASE
@@ -1108,11 +1390,13 @@ SELECT ISNULL (
         ),
         0
     ) AS don_da_huy,
+
+-- Cac chi so tong quan 
     (
         SELECT COUNT(*)
         FROM nguoi_dung nd
             JOIN vai_tro vt ON vt.id_vai_tro = nd.id_vai_tro
-        WHERE vt.ten_vai_tro = N 'KHACH_HANG'
+        WHERE vt.ten_vai_tro = N'KHACH_HANG'
     ) AS tong_khach_hang,
     (
         SELECT COUNT(*)
@@ -1128,6 +1412,7 @@ SELECT ISNULL (
             JOIN don_hang dh2 ON dh2.ma_don_hang = ctdh.ma_don_hang
         WHERE dh2.trang_thai_don_hang = N'Đã giao'
     ) AS tong_sach_da_ban
+-- Loc ngay chinh xac 
 FROM don_hang dh
 WHERE (
         @tu_ngay IS NULL
@@ -1138,12 +1423,21 @@ WHERE (
         OR dh.ngay_dat < DATEADD(DAY, 1, @den_ngay)
     )
 END
-GO -- Thong ke doanh thu theo ngay hoac theo thang
-    CREATE
-    OR ALTER PROCEDURE sp_thong_ke_doanh_thu @tu_ngay DATE = NULL,
+GO 
+
+
+-- Thong ke doanh thu theo ngay hoac theo thang
+CREATE OR ALTER PROCEDURE sp_thong_ke_doanh_thu 
+    @tu_ngay DATE = NULL,
     @den_ngay DATE = NULL,
-    @kieu_thong_ke NVARCHAR(10) = N 'NGAY' AS BEGIN
-SET NOCOUNT ON IF @kieu_thong_ke = N 'THANG' BEGIN
+    @kieu_thong_ke NVARCHAR(10) = N'NGAY' 
+AS BEGIN
+
+SET NOCOUNT ON 
+
+-- Thong ke gom nhom theo thang 
+IF @kieu_thong_ke = N'THANG' 
+BEGIN
 SELECT YEAR(ngay_dat) AS nam,
     MONTH(ngay_dat) AS thang,
     COUNT(*) AS so_don_da_giao,
@@ -1163,7 +1457,10 @@ GROUP BY YEAR(ngay_dat),
 ORDER BY nam,
     thang
 END
-ELSE BEGIN
+ELSE 
+
+-- Thong ke gom nhom theo ngay 
+BEGIN
 SELECT CAST(ngay_dat AS DATE) AS ngay,
     COUNT(*) AS so_don_da_giao,
     SUM(tong_tien) AS doanh_thu
@@ -1181,12 +1478,22 @@ GROUP BY CAST(ngay_dat AS DATE)
 ORDER BY ngay
 END
 END
-GO -- Thong ke sach ban chay (tinh so_luong_da_ban qua query)
-    CREATE
-    OR ALTER PROCEDURE sp_top_sach_ban_chay @so_luong_top INT = 10 AS BEGIN
-SET NOCOUNT ON IF @so_luong_top < 1
-SET @so_luong_top = 10
-SELECT TOP (@so_luong_top) s.id_sach,
+GO 
+
+
+-- Thong ke sach ban chay (tinh so_luong_da_ban qua query)
+CREATE OR ALTER PROCEDURE sp_top_sach_ban_chay 
+    @so_luong_top INT = 10 
+    
+AS BEGIN
+
+SET NOCOUNT ON 
+
+IF @so_luong_top < 1
+    SET @so_luong_top = 10
+
+SELECT TOP (@so_luong_top) 
+    s.id_sach,
     s.ten_sach,
     s.tac_gia,
     s.gia_goc,
@@ -1196,11 +1503,13 @@ SELECT TOP (@so_luong_top) s.id_sach,
     s.trang_thai,
     SUM(ctdh.so_luong) AS tong_so_luong_ban,
     SUM(ctdh.thanh_tien) AS tong_doanh_thu
+
+-- Ket noi cac bang, loc don hop le va gom nhom 
 FROM chi_tiet_don_hang ctdh
     JOIN don_hang dh ON dh.ma_don_hang = ctdh.ma_don_hang
     JOIN sach s ON s.id_sach = ctdh.id_sach
 WHERE dh.trang_thai_don_hang = N'Đã giao'
-    AND s.trang_thai <> N 'Ngừng bán'
+    AND s.trang_thai <> N'Ngừng bán'
 GROUP BY s.id_sach,
     s.ten_sach,
     s.tac_gia,
@@ -1209,18 +1518,28 @@ GROUP BY s.id_sach,
     s.anh_bia,
     s.so_luong_ton,
     s.trang_thai
+
+-- Sap xep theo thu bac ban chay 
 ORDER BY tong_so_luong_ban DESC,
     tong_doanh_thu DESC
 END
-GO -- Thong ke don hang theo trang thai
-    CREATE
-    OR ALTER PROCEDURE sp_thong_ke_don_hang_theo_trang_thai @tu_ngay DATE = NULL,
-    @den_ngay DATE = NULL AS BEGIN
+GO 
+
+-- Thong ke don hang theo trang thai
+CREATE OR ALTER PROCEDURE sp_thong_ke_don_hang_theo_trang_thai 
+    @tu_ngay DATE = NULL,
+    @den_ngay DATE = NULL 
+AS BEGIN
+
 SET NOCOUNT ON
+
+--Tinh tong so luong don hang va tong gia tri theo trang thai 
 SELECT trang_thai_don_hang,
     COUNT(*) AS so_luong_don,
     ISNULL(SUM(tong_tien), 0) AS tong_gia_tri
 FROM don_hang
+
+-- Loc theo thoi gian va gom nhom du lieu 
 WHERE (
         @tu_ngay IS NULL
         OR ngay_dat >= @tu_ngay
@@ -1230,7 +1549,9 @@ WHERE (
         OR ngay_dat < DATEADD(DAY, 1, @den_ngay)
     )
 GROUP BY trang_thai_don_hang
-ORDER BY CASE
+
+-- Sap xep theo dung quy trinh van hanh 
+ORDER BY CASE -- Neu chi dung order thong thuong thi se mac dinh sap xep a-z 
         trang_thai_don_hang
         WHEN N'Chờ xác nhận' THEN 1
         WHEN N'Đang chuẩn bị' THEN 2

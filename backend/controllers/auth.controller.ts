@@ -79,3 +79,36 @@ export async function getMe(
     next(error);
   }
 }
+
+// POST /api/auth/change-password
+export async function changePassword(
+  req: Request, res: Response, next: NextFunction
+) {
+  try {
+    const { mat_khau_cu, mat_khau_moi } = req.body;
+
+    if (!mat_khau_cu || !mat_khau_moi) {
+      res.status(400).json({
+        success: false,
+        message: 'Vui lòng cung cấp mật khẩu cũ và mật khẩu mới.',
+      });
+      return;
+    }
+
+    if (mat_khau_moi.length < 6) {
+      res.status(400).json({
+        success: false,
+        message: 'Mật khẩu mới phải có ít nhất 6 ký tự.',
+      });
+      return;
+    }
+
+    const result = await authService.doiMatKhau(req.user!.email, mat_khau_cu, mat_khau_moi);
+    res.json({
+      success: true,
+      message: result.thong_bao,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

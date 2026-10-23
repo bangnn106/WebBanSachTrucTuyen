@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import sql from 'mssql';
-import { executeProcedure } from '../config/database';
+import { executeProcedure, getPool } from '../config/database';
 import { DangKyDTO, DangNhapDTO, JwtPayload, NguoiDung } from '../models/user.model';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
@@ -105,4 +105,30 @@ export async function layThongTinHienTai(email: string) {
     ...userInfo,
     id: userInfo.id_nguoi_dung,
   };
+}
+
+// DOI MAT KHAU
+export async function doiMatKhau(email: string, matKhauCu: string, matKhauMoi: string) {
+  const result = await executeProcedure('sp_lay_nguoi_dung_theo_email', [
+    { name: 'email', type: sql.VarChar(255), value: email },
+  ]);
+
+  if (result.recordset.length === 0) {
+    throw { statusCode: 404, message: 'Không tìm thấy người dùng.' };
+  }
+
+  const user: NguoiDung = result.recordset[0];
+  const isMatch = await bcrypt.compare(matKhauCu, user.mat_khau);
+  if (!isMatch) {
+    throw { statusCode: 400, message: 'Mật khẩu hiện tại không chính xác.' };
+  }
+
+  const hashedPassword = await bcrypt.hash(matKhauMoi, 10);
+  const pool = await getPool();
+  await pool.request()
+    .input('mat_khau', sql.VarChar(255), hashedPassword)
+    .input('id_nguoi_dung', sql.Int, user.id_nguoi_dung)
+    .query('UPDATE nguoi_dung SET mat_khau = @mat_khau WHERE id_nguoi_dung = @id_nguoi_dung');
+
+  return { thong_bao: 'Đổi mật khẩu thành công.' };
 }

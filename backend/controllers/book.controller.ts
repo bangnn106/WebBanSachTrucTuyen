@@ -59,7 +59,7 @@ export async function createBook(
   try {
     const data = req.body;
 
-    // Neu co file upload → gan duong dan anh
+    // Neu co file upload -> gan duong dan anh
     if (req.file) {
       data.anh_bia = `/uploads/books/${req.file.filename}`;
     }

@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// CAU HINH KET NOI SQL SERVER
+// Cau hinh ket noi SQL Server
 const dbConfig: sql.config = {
   server: process.env.DB_SERVER || 'localhost',
   port: parseInt(process.env.DB_PORT || '1433'),
@@ -27,18 +27,18 @@ const dbConfig: sql.config = {
 };
 
 // SINGLETON CONNECTION POOL
-// Chi tao 1 pool duy nhat cho toan bo app, tai su dung
+// Chi tao 1 pool duy nhat cho toan bo 
 let pool: sql.ConnectionPool | null = null;
 
 export async function getPool(): Promise<sql.ConnectionPool> {
   if (!pool) {
     pool = await new sql.ConnectionPool(dbConfig).connect();
-    console.log('✅ Kết nối SQL Server thành công!');
+    console.log('Kết nối SQL Server thành công!');
   }
   return pool;
 }
 
-// GOI STORED PROCEDURE
+// GOI STORED PROCEDURE 
 // Ham helper goi SP an toan, chong SQL injection nho parameterized query
 export async function executeProcedure(
   procName: string,
@@ -51,7 +51,7 @@ export async function executeProcedure(
   const db = await getPool();
   const request = db.request();
 
-  // Gan tung parameter vao request (tu dong escape, khong bi SQL injection)
+  // Gan tung parameter vao request 
   for (const param of params) {
     request.input(param.name, param.type, param.value);
   }

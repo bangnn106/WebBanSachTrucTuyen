@@ -115,7 +115,7 @@ export default function StaffInventoryPage() {
           </div>
         </Col>
 
-        {/* IEU CHINH KHO */}
+        {/* DIEU CHINH KHO */}
         <Col md={6}>
           <div className="bg-white p-3 rounded shadow-sm">
             <h6 className="fw-bold mb-3"><i className="bi bi-arrow-left-right me-2" />Điều chỉnh kho</h6>
@@ -143,26 +143,31 @@ export default function StaffInventoryPage() {
           <Table hover responsive className="bg-white shadow-sm rounded">
             <thead>
               <tr>
-                <th>Ngày</th><th>Sách</th><th>Loại GD</th>
-                <th className="text-center">SL</th><th className="text-center">Trước</th>
-                <th className="text-center">Sau</th><th>Người thực hiện</th><th>Lý do</th>
+                <th>Mã phiếu</th>
+                <th>Ngày nhập</th>
+                <th>Sách</th>
+                <th className="text-center">Số lượng</th>
+                <th className="text-end">Đơn giá nhập</th>
+                <th className="text-end">Tổng tiền</th>
+                <th>Người nhập</th>
+                <th>Ghi chú</th>
               </tr>
             </thead>
             <tbody>
               {lichSu.map((ls: any, i: number) => (
-                <tr key={i}>
-                  <td>{new Date(ls.ngay_thuc_hien).toLocaleString("vi-VN")}</td>
-                  <td>{ls.ten_sach}</td>
-                  <td><Badge bg={mauGiaoDich[ls.loai_giao_dich] || "secondary"}>{ls.loai_giao_dich}</Badge></td>
-                  <td className="text-center">{ls.so_luong}</td>
-                  <td className="text-center">{ls.ton_truoc}</td>
-                  <td className="text-center">{ls.ton_sau}</td>
-                  <td>{ls.ten_nguoi_thuc_hien || "—"}</td>
-                  <td>{ls.ly_do || "—"}</td>
+                <tr key={ls.ma_phieu_nhap || i}>
+                  <td><code>{ls.ma_phieu_nhap}</code></td>
+                  <td>{ls.ngay_nhap ? new Date(ls.ngay_nhap).toLocaleString("vi-VN") : "—"}</td>
+                  <td className="fw-medium">{ls.ten_sach}</td>
+                  <td className="text-center fw-bold text-success">+{ls.so_luong}</td>
+                  <td className="text-end">{Number(ls.don_gia_nhap || 0).toLocaleString("vi-VN")} đ</td>
+                  <td className="text-end fw-bold">{Number(ls.tong_tien_nhap || 0).toLocaleString("vi-VN")} đ</td>
+                  <td>{ls.nguoi_nhap || "—"}</td>
+                  <td>{ls.ghi_chu || "—"}</td>
                 </tr>
               ))}
               {lichSu.length === 0 && (
-                <tr><td colSpan={8} className="text-center text-secondary py-4">Chưa có lịch sử</td></tr>
+                <tr><td colSpan={8} className="text-center text-secondary py-4">Chưa có lịch sử nhập hàng</td></tr>
               )}
             </tbody>
           </Table>

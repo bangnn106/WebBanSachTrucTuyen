@@ -63,12 +63,15 @@ export async function createUser(
   req: Request, res: Response, next: NextFunction
 ) {
   try {
-    const { ho_ten, email, mat_khau, so_dien_thoai, id_vai_tro } = req.body;
+    const {
+      ho_ten, email, mat_khau, so_dien_thoai, id_vai_tro,
+      tinh_thanh, quan_huyen, phuong_xa, dia_chi_chi_tiet,
+    } = req.body;
 
     if (!ho_ten || !email || !mat_khau || !so_dien_thoai || !id_vai_tro) {
       res.status(400).json({
         success: false,
-        message: 'Vui lòng điền đầy đủ thông tin.',
+        message: 'Vui lòng điền đầy đủ thông tin bắt buộc.',
       });
       return;
     }
@@ -83,8 +86,15 @@ export async function createUser(
     }
 
     const result = await userService.taoTaiKhoan({
-      ho_ten, email, mat_khau, so_dien_thoai,
+      ho_ten,
+      email,
+      mat_khau,
+      so_dien_thoai,
       id_vai_tro: Number(id_vai_tro),
+      tinh_thanh,
+      quan_huyen,
+      phuong_xa,
+      dia_chi_chi_tiet,
     });
 
     res.status(201).json({

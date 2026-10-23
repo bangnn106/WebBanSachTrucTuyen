@@ -20,7 +20,6 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body>
-        {/* AuthProvider boc ngoai e CartProvider co the dung useAuth */}
         <AuthProvider>
           <CartProvider>
             {children}

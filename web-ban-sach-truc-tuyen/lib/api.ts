@@ -272,6 +272,10 @@ export const nguoiDungAPI = {
     mat_khau: string;
     so_dien_thoai: string;
     id_vai_tro: number;
+    tinh_thanh?: string;
+    quan_huyen?: string;
+    phuong_xa?: string;
+    dia_chi_chi_tiet?: string;
   }) =>
     goiAPI("/users", { method: "POST", body: JSON.stringify(data) }),
 

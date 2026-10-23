@@ -265,18 +265,24 @@ async function seed() {
         const sach = danhSachSach[i];
 
         try {
-          // Tai anh bia placeholder (moi cuon co seed khac nhau de anh khac nhau)
-          const tenFileAnh = `seed-book-${i + 1}.jpg`;
-          const anhUrl = `https://picsum.photos/seed/book${i + 1}/400/600`;
+          // Ten file anh theo slug ten sach (khong dau)
+          const slug = sach.ten
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[đĐ]/g, 'd')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+          const tenFileAnh = `${slug}.jpg`;
+          const localFilePath = path.join(__dirname, '..', 'public', 'uploads', 'books', tenFileAnh);
           let anhBia: string;
 
-          try {
-            anhBia = await taiAnh(anhUrl, tenFileAnh);
-            console.log(`   📸 Đã tải ảnh: ${tenFileAnh}`);
-          } catch {
-            // Neu khong tai duoc anh, van them sach voi anh null
+          if (fs.existsSync(localFilePath)) {
+            anhBia = `/uploads/books/${tenFileAnh}`;
+            console.log(`   📸 Dùng ảnh có sẵn: ${tenFileAnh}`);
+          } else {
             anhBia = '';
-            console.log(`   ⚠️  Không tải được ảnh cho "${sach.ten}", sách vẫn được thêm.`);
+            console.log(`   ℹ️  Chưa có ảnh bìa cho "${sach.ten}".`);
           }
 
           const idTheLoai = theLoaiMap[sach.the_loai];
