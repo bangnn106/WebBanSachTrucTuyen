@@ -25,7 +25,7 @@ function taoToken(payload: JwtPayload): string {
 // DANG KY TAI KHOAN MOI
 export async function dangKy(data: DangKyDTO) {
   // 1. Hash mat khau truoc khi luu vao DB
-  const hashedPassword = await bcrypt.hash(data.mat_khau, 10);
+  const hashedPassword = await bcrypt.hash(data.mat_khau, 10); //* 
 
   // 2. Goi SP dang ky (SP tu tao gio hang)
   const result = await executeProcedure('sp_dang_ky_nguoi_dung', [

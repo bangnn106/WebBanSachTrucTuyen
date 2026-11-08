@@ -55,7 +55,7 @@ async function goiAPI(
   return data;
 }
 
-/* Tao query string tu object (bo qua gia tri rong) */
+// Tao query string tu object (bo qua gia tri rong) 
 function taoQuery(params: Record<string, any>): string {
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {

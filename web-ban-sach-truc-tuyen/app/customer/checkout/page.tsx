@@ -33,7 +33,7 @@ export default function CheckoutPage() {
     ghi_chu: "",
   });
 
-  /* Neu chua ang nhap redirect */
+  /* Neu chua dang nhap redirect */
   if (!daDangNhap) {
     return (
       <Container fluid="xl" className="py-5 text-center">

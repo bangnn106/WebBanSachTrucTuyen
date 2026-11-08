@@ -146,7 +146,7 @@ export default function AdminBookPage() {
             </thead>
             <tbody>
               {sachList.map((s: any) => (
-                <tr key={s.id}>
+                <tr key={s.id_sach}>
                   <td>{s.id_sach || s.id}</td>
                   <td style={{ maxWidth: 250 }}>{s.ten_sach}</td>
                   <td>{s.tac_gia}</td>
@@ -243,8 +243,8 @@ export default function AdminBookPage() {
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group><Form.Label>Số lượng tồn</Form.Label>
-                <Form.Control type="number" value={formSach.so_luong_ton} onChange={(e) => setFormSach(p => ({...p, so_luong_ton: e.target.value}))} />
+              <Form.Group><Form.Label>Số lượng tồn {editId ? <small className="text-muted">(chỉ đọc - quản lý qua Nhập kho)</small> : null}</Form.Label>
+                <Form.Control type="number" value={formSach.so_luong_ton} onChange={(e) => setFormSach(p => ({...p, so_luong_ton: e.target.value}))} readOnly={!!editId} disabled={!!editId} />
               </Form.Group>
             </Col>
             <Col md={4}>
